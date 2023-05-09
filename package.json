@@ -9,6 +9,7 @@
   "author": "Yongeun Kwon, Munyoung Cho, Marvin Sio",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "ejs": "^3.1.9",
     "express": "^4.18.2"
   }
