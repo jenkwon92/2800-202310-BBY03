@@ -1,0 +1,15 @@
+{
+  "name": "coursepilot",
+  "version": "1.0.0",
+  "description": "This is my readme file.\r ## 1. Branches\r * dev - yongeun Kwon\r * Marvin_Index_Page - Marvin Sio\r * Main Page - Yongeun Kwon\r * Profile page - Munyoung Cho",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yongeun Kwon, Munyoung Cho, Marvin Sio",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.2"
+  }
+}
