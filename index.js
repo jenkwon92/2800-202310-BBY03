@@ -51,8 +51,16 @@ app.use(express.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 
 /* Home Section */
+
+//Renders the index page
 app.get('/', (req, res) => {
     res.render('index');
+});
+
+//Renders the main page
+//When the user logged in
+app.get('/main', (req,res) => {
+    res.render('main');
 });
 
 app.get('/editProfile', (req,res) => {
@@ -125,10 +133,9 @@ app.post('/submitLogin', (req,res) => {
     res.redirect('/login?msg=Invalid Email/Password!');
 });
 
-app.get('/home', (req,res) => {
-    res.render('home');
-});
-
 app.listen(port, () => {
     console.log("Node application listening on port " + port);
 });
+
+//Serves the static assets from the specified directory
+app.use(express.static(__dirname + '/public'));
