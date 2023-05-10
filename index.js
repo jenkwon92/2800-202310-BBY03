@@ -55,6 +55,10 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
+app.get('/profile', (req,res) => {
+    res.render('profile');
+});
+
 /* Login Section */
 app.get('/users', async (req, res) => {
     const users = await userCollection.find().toArray();
