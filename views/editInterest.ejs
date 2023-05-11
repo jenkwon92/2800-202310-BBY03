@@ -32,21 +32,39 @@
 
 <div class="card-body p-4 text-black" style="margin-top: 20px;">
   <div class="mb-5">
-      <div class="p-4" style="background-color: #d0d4d6;">
-          <button type="button" class="btn btn-secondary btn-rounded">JS<span class="material-symbols-outlined" style="font-size: smaller; margin-left: 10px;">
+      <div class="p-4" style="background-color: #d0d4d6; height: 180px;">
+        <button type="button" class="btn btn-secondary btn-rounded" id="js-div">
+          JS
+          <span id="js-close" class="material-symbols-outlined" style="font-size: smaller; margin-left: 10px;">
               close
-              </span></button>
+          </span>
+      </button>
       </div>
   </div>
 
   <button class="btn btn-sm btn-dark profile-button" type="button" style="align-items: center; margin-top: 10px; width: 100%;">Save the changes</button>
 
-  <!-- <script>
-    $(document).ready(function() {
-      $('#multiple-checkboxes-interest').multiselect({
-        includeSelectAllOption: true,
-      });
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+
+  <script>
+    // $(document).ready(function() {
+    //   $('#multiple-checkboxes-interest').multiselect({
+    //     includeSelectAllOption: true,
+    //   });
+    // });
+
+    // Close the interest button
+     const closeButton = document.getElementById("js-close");
+    const jsDiv = document.getElementById("js-div");
+    closeButton.addEventListener("click", function() {
+        jsDiv.style.display = "none";
     });
-  </script> -->
+
+  </script>
   
   <%- include("templates/footer") %>

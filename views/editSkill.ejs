@@ -66,8 +66,8 @@
 <!-- Skills set section -->
   <div class="card-body p-4 text-black" style="margin-top: 10px;">
     <div class="mb-5">
-        <div class="p-4" style="background-color: #d0d4d6;">
-            <button type="button" class="btn btn-secondary btn-rounded">JS<span class="material-symbols-outlined" style="font-size: smaller; margin-left: 10px;">
+        <div class="p-4" style="background-color: #d0d4d6; height: 180px;">
+            <button type="button" id="js-div" class="btn btn-secondary btn-rounded">JS<span id="js-close" class="material-symbols-outlined" style="font-size: smaller; margin-left: 10px;">
                 close
                 </span></button>
         </div>
@@ -89,6 +89,13 @@
       $('#multiple-checkboxes').multiselect({
         includeSelectAllOption: true,
       });
+    });
+
+    // Close the interest button
+    const closeButton = document.getElementById("js-close");
+    const jsDiv = document.getElementById("js-div");
+    closeButton.addEventListener("click", function() {
+        jsDiv.style.display = "none";
     });
   </script>
   
