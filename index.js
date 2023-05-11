@@ -201,6 +201,11 @@ app.post('/submitLogin', async (req, res) => {
     res.redirect('/main');
 });
 
+// Renders the chatbot page
+app.get('/chatbot', (req, res) => {
+    res.render('chatbot');
+});
+
 // For developers to test on their local machine
 app.listen(port, () => {
     console.log("Node application listening on port " + port);
