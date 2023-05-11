@@ -1,0 +1,52 @@
+<%- include("templates/header") %>
+<div style="display: flex; flex-direction: column; margin-left: 20px; margin-top: 20px;">
+  <div class="select-wrapper" style="margin-bottom: 20px;">
+    <strong style="margin-left:15px;">Interests</strong>
+    <select id="multiple-checkboxes-interest" multiple="multiple" style="display: none;">
+      <option value="php">PHP</option>
+      <option value="javascript">JavaScript</option>
+      <option value="java">Java</option>
+      <option value="sql">SQL</option>
+      <option value="jquery">Jquery</option>
+      <option value=".net">.Net</option>
+    </select>
+  </br>
+    <div class="btn-group" style="width:90%; margin: 20px;">
+      <button type="button" class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" title="None selected" aria-expanded="false">
+        <span class="multiselect-selected-text">Select your interests</span>
+      </button>
+      <ul class="multiselect-container dropdown-menu">
+        <li class="multiselect-item multiselect-all">
+          <a tabindex="0" class="multiselect-all"><label class="checkbox"><input type="checkbox" value="multiselect-all">  Select all</label></a>
+        </li>
+        <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="php"> PHP</label></a></li>
+        <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="javascript"> JavaScript</label></a></li>
+        <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="java"> Java</label></a></li>
+        <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="sql"> SQL</label></a></li>
+        <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="jquery"> Jquery</label></a></li>
+        <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value=".net"> .Net</label></a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="card-body p-4 text-black" style="margin-top: 20px;">
+  <div class="mb-5">
+      <div class="p-4" style="background-color: #d0d4d6;">
+          <button type="button" class="btn btn-secondary btn-rounded">JS<span class="material-symbols-outlined" style="font-size: smaller; margin-left: 10px;">
+              close
+              </span></button>
+      </div>
+  </div>
+
+  <button class="btn btn-sm btn-dark profile-button" type="button" style="align-items: center; margin-top: 10px; width: 100%;">Save the changes</button>
+
+  <!-- <script>
+    $(document).ready(function() {
+      $('#multiple-checkboxes-interest').multiselect({
+        includeSelectAllOption: true,
+      });
+    });
+  </script> -->
+  
+  <%- include("templates/footer") %>

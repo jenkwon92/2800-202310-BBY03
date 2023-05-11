@@ -1,0 +1,95 @@
+  <%- include("templates/header") %>
+<!-- front-end dropdown -->
+  <div style="display: flex; flex-direction: column; margin-left: 10px; margin-top: 20px;">
+    <div class="select-wrapper" style="margin-bottom: 20px;">
+      <strong style="margin-left:15px;">Front-end</strong>
+      <select id="multiple-checkboxes-interest" multiple="multiple" style="display: none;">
+        <option value="php">PHP</option>
+        <option value="javascript">JavaScript</option>
+        <option value="java">Java</option>
+        <option value="sql">SQL</option>
+        <option value="jquery">Jquery</option>
+        <option value=".net">.Net</option>
+      </select>
+    </br>
+      <div class="btn-group" style="width:90%; margin: 10px;">
+        <button type="button" class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" title="None selected" aria-expanded="false">
+          <span class="multiselect-selected-text">Select your Front-end Skills</span>
+        </button>
+        <ul class="multiselect-container dropdown-menu">
+          <li class="multiselect-item multiselect-all">
+            <a tabindex="0" class="multiselect-all"><label class="checkbox"><input type="checkbox" value="multiselect-all">  Select all</label></a>
+          </li>
+          <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="php"> PHP</label></a></li>
+          <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="javascript"> JavaScript</label></a></li>
+          <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="java"> Java</label></a></li>
+          <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="sql"> SQL</label></a></li>
+          <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="jquery"> Jquery</label></a></li>
+          <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value=".net"> .Net</label></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+<!-- Back-end dropdown -->
+  <div style="display: flex; flex-direction: column; margin-left: 10px; ">
+    <div class="select-wrapper" style="margin-bottom: 20px;">
+      <strong style="margin-left:15px;">Back-end</strong>
+      <select id="multiple-checkboxes-interest" multiple="multiple" style="display: none;">
+        <option value="php">PHP</option>
+        <option value="javascript">JavaScript</option>
+        <option value="java">Java</option>
+        <option value="sql">SQL</option>
+        <option value="jquery">Jquery</option>
+        <option value=".net">.Net</option>
+      </select>
+    </br>
+      <div class="btn-group" style="width:100%; margin: 10px;">
+        <button type="button" class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" title="None selected" aria-expanded="false">
+          <span class="multiselect-selected-text">Select your Back-end Skills</span>
+        </button>
+        <ul class="multiselect-container dropdown-menu">
+          <li class="multiselect-item multiselect-all">
+            <a tabindex="0" class="multiselect-all"><label class="checkbox"><input type="checkbox" value="multiselect-all">  Select all</label></a>
+          </li>
+          <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="php"> PHP</label></a></li>
+          <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="javascript"> JavaScript</label></a></li>
+          <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="java"> Java</label></a></li>
+          <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="sql"> SQL</label></a></li>
+          <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="jquery"> Jquery</label></a></li>
+          <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value=".net"> .Net</label></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+<!-- Skills set section -->
+  <div class="card-body p-4 text-black" style="margin-top: 10px;">
+    <div class="mb-5">
+        <div class="p-4" style="background-color: #d0d4d6;">
+            <button type="button" class="btn btn-secondary btn-rounded">JS<span class="material-symbols-outlined" style="font-size: smaller; margin-left: 10px;">
+                close
+                </span></button>
+        </div>
+    </div>
+
+    <button class="btn btn-sm btn-dark profile-button" type="button" style="align-items: center; margin-top: 10px; width: 100%;">Save the changes</button>
+
+  
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+  
+  <script>
+    $(document).ready(function() {
+      $('#multiple-checkboxes').multiselect({
+        includeSelectAllOption: true,
+      });
+    });
+  </script>
+  
+  <%- include("templates/footer") %>
