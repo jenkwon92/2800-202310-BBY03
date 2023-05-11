@@ -160,7 +160,7 @@ app.get('/users', async (req, res) => {
 
 // For developers to test on their local machine
 app.get('/signup', (req, res) => {
-    res.render('signup');
+    res.render('signUp');
 });
 
 // Creates a new user
