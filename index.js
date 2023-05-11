@@ -13,6 +13,9 @@ const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const saltRounds = 12;
 
+// To access ObjectID in MongoDB
+const { ObjectId } = require('mongodb');
+
 // For developers to test on their local machine
 const port = process.env.PORT || 3000;
 
@@ -21,7 +24,15 @@ const app = express();
 
 const Joi = require("joi");
 
-// Set expiration time for session to 1 hour
+// For JSON Web Tokens to reset password
+const jwt = require("jsonwebtoken");
+
+// For sending emails
+const nodemailer = require("nodemailer");
+
+const WebsiteURL = 'http://wjxdvnhtuk.eu09.qoddiapp.com';
+
+//Set expiration time for session to 1 hour
 const expireTime = 1 * 60 * 60 * 1000;
 
 /* Secret Information Section */
@@ -32,7 +43,10 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 
 const node_session_secret = process.env.NODE_SESSION_SECRET;
+
+const JWT_SECRET = process.env.JWT_SECRET;
 /* End Secret Information Section */
+
 
 /* Session Section */
 var mongoStore = MongoStore.create({
@@ -247,19 +261,145 @@ app.post('/submitLogin', async (req,res) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     // If password does not match, return error message
-    if (!passwordMatch) {
+    if (passwordMatch) {
+        // Set session variables
+        req.session.authenticated = true;
+        req.session.username = user.username;
+        req.session.email = email;
+        req.session.cookie.maxAge = expireTime;
+    } else {
         console.log("Incorrect password");
         res.redirect('/login?msg=Invalid Password!');
         return;
     }
 
-    // Set session variables
-    req.session.authenticated = true;
-    req.session.username = user.username;
-    req.session.email = email;
-    req.session.cookie.maxAge = expireTime;
-
     res.redirect('/main');
+});
+
+// Renders the forgot password page
+app.get('/forgotPassword', (req, res, next) => {
+    var msg = req.query.msg || '';
+
+    res.render('forgotPassword', { msg: msg })
+});
+
+// Sends the reset password email
+app.post('/forgotPassword', async (req, res, next) => {
+    const { email } = req.body;
+
+    const user = await userCollection.findOne({ email: email });
+
+    if (!user) {
+        res.render('forgotPassword', { msg: "User email not found!" });
+    } else {
+        const secret = JWT_SECRET + user.password;
+        const payload = {
+            email: email,
+            id: user._id
+        };
+        const token = jwt.sign(payload, secret, { expiresIn: '15m' });
+        // const link = `${WebsiteURL}/resetPassword/${user._id}/${token}`;
+        const link = `${WebsiteURL}/resetPassword/${user._id}/${token}`;
+
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: process.env.COURSEPILOT_SUPPORT_EMAIL,
+                pass: process.env.COURSEPILOT_SUPPORT_PASSWORD
+            }
+        });
+
+        // send mail with defined transport object
+        const mailOptions = {
+            from: `"CoursePilot" <${process.env.COURSEPILOT_SUPPORT_EMAIL}>`, // Sender address
+            to: user.email, // Recipient address
+            subject: 'CoursePilot Password Recovery', // Subject line
+            html: `<p>Please click this <a href="${link}">link</a> to reset your password.</p>` // HTML body
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+
+        res.render('forgotPassword', { msg: "Password reset link has been sent!" });
+    }
+});
+
+
+// Renders the reset password page
+app.get('/resetPassword/:id/:token', async (req, res, next) => {
+    // Get user id and token from url
+    const { id, token } = req.params;
+
+    // Find user in database
+    const user = await userCollection.findOne({ _id: new ObjectId(id) });
+
+    // If user does not exist, return error message
+    if (!user) {
+        // res.render('resetPassword', { msg: "ID not found!" });
+        res.send("ID not found!");
+        return;
+    }
+
+    // Create secret for JWT
+    const secret = JWT_SECRET + user.password;
+    try {
+        const payload = jwt.verify(token, secret);
+        res.render('resetPassword', { email: user.email });
+    }
+    catch (error) {
+        console.log(error);
+        res.send(error);
+    }
+});
+
+
+// Resets the user's password
+app.post('/resetPassword/:id/:token', async (req, res, next) => {
+    // Get user id and token from url
+    const { id, token } = req.params;
+
+    // Get new password from form
+    const { newPassword } = req.body;
+
+    // Find user in database
+    const user = await userCollection.findOne({ _id: new ObjectId(id) });
+
+    // If user does not exist, return error message
+    if (!user) {
+        // res.render('resetPassword', { msg: "ID not found!" });
+        res.send("ID not found!");
+        return;
+    }
+
+    // Create secret for JWT
+    const secret = JWT_SECRET + user.password;
+    try {
+        // Verify the token
+        const payload = jwt.verify(token, secret);
+
+        // Hash the new password
+        user.password = await bcrypt.hash(newPassword, saltRounds);
+
+        // Update password in database
+        await userCollection.updateOne(
+            { _id: new ObjectId(id) },
+            { $set: { password: user.password } }
+        );
+
+        // Password successfully updated
+        res.render('passwordUpdated');
+    }
+    catch (error) {
+        console.log(error);
+        res.send(error);
+    }
 });
 
 // Renders the chatbot page
