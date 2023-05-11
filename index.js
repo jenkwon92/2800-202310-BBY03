@@ -80,6 +80,20 @@ function sessionValidation(req, res, next) {
     }
 }
 
+// log out function 
+function logout() {
+    // AJAX call
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/logout');
+  
+    // send logout call 
+    xhr.onload = function () {
+      // redirect to index page 
+      window.location.href = '/index';
+    };
+    xhr.send();
+  }
+
 /* Home Section */
 
 //Renders the index page
@@ -93,15 +107,37 @@ app.get('/main', (req, res) => {
     res.render('main');
 });
 
-app.get('/editProfile', (req, res) => {
-    res.render('editProfile');
-});
+/* Profile Section */
 
-app.get('/profile', (req, res) => {
+// profile 
+app.get('/profile', (req,res) => {
     res.render('profile');
 });
 
-// Renders the signup page
+// edit basic profile Section
+app.get('/editProfile', (req,res) => {
+    res.render('editProfile');
+});
+
+// edit skill Section
+app.get('/editSkill', (req,res) => {
+    res.render('editSKill');
+});
+
+// edit interest Section
+app.get('/editInterest', (req,res) => {
+    res.render('editInterest');
+});
+
+/* Profile Section end */
+
+/* Login Section */
+app.get('/users', async (req, res) => {
+    const users = await userCollection.find().toArray();
+    res.render('users', { users });
+});
+
+// For developers to test on their local machine
 app.get('/signup', (req, res) => {
     res.render('signup');
 });
@@ -158,13 +194,15 @@ app.get('/login', (req, res) => {
     res.render("login", { msg: msg })
 });
 
-// Logs the user in
-app.post('/submitLogin', async (req, res) => {
-    const { email, password } = req.body;
+// logout 
+app.get("/logout", (req, res) => {
+    req.session.destroy();
+    res.redirect("/index");
+  });
 
-    // Checks for valid email
-    const schema = Joi.string().required();
-    const validationResult = schema.validate(email);
+app.post('/submitLogin', (req,res) => {
+    var email = req.body.email;
+    var password = req.body.password;
 
     // If email is invalid, return error message
     if (validationResult.error != null) {
