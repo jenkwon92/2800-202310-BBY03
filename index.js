@@ -219,7 +219,7 @@ app.get('/login', (req, res) => {
 app.get("/logout", (req, res) => {
     req.session.destroy();
     res.redirect("/index");
-  });
+});
 
 app.post('/submitLogin', (req,res) => {
     var email = req.body.email;
