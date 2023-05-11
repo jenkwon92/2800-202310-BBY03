@@ -123,7 +123,8 @@ app.post('/submitLogin', (req,res) => {
     for (i = 0; i < users.length; i++) {
         if (users[i].email == email) {
             if (bcrypt.compareSync(password, users[i].password)) {
-                res.redirect('/loggedIn');
+                //When the user logged in, renders to the main page.
+                res.redirect('/main');
                 return;
             }
         }
