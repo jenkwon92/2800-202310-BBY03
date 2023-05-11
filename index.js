@@ -93,6 +93,11 @@ app.get('/main', (req, res) => {
     res.render('main');
 });
 
+// Renders the course detail page
+app.get('/courseDetail', (req, res) => {
+    res.render('courseDetail');
+});
+
 app.get('/editProfile', (req, res) => {
     res.render('editProfile');
 });
