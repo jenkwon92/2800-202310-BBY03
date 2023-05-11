@@ -107,6 +107,11 @@ app.get('/main', (req, res) => {
     res.render('main');
 });
 
+// Renders the course detail page
+app.get('/courseDetail', (req, res) => {
+    res.render('courseDetail');
+});
+
 /* Profile Section */
 
 // profile 
