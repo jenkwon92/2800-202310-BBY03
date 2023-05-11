@@ -21,6 +21,9 @@ const app = express();
 
 const Joi = require("joi");
 
+// For JSON Web Tokens to reset password
+const jwt = require("jsonwebtoken");
+
 //Set expiration time for session to 1 hour
 const expireTime = 1 * 60 * 60 * 1000;
 
@@ -32,7 +35,10 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 
 const node_session_secret = process.env.NODE_SESSION_SECRET;
+
+const JWT_SECRET = process.env.JWT_SECRET;
 /* End Secret Information Section */
+
 
 /* Session Section */
 var mongoStore = MongoStore.create({
@@ -186,19 +192,71 @@ app.post('/submitLogin', async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     // If password does not match, return error message
-    if (!passwordMatch) {
+    if (passwordMatch) {
+        // Set session variables
+        req.session.authenticated = true;
+        req.session.username = user.username;
+        req.session.email = email;
+        req.session.cookie.maxAge = expireTime;
+    } else {
         console.log("Incorrect password");
         res.redirect('/login?msg=Invalid Password!');
         return;
     }
 
-    // Set session variables
-    req.session.authenticated = true;
-    req.session.username = user.username;
-    req.session.email = email;
-    req.session.cookie.maxAge = expireTime;
-
     res.redirect('/main');
+});
+
+app.get('/forgotPassword', (req, res, next) => {
+    var msg = req.query.msg || '';
+
+    res.render('forgotPassword', { msg: msg })
+});
+
+app.post('/forgotPassword', async (req, res, next) => {
+    const { id, email } = req.body;
+
+    const user = await userCollection.findOne({ email: email });
+
+    if (!user) {
+        res.render('forgotPassword', { msg: "User email not found!" });
+    }
+
+    const secret = JWT_SECRET + user.password;
+    const payload = {
+        email: email,
+        id: user._id
+    };
+    const token = jwt.sign(payload, secret, { expiresIn: '15m' });
+    const link = `http://localhost:3000/resetPassword/${token}`;
+    console.log(link);
+    res.render('forgotPassword', { msg: "Password reset link has been sent!" });
+});
+
+app.get('/resetPassword/:token', async (req, res, next) => {
+    const { id, token } = req.params;
+
+    var msg = req.query.msg || '';
+
+    const user = await userCollection.findOne({ _id: id });
+    if (!user) {
+        res.render('resetPassword', { msg: "User not found!" });
+    }
+
+    const secret = JWT_SECRET + user.password;
+    try {
+        const payload = jwt.verify(token, secret);
+        res.render('resetPassword', { msg: "Reset password!" });
+    }
+    catch (error) {
+        console.log(error);
+        res.render('resetPassword', { msg: "Invalid token!" });
+    }
+});
+
+app.post('/resetPassword/:token', (req, res, next) => {
+    const { id, token } = req.params;
+    res.send(user);
 });
 
 // For developers to test on their local machine
