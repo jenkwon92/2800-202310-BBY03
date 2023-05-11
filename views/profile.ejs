@@ -18,10 +18,11 @@
                                 <h5>Tim Kwon</h5>
                                 <p>Junior web-developer</p>
                                 <p>Level 5</p>
-                                <span style="font-size: 20px; float: right; line-height:2px;"
+                                <span id="edit-icon" style="font-size: 20px; float: right; line-height:2px;"
                                     class="material-symbols-outlined">
                                     edit
                                 </span>
+
                             </div>
                         </div>
                         <!-- Basic profile end -->
@@ -46,7 +47,8 @@
                                 <p class="lead fw-normal mb-0"></p>
                             </div>
                             <div class="row g-2">
-                                <div class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center"
+                                <div id="go-skill"
+                                    class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center"
                                     style=" border: 1px solid #ccc;
                                     border-radius: 10px;
                                     padding: 10px;">
@@ -55,7 +57,8 @@
                                     </span>
                                     <p style="font-size:1rem" class="text-center mt-2">Skills</p>
                                 </div>
-                                <div class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center"
+                                <div id="go-interest"
+                                    class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center"
                                     style=" border: 1px solid #ccc;
                                     border-radius: 10px;
                                     padding: 10px;">
@@ -78,5 +81,25 @@
                 </div>
             </div>
     </section>
+
+    <!-- function section -->
+    <script>
+
+        const editIcon = document.querySelector("#edit-icon");
+        editIcon.addEventListener("click", () => {
+            window.location.href = "/editProfile";
+        });
+
+        const goSkill = document.querySelector("#go-skill");
+        goSkill.addEventListener("click", () => {
+            window.location.href = "/editSkill";
+        });
+
+        const goInterest = document.querySelector("#go-interest");
+        goInterest.addEventListener("click", () => {
+            window.location.href = "/editInterest";
+        });
+
+    </script>
 
     <%- include("templates/footer") %>
