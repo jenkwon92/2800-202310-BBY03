@@ -92,14 +92,14 @@ function logout() {
     // AJAX call
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/logout');
-  
+
     // send logout call 
     xhr.onload = function () {
       // redirect to index page 
-      window.location.href = '/index';
+        window.location.href = '/index';
     };
     xhr.send();
-  }
+}
 
 /* Home Section */
 
@@ -221,7 +221,7 @@ app.get("/logout", (req, res) => {
     res.redirect("/index");
 });
 
-app.post('/submitLogin', (req,res) => {
+app.post('/submitLogin', async (req,res) => {
     var email = req.body.email;
     var password = req.body.password;
 
