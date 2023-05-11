@@ -6,22 +6,31 @@
 
           <!-- All profiles -->
           <div class="card">
-            <!-- Basic profile -->
-            <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
-              <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
-                  alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
-                  style="width: 150px; z-index: 1">
+            <!-- Basic profile form -->
+            <form id="profile-form" action="/submitProfile" method="POST">
+              <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+                <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                    alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                    style="width: 150px; z-index: 1">
+                </div>
+                <div class="ms-3" style="margin-top: 65px; font-size: small">
+                  <div class="col-md-6">
+                    <label class="labels" for="name-input">Name</label>
+                    <input style="width:100px;" class="form-control form-control-sm" id="name-input" name="name"
+                      type="text" class="form-control" placeholder="Tim Kwon" value="">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="labels" for="job-input">Job</label>
+                    <input style="width:110px;" class="form-control form-control-sm" id="job-input" name="job"
+                      type="text" class="form-control" placeholder="Enter your job" value="">
+                  </div>
+                  <p>Level 5</p>
+                  <button id="save-button" class="btn btn-sm btn-dark profile-button" type="submit"
+                    style="float:right; margin-left: 100px; margin-top: 20px;">Save</button>
+                </div>
               </div>
-              <div class="ms-3" style="margin-top: 65px; font-size: small">
-                
-                  <div class="col-md-6"><label class="labels">Name</label><input style="width:100px;" class="form-control form-control-sm"  type="text" class="form-control" placeholder="Tim Kwon" value=""></div>
-                <div class="col-md-6"><label class="labels">Job</label><input style="width:110px;" class="form-control form-control-sm"  type="text" class="form-control" placeholder="enter your job" value=""></div>
-                <p>Level 5</p>
-                <button class="btn btn-sm btn-dark profile-button" type="button" style="float:right; margin-left: 100px; margin-top: 20px;">Save</button>
-              </div>
-            </div>
-          </div>
+            </form>
             <!-- Basic profile end -->
 
 
