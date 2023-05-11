@@ -225,6 +225,8 @@ app.post('/submitLogin', async (req,res) => {
     var email = req.body.email;
     var password = req.body.password;
 
+    const schema = Joi.string().required();
+    const validationResult = schema.validate(email);
     // If email is invalid, return error message
     if (validationResult.error != null) {
         console.log(validationResult.error);
