@@ -260,6 +260,11 @@ app.post('/submitLogin', (req,res) => {
     res.redirect('/main');
 });
 
+// Renders the chatbot page
+app.get('/chatbot', (req, res) => {
+    res.render('chatbot');
+});
+
 // Renders the user to the root URL after the session is destroyed (logged out).
 app.get('/logout', (req, res) => {
 	req.session.destroy();
