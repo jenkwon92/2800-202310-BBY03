@@ -21,7 +21,7 @@ const app = express();
 
 const Joi = require("joi");
 
-//Set expiration time for session to 1 hour
+// Set expiration time for session to 1 hour
 const expireTime = 1 * 60 * 60 * 1000;
 
 /* Secret Information Section */
@@ -46,12 +46,19 @@ var mongoStore = MongoStore.create({
 var { database } = require("./databaseConnection");
 const userCollection = database.db(mongodb_database).collection("users");
 
-app.use(express.urlencoded({ extended: false }));
-
 /* Set the ejs view engine */
 app.set('view engine', 'ejs');
 
-/* Sets the session */
+
+/* Sets up middleware for an Express.js */
+
+// Handles URL-encoded form data.
+app.use(express.urlencoded({ extended: false }));
+
+// Serves the static assets from the specified directory
+app.use(express.static(__dirname + '/public'));
+
+// Sets the session
 app.use(session({
     secret: node_session_secret,
     store: mongoStore,
@@ -62,7 +69,7 @@ app.use(session({
     }
 }));
 
-//Check if the session is valid
+// Check if the session is valid
 function isValidSession(req) {
     if (req.session.authenticated) {
         return true;
@@ -70,7 +77,7 @@ function isValidSession(req) {
     return false;
 }
 
-//Check if the session is valid
+// Check if the session is valid
 function sessionValidation(req, res, next) {
     if (isValidSession(req)) {
         next();
@@ -82,15 +89,24 @@ function sessionValidation(req, res, next) {
 
 /* Home Section */
 
-//Renders the index page
+// Renders the index page
 app.get('/', (req, res) => {
     res.render('index');
 });
 
-//Renders the main page
-//When the user logged in
+// Renders the main page
+
+
 app.get('/main', (req, res) => {
-    res.render('main');
+    var isAuthenticated = req.session.authenticated || false;
+    
+    //When the user not logged in - login page
+    //When the user logged in - main page
+    if (!isAuthenticated) {
+		res.redirect('/login');
+	} else {
+		res.render('main', { authenticated: req.session.authenticated, username: req.session.username });
+	}
 });
 
 app.get('/editProfile', (req, res) => {
@@ -201,10 +217,20 @@ app.post('/submitLogin', async (req, res) => {
     res.redirect('/main');
 });
 
+// Renders the user to the root URL after the session is destroyed (logged out).
+app.get('/logout', (req, res) => {
+	req.session.destroy();
+	res.redirect('/');
+});
+
+// Renders the custom 404 error page to users instead of displaying a generic error message or a stack trace.
+app.get('*', (req, res) => {
+	res.status(404);
+	res.render('404');
+});
+
 // For developers to test on their local machine
 app.listen(port, () => {
     console.log("Node application listening on port " + port);
 });
 
-//Serves the static assets from the specified directory
-app.use(express.static(__dirname + '/public'));
