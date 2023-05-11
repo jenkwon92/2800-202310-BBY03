@@ -50,6 +50,20 @@ app.use(express.urlencoded({ extended: false }));
 
 app.set('view engine', 'ejs');
 
+// log out function 
+function logout() {
+    // AJAX call
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/logout');
+  
+    // send logout call 
+    xhr.onload = function () {
+      // redirect to index page 
+      window.location.href = '/index';
+    };
+    xhr.send();
+  }
+
 /* Home Section */
 
 //Renders the index page
@@ -63,13 +77,29 @@ app.get('/main', (req,res) => {
     res.render('main');
 });
 
+/* Profile Section */
+
+// profile 
+app.get('/profile', (req,res) => {
+    res.render('profile');
+});
+
+// edit basic profile Section
 app.get('/editProfile', (req,res) => {
     res.render('editProfile');
 });
 
-app.get('/profile', (req,res) => {
-    res.render('profile');
+// edit skill Section
+app.get('/editSkill', (req,res) => {
+    res.render('editSKill');
 });
+
+// edit interest Section
+app.get('/editInterest', (req,res) => {
+    res.render('editInterest');
+});
+
+/* Profile Section end */
 
 /* Login Section */
 app.get('/users', async (req, res) => {
@@ -114,6 +144,12 @@ app.get('/login', (req, res) => {
 
     res.render("login", { msg: msg })
 });
+
+// logout 
+app.get("/logout", (req, res) => {
+    req.session.destroy();
+    res.redirect("/index");
+  });
 
 app.post('/submitLogin', (req,res) => {
     var email = req.body.email;
