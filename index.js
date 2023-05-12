@@ -109,7 +109,7 @@ function logout() {
 
     // send logout call 
     xhr.onload = function () {
-      // redirect to index page 
+        // redirect to index page 
         window.location.href = '/index';
     };
     xhr.send();
@@ -127,14 +127,14 @@ app.get('/', (req, res) => {
 
 app.get('/main', (req, res) => {
     var isAuthenticated = req.session.authenticated || false;
-    
+
     //When the user not logged in - login page
     //When the user logged in - main page
     if (!isAuthenticated) {
-		res.redirect('/login');
-	} else {
-		res.render('main', { authenticated: req.session.authenticated, username: req.session.username });
-	}
+        res.redirect('/login');
+    } else {
+        res.render('main', { authenticated: req.session.authenticated, username: req.session.username });
+    }
 });
 
 // Renders the course detail page
@@ -145,22 +145,22 @@ app.get('/courseDetail', (req, res) => {
 /* Profile Section */
 
 // profile 
-app.get('/profile', (req,res) => {
+app.get('/profile', (req, res) => {
     res.render('profile');
 });
 
 // edit basic profile Section
-app.get('/editProfile', (req,res) => {
+app.get('/editProfile', (req, res) => {
     res.render('editProfile');
 });
 
 // edit skill Section
-app.get('/editSkill', (req,res) => {
+app.get('/editSkill', (req, res) => {
     res.render('editSKill');
 });
 
 // edit interest Section
-app.get('/editInterest', (req,res) => {
+app.get('/editInterest', (req, res) => {
     res.render('editInterest');
 });
 
@@ -235,7 +235,7 @@ app.get("/logout", (req, res) => {
     res.redirect("/index");
 });
 
-app.post('/submitLogin', async (req,res) => {
+app.post('/submitLogin', async (req, res) => {
     var email = req.body.email;
     var password = req.body.password;
 
@@ -407,16 +407,20 @@ app.get('/chatbot', (req, res) => {
     res.render('chatbot');
 });
 
+app.get('/search', (req, res) => {
+    res.render('search');
+});
+
 // Renders the user to the root URL after the session is destroyed (logged out).
 app.get('/logout', (req, res) => {
-	req.session.destroy();
-	res.redirect('/');
+    req.session.destroy();
+    res.redirect('/');
 });
 
 // Renders the custom 404 error page to users instead of displaying a generic error message or a stack trace.
 app.get('*', (req, res) => {
-	res.status(404);
-	res.render('404');
+    res.status(404);
+    res.render('404');
 });
 
 // For developers to test on their local machine
