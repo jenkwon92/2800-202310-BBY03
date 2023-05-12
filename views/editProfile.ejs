@@ -1,0 +1,119 @@
+<%- include("templates/header") %>
+  <section class="h-100 gradient-custom-2">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-9 col-xl-7">
+
+          <!-- All profiles -->
+          <form id="profile-form" action="/submitProfile" method="POST">
+            <div class="card">
+              <!-- Basic profile form -->
+              <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+                <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                    alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                    style="width: 150px; z-index: 1">
+                </div>
+                <div class="ms-3" style="margin-top: 65px; font-size: small">
+                  <div class="col-md-6">
+                    <label class="labels" for="name-input">ID</label>
+                    <input style="width:100px;" class="form-control form-control-sm" id="name-input" name="name"
+                      type="text" class="form-control" value="<%=username%>">
+
+                  </div>
+                  <div class="col-md-6">
+                    <label class="labels" for="job-input">Job</label>
+                    <input style="width:110px;" class="form-control form-control-sm" id="job-input" name="job"
+                      type="text" class="form-control" placeholder="Enter your job" value="">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="labels" for="job-input">Email</label>
+                    <input style="width:110px;" class="form-control form-control-sm" id="email-input" name="email"
+                      type="text" class="form-control" value="<%=email%>">
+                  </div>
+                  <button onclick="window.location.href='/profile'" id="save-button"
+                    class="btn btn-sm btn-dark profile-button" type="submit"
+                    style="float:right; margin-left: 100px; margin-top: 20px;">Save</button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <!-- Basic profile end -->
+
+
+          <!-- Skills&interests  -->
+          <div class="card-body p-4 text-black" style="margin-top: 20px;">
+            <div class="mb-5">
+              <p class="lead fw-normal mb-1">Skills</p>
+              <div class="p-4" style="background-color: #d0d4d6;">
+                <button type="button" class="btn btn-secondary btn-rounded">JS</button>
+              </div>
+              <p class="lead fw-normal mb-1">Interests</p>
+              <div class="p-4" style="background-color: #d0d4d6;">
+                <button type="button" class="btn btn-secondary btn-rounded">Python</button>
+              </div>
+            </div>
+            <!-- Skills&interests end  -->
+
+            <!-- edit skills&interests  -->
+            <div class="d-flex justify-content-center align-items-center mb-4">
+              <p class="lead fw-normal mb-0"></p>
+            </div>
+            <div class="row g-2">
+              <div class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center">
+                <span style="font-size:4rem" class="material-symbols-outlined mb-2">
+                  laptop_mac
+                </span>
+                <p style="font-size:1rem" class="text-center mt-2">Skills</p>
+              </div>
+              <div class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center">
+                <span style="font-size:4rem" class="material-symbols-outlined mb-2">
+                  library_books
+                </span>
+                <p style="font-size:1rem" class="text-center mt-2">Interests</p>
+              </div>
+            </div>
+            <!-- edit skills&interests end -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const form = document.getElementById('profile-form');
+    const saveButton = document.getElementById('save-button');
+  
+    saveButton.addEventListener('click', (event) => {
+      event.preventDefault();
+  
+      const name = form.name.value;
+      const job = form.job.value;
+      const email = form.email.value;
+  
+      // Create a URL-encoded string from the form data
+      const formData = new URLSearchParams();
+      formData.append('name', name);
+      formData.append('job', job);
+      formData.append('email', email);
+  
+      fetch('/submitProfile', {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          if (data.success) {
+            window.location.href = '/profile';
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          alert('Error updating profile');
+        });
+    });
+  </script>
+  
+
+  <%- include("templates/footer") %>

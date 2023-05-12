@@ -4,3 +4,4 @@ This is my readme file.
 * Marvin_Index_Page - Marvin Sio
 * Main Page - Yongeun Kwon
 * Profile page - Munyoung Cho
+* Footer/Header - Munyoung Cho

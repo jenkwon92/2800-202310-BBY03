@@ -1,0 +1,61 @@
+<%- include("templates/header") %>
+    <link href="/css/search.css" rel="stylesheet" type="text/css">
+    <div class="search-wrapper d-flex flex-column gap-2 mb-2">
+        <label for="search"></label>
+        <input type="search" id="search" class="form-control" placeholder="Search...">
+    </div>
+
+    <!-- Popular Tags -->
+    <div class="popular-tags mb-2">
+        <h3>What's Popular</h3>
+        <div class="tag-list">
+            <a href="#" class="btn btn-secondary bg-transparent text-dark mb-2">Java</a>
+            <a href="#" class="btn btn-secondary bg-transparent text-dark mb-2">Python</a>
+            <a href="#" class="btn btn-secondary bg-transparent text-dark mb-2">JavaScript</a>
+            <a href="#" class="btn btn-secondary bg-transparent text-dark mb-2">C++</a>
+        </div>
+    </div>
+
+    <!-- Display example of how cards will look -->
+    <div class="search-results">
+        <a href="" class="text-decoration-none text-dark">
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-4">
+                        <img src="https://dummyimage.com/200x200/000/fff" alt="placeholder image"
+                            class="rounded img-fluid">
+                    </div>
+                    <div class="col-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Python</h5>
+                            <p class="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut eos
+                                nostrum hic non asperiores, sit minima soluta! </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Actual template to load in cards from Javascript -->
+    <template courses-data>
+        <a href="">
+            <div class="search-results">
+                <div class="card mb-3">
+                    <div class="row g-0">
+                        <div class="col-4">
+                            <img src="https://dummyimage.com/200x200/000/fff" alt="placeholder image"
+                                class="rounded img-fluid">
+                        </div>
+                        <div class="col-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Course Name</h5>
+                                <p class="card-text">Course Details</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </template>
+    <%- include("templates/footer") %>
