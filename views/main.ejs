@@ -1,4 +1,4 @@
-<html lang="en">
+<!-- <html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -10,480 +10,31 @@
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/album/">
 
-    <!-- Custom styles for this template -->
+    Custom styles for this template
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
-    <!-- Links for slick carousel -->
+    Links for slick carousel
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" />
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css" />
 
-    <style>
-        /*===================================================
-            Fonts
-        ==================================================*/
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
-
-        /*===================================================
-            GLobal Settings
-        ==================================================*/
-        * {
-            outline: none;
-        }
-
-        .modal-open {
-            overflow: hidden !important;
-        }
-
-        body {
-            background: #ffffff;
-            color: #4d5868;
-            font-size: 14px;
-            font-family: 'Outfit', sans-serif;
-            margin: 0;
-            overflow-x: hidden !important;
-            font-weight: 400;
-        }
-
-        html {
-            position: relative;
-            min-height: 100%;
-        }
-
-        a {
-            color: #303740;
-            text-decoration: none;
-            background-color: transparent;
-            -webkit-text-decoration-skip: objects;
-        }
-
-        a:hover,
-        a:focus {
-            text-decoration: none;
-        }
-
-        a.link {
-            color: #da0b4e;
-        }
-
-        a.link:hover,
-        a.link:focus,
-        a:hover,
-        a:focus {
-            color: #da0b4e;
-        }
-
-        section {
-            padding: 30px 0 15px;
-            position: relative;
-        }
-
-        .text-muted {
-            color: #8d97ad !important;
-        }
-
-        .lead {
-            font-size: 20px !important;
-        }
-
-        p {
-            line-height: 1.8;
-        }
-
-        p,
-        ul,
-        ol,
-        dl,
-        dt,
-        dd,
-        blockquote,
-        address {
-            margin: 0 0 10px;
-        }
-
-        /*------------ GLobal Settings: Heading-------------*/
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            color: #202124;
-            font-weight: 600;
-            text-transform: capitalize;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        h1 {
-            line-height: 40px;
-            font-size: 36px;
-        }
-
-        /*-------------- GLobal Settings: Background Colors ----------------*/
-        html body .bg-light {
-            background-color: #f4f8fa !important;
-        }
-
-        html body .bg-light-2 {
-            background: #fdedf2;
-        }
-
-        .sec-heading {
-            margin-bottom: 1rem;
-        }
-
-        .light-2 {
-            background: #fbf5f4;
-        }
-
-        /*-------------- GLobal Settings: Section Headings ----------------*/
-        .sec-heading2 {
-            width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .sec-left {
-            flex: 1;
-        }
-
-        .sec-left h3 {
-            font-size: 20px;
-            margin-bottom: 0px;
-        }
-
-        .sec-right a {
-            font-size: 14px;
-            font-weight: 600;
-            opacity: 0.7;
-        }
-
-        /*===================================================
-            Main Header User Elements
-        ==================================================*/
-        .user_info {
-            display: flex;
-        }
-
-        .user_img {
-            align-items: center;
-            max-width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: inline-block;
-            overflow: hidden;
-            justify-content: flex-end;
-        }
-
-        .user_name {
-            width: 85%;
-        }
-
-        /*===================================================
-            My Courses Elements
-        ==================================================*/
-        .my_courses_block_grid {
-            width: 100%;
-            background: #ffffff;
-            border-radius: 0.4rem;
-            overflow: hidden;
-            margin-bottom: 30px;
-            position: relative;
-            transition: all ease 0.4s;
-            border: 1px solid #e8ebf1;
-        }
-
-        .my_courses_block_grid:hover,
-        .my_courses_block_grid:focus {
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-            -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-        }
-
-        /*-------------- My Courses Elements: Courses Images Section ----------------*/
-        .my_courses_block_body {
-            padding: 20px;
-        }
-
-        .my_courses_block_thumb {
-            overflow: hidden;
-            position: relative;
-        }
-
-        .my_courses_block_thumb:before {
-            content: "";
-            position: absolute;
-            background: #2a2f4c;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            top: 0;
-            opacity: 0.2;
-        }
-
-        .my_courses_block_thumb.n-shadow:before {
-            display: none;
-        }
-
-        /* .my_courses_block_grid.style_3 {
-            border: none;
-        } */
-
-        .my_courses_block_grid .bl-title {
-            font-size: 17px;
-            margin-bottom: 10px;
-        }
-
-        .my_courses_block_body p {
-            font-size: 14px;
-            margin-bottom: 0;
-        }
-
-        .my_courses_block_body {
-            padding: 20px;
-        }
-
-        /*-------------- My Courses Elements: Courses Author & Websites Section ----------------*/
-        .my_courses_block_author,
-        .my_courses_block_website {
-            flex: 1;
-            display: flex;
-            align-items: center;
-        }
-
-        .my_courses_block_author h5,
-        .my_courses_block_website h5 {
-            margin: 0;
-            font-size: 12px;
-            font-weight: 600;
-            opacity: 1;
-        }
-
-        .my_courses_block_author h5 a,
-        .my_courses_block_website h5 a {
-            color: #4a5874;
-        }
-
-        /*-------------- My Courses Elements: Courses Footer Section ----------------*/
-        .my_courses_block_footer {
-            text-align: center;
-            padding: 1rem 1.5rem;
-            width: 100%;
-            vertical-align: middle;
-            align-items: center;
-        }
-
-        .btn_start_learning {
-            background: #f4f8fa;
-            color: #4a5874;
-            padding: 6px 15px;
-            font-size: 13px;
-        }
-
-        .btn_start_learning:hover {
-            background: rgba(154, 161, 171, 0.15);
-            color: #4a5874;
-            padding: 6px 15px;
-            font-size: 13px;
-        }
-
-        .my_courses {
-            height: 400px;
-        }
-
-        /*----------- Style 3 -------------*/
-        .my_courses_block_grid.style_3 .my_courses_block_body {
-            padding: 20px 20px 5px;
-        }
-
-        /*-------------- My Courses Elements: Courses Tag Lists ----------------*/
-        .courses_tags {
-            position: relative;
-            width: 100%;
-            padding: 0 20px;
-            margin-top: 1rem;
-        }
-
-        ul.courses_tags_list {
-            margin: 0;
-            padding: 0;
-        }
-
-        ul.courses_tags_list li {
-            display: inline-block;
-            margin-right: 0.8rem;
-        }
-
-        ul.courses_tags_list li:last-child {
-            margin-right: 0rem;
-        }
-
-        ul.courses_tags_list li {
-            padding: 3px 8px;
-            font-size: 13px;
-            position: relative;
-            background: #f4f5f7;
-            border-radius: 0 2px 2px 0;
-        }
-
-        ul.courses_tags_list li.facts-1 {
-            background: rgba(33, 177, 124, 0.13);
-            color: #21b17c;
-        }
-
-        ul.courses_tags_list li.facts-2 {
-            background: rgba(255, 118, 0, 0.13);
-            color: #ff7600;
-        }
-
-        ul.courses_tags_list li.facts-3 {
-            background: rgba(197, 20, 59, 0.13);
-            color: #da0b4e;
-        }
-
-        ul.courses_tags_list li.facts-4 {
-            background: rgba(18, 163, 218, 0.13);
-            color: #12a3da;
-        }
-
-        ul.courses_tags_list li.facts-5 {
-            background: rgba(138, 101, 251, 0.13);
-            color: #8a65fb;
-        }
-
-        ul.courses_tags_list li:before {
-            border-top: 12px solid transparent;
-            border-left: 10px solid #eaedf3;
-            border-bottom: 13px solid transparent;
-            content: "";
-            height: 0;
-            position: absolute;
-            top: 0;
-            right: -10px;
-            width: 0;
-        }
-
-        ul.courses_tags_list li.facts-1:before {
-            border-left-color: rgba(33, 177, 124, 0.13);
-        }
-
-        ul.courses_tags_list li.facts-2:before {
-            border-left-color: rgba(255, 118, 0, 0.13);
-        }
-
-        ul.courses_tags_list li.facts-3:before {
-            border-left-color: rgba(197, 20, 59, 0.13);
-        }
-
-        ul.courses_tags_list li.facts-4:before {
-            border-left-color: rgba(18, 163, 218, 0.13);
-        }
-
-        ul.courses_tags_list li.facts-5:before {
-            border-left-color: rgba(138, 101, 251, 0.13);
-        }
-
-        ul.courses_tags_list li:after {
-            background-color: #fff;
-            border-radius: 50%;
-            content: "";
-            height: 4px;
-            position: absolute;
-            top: 10px;
-            right: -5px;
-            width: 4px;
-        }
-
-        /* .my_courses_block_grid.style_3 .my_courses_block_thumb {
-            padding: 12px 12px 0;
-        }
-
-        
-
-        .my_courses_block_grid.style_3 .my_courses_block_thumb img {
-            border-radius: 6px;
-        } */
-
-        .my_courses_block_grid:hover,
-        .my_courses_block_grid:focus {
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-            -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-        }
-
-        .my_courses_course_image {
-            position: relative;
-            width: 100%;
-            height: 50%;
-        }
-
-        .style_3 {
-            display: block;
-            margin-bottom: 1rem;
-        }
-
-        /*===================================================
-            Recommendations
-        ==================================================*/
-        .recommendations_course_grid {
-            -webkit-transition: all .25s ease;
-            -o-transition: all .25s ease;
-            -moz-transition: all .25s ease;
-            transition: all .25s ease;
-            position: relative;
-            margin-bottom: 1.5rem;
-            width: 100%;
-            background-color: #ffffff;
-            border-radius: 5px;
-            padding: 0px;
-            -webkit-transition: .5s;
-            transition: .5s;
-            display: -ms-flexbox;
-            display: flex;
-            -ms-flex-direction: column;
-            flex-direction: column;
-            -webkit-box-shadow: 0 0 35px 0 rgba(154, 161, 171, 0.15);
-            box-shadow: 0 0 35px 0 rgba(154, 161, 171, 0.15);
-        }
-
-        .recommendations_course_grid:hover {
-            -webkit-transform: translateY(-4px) scale(1.02);
-            -moz-transform: translateY(-4px) scale(1.02);
-            -ms-transform: translateY(-4px) scale(1.02);
-            -o-transform: translateY(-4px) scale(1.02);
-            transform: translateY(-4px) scale(1.02);
-            -webkit-box-shadow: 0 14px 24px rgba(0, 0, 0, 0.2);
-            box-shadow: 0 14px 24px rgba(0, 0, 0, 0.2);
-            z-index: 999;
-        }
-
-        .recommendations_course_grid .bl-title {
-            font-size: 17px;
-            margin-bottom: 10px;
-        }
-
-        .recommendations_course_body {
-            padding: 1.5rem;
-            -ms-flex: 1 1 auto;
-            flex: 1 1 auto;
-            border-radius: 5px;
-        }
-    </style>
+    
 </head>
 
-<body>
-    <main role="main">
-        <section class="jumbotron">
-            <div class="container">
-                <p class="lead text-muted">Hello,</p>
-                <div class="user_info">
-                    <h1 class="jumbotron-heading user_name"><%=username%></h1>
-                    <div class="path-img user_img"><a href="instructor-detail.html" tabindex="-1"><img src="cat1.jpg"
-                                class="img-fluid" alt=""></a></div>
-                </div>
+<body> -->
+    <link rel="stylesheet" href="/css/main.css">
+    <%- include("templates/header") %>
+        <div class="container" style="margin-bottom: 10px;">
+            <p class="lead text-muted">Hello,</p>
+            <div class="user_info">
+                <h1 class="jumbotron-heading user_name"><%=username%></h1>
+                <div class="path-img user_img"><a href="/profile" tabindex="-1"><img src="cat1.jpg"
+                            class="img-fluid" alt=""></a></div>
             </div>
-        </section>
+        </div>
+    <main role="main">
 
         <section class="light-2">
             <div class="container">
@@ -513,16 +64,16 @@
                         <div class="my_courses">
                             <div class="my_courses_block_grid style_3 m-1">
                                 <div class="my_courses_block_thumb n-shadow">
-                                    <a href="course-detail.html"><img src="cat1.jpg"
+                                    <a href="/courseDetail"><img src="cat1.jpg"
                                             class="my_courses_course_image img-fluid" alt=""></a>
                                 </div>
                                 <div class="my_courses_block_body">
-                                    <h4 class="bl-title"><a href="course-detail.html">Python for Data Science</a></h4>
+                                    <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a></h4>
                                     <div class="my_courses_block_author">
-                                        <h5><a href="instructor-detail.html">Shaurya Preet</a></h5>
+                                        <h5><a href="/courseDetail">Shaurya Preet</a></h5>
                                     </div>
                                     <div class="my_courses_block_website">
-                                        <h5><a href="instructor-detail.html">Udemy</a></h5>
+                                        <h5><a href="/courseDetail">Udemy</a></h5>
                                     </div>
                                 </div>
                                 <div class="courses_tags">
@@ -540,16 +91,16 @@
                             </div>
                             <div class="my_courses_block_grid style_3 m-1">
                                 <div class="my_courses_block_thumb n-shadow">
-                                    <a href="course-detail.html"><img src="cat1.jpg"
+                                    <a href="/courseDetail"><img src="cat1.jpg"
                                             class="my_courses_course_image img-fluid" alt=""></a>
                                 </div>
                                 <div class="my_courses_block_body">
-                                    <h4 class="bl-title"><a href="course-detail.html">Python for Data Science</a></h4>
+                                    <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a></h4>
                                     <div class="my_courses_block_author">
-                                        <h5><a href="instructor-detail.html">Shaurya Preet</a></h5>
+                                        <h5><a href="/courseDetail">Shaurya Preet</a></h5>
                                     </div>
                                     <div class="my_courses_block_website">
-                                        <h5><a href="instructor-detail.html">Udemy</a></h5>
+                                        <h5><a href="/courseDetail">Udemy</a></h5>
                                     </div>
                                 </div>
                                 <div class="courses_tags">
@@ -567,16 +118,16 @@
                             </div>
                             <div class="my_courses_block_grid style_3 m-1">
                                 <div class="my_courses_block_thumb n-shadow">
-                                    <a href="course-detail.html"><img src="cat1.jpg"
+                                    <a href="/courseDetail"><img src="cat1.jpg"
                                             class="my_courses_course_image img-fluid" alt=""></a>
                                 </div>
                                 <div class="my_courses_block_body">
-                                    <h4 class="bl-title"><a href="course-detail.html">Python for Data Science</a></h4>
+                                    <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a></h4>
                                     <div class="my_courses_block_author">
-                                        <h5><a href="instructor-detail.html">Shaurya Preet</a></h5>
+                                        <h5><a href="/courseDetail">Shaurya Preet</a></h5>
                                     </div>
                                     <div class="my_courses_block_website">
-                                        <h5><a href="instructor-detail.html">Udemy</a></h5>
+                                        <h5><a href="/courseDetail">Udemy</a></h5>
                                     </div>
                                 </div>
                                 <div class="courses_tags">
@@ -617,7 +168,7 @@
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
                                         <div class="d-flex flex-column fw-500">
-                                            <h4 class="bl-title"><a href="course-detail.html">Python for Data Science</a></h4>
+                                            <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a></h4>
                                             <span class="text-fade">Instructor name</span>
                                         </div>
                                     </div>
@@ -633,7 +184,7 @@
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
                                         <div class="d-flex flex-column fw-500">
-                                            <h4 class="bl-title"><a href="course-detail.html">Python for Data Science</a></h4>
+                                            <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a></h4>
                                             <span class="text-fade">Instructor name</span>
                                         </div>
                                     </div>
@@ -662,14 +213,6 @@
     <script>
         // My Courses carousel function
         $(document).ready(function () {
-            // $('.my_courses').slick({
-            //     slidesToShow: 1,
-            //     slidesToScroll: 1,
-            //     autoplay: true,
-            //     autoplaySpeed: 2000,
-            //     pauseOnHover : true, //Slider stop when a user hovers the 
-            // });
-
             // Slide For dots Three
             $('.my_courses').slick({
                 slidesToShow: 3,
@@ -701,6 +244,4 @@
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous">
     </script>
-</body>
-
-</html>
+ <%- include("templates/footer") %>
