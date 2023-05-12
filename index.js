@@ -109,7 +109,7 @@ function logout() {
 
     // send logout call 
     xhr.onload = function () {
-      // redirect to index page 
+        // redirect to index page 
         window.location.href = '/index';
     };
     xhr.send();
@@ -127,14 +127,14 @@ app.get('/', (req, res) => {
 
 app.get('/main', (req, res) => {
     var isAuthenticated = req.session.authenticated || false;
-    
+
     //When the user not logged in - login page
     //When the user logged in - main page
     if (!isAuthenticated) {
-		res.redirect('/login');
-	} else {
-		res.render('main', { authenticated: req.session.authenticated, username: req.session.username });
-	}
+        res.redirect('/login');
+    } else {
+        res.render('main', { authenticated: req.session.authenticated, username: req.session.username });
+    }
 });
 
 // Renders the course detail page
@@ -145,22 +145,22 @@ app.get('/courseDetail', (req, res) => {
 /* Profile Section */
 
 // profile 
-app.get('/profile', (req,res) => {
+app.get('/profile', (req, res) => {
     res.render('profile');
 });
 
 // edit basic profile Section
-app.get('/editProfile', (req,res) => {
+app.get('/editProfile', (req, res) => {
     res.render('editProfile');
 });
 
 // edit skill Section
-app.get('/editSkill', (req,res) => {
+app.get('/editSkill', (req, res) => {
     res.render('editSKill');
 });
 
 // edit interest Section
-app.get('/editInterest', (req,res) => {
+app.get('/editInterest', (req, res) => {
     res.render('editInterest');
 });
 
@@ -174,7 +174,9 @@ app.get('/users', async (req, res) => {
 
 // For developers to test on their local machine
 app.get('/signup', (req, res) => {
-    res.render('signUp');
+    var msg = req.query.msg || '';
+
+    res.render('signUp', { msg: msg });
 });
 
 // Creates a new user
@@ -189,10 +191,28 @@ app.post('/submitUser', async (req, res) => {
     // If user already exists, return error message
     if (existingUser) {
         if (existingUser.email === email) {
-            return res.send("User with this email already exists");
+            res.render('signUp', { msg: "User with this email already exists." });
+            return;
         } else {
-            return res.send("User with this username already exists");
+            res.render('signUp', { msg: "User with this username already exists." });
+            return;
         }
+    }
+
+    const schema = Joi.object(
+        {
+            email: Joi.string().email().required().messages({ 'string.empty': 'Email is required' }),
+            username: Joi.string().alphanum().max(20).required().messages({ 'string.empty': 'Username is required' }),
+            firstName: Joi.string().required().messages({ 'string.empty': 'First name is required' }),
+            password: Joi.string().max(20).required().messages({ 'string.empty': 'Password is required' })
+        });
+
+    const validationResult = schema.validate({ email, username, firstName, password });
+    if (validationResult.error != null) {
+        console.log(validationResult.error);
+        var errorMessage = validationResult.error.details[0].message;
+        res.render('signUp', { msg: errorMessage });
+        return;
     }
 
     // Hash the password
@@ -235,16 +255,17 @@ app.get("/logout", (req, res) => {
     res.redirect("/index");
 });
 
-app.post('/submitLogin', async (req,res) => {
+app.post('/submitLogin', async (req, res) => {
     var email = req.body.email;
     var password = req.body.password;
 
     const schema = Joi.string().required();
     const validationResult = schema.validate(email);
+
     // If email is invalid, return error message
     if (validationResult.error != null) {
         console.log(validationResult.error);
-        res.redirect('/login?msg=Invalid Email/Password!');
+        res.render('login', { msg: "Invalid Email!" });
         return;
     }
 
@@ -253,7 +274,7 @@ app.post('/submitLogin', async (req,res) => {
     // If email does not exist, return error message
     if (!user) {
         console.log("Email not found");
-        res.redirect('/login?msg=Invalid Email!');
+        res.render('login', { msg: "User with this email does not exist." });
         return;
     }
 
@@ -269,7 +290,7 @@ app.post('/submitLogin', async (req,res) => {
         req.session.cookie.maxAge = expireTime;
     } else {
         console.log("Incorrect password");
-        res.redirect('/login?msg=Invalid Password!');
+        res.render('login', { msg: "Password is incorrect." });
         return;
     }
 
@@ -409,14 +430,14 @@ app.get('/chatbot', (req, res) => {
 
 // Renders the user to the root URL after the session is destroyed (logged out).
 app.get('/logout', (req, res) => {
-	req.session.destroy();
-	res.redirect('/');
+    req.session.destroy();
+    res.redirect('/');
 });
 
 // Renders the custom 404 error page to users instead of displaying a generic error message or a stack trace.
 app.get('*', (req, res) => {
-	res.status(404);
-	res.render('404');
+    res.status(404);
+    res.render('404');
 });
 
 // For developers to test on their local machine
