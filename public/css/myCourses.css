@@ -1,0 +1,67 @@
+.banner-heading {
+    font-size: 50px;
+    font-weight: 600;
+  }
+
+  .index-banner-search {
+    font-size: 14px;
+  }
+
+  /** Course Card CSS Start  **/
+  .course-card {
+    padding: 10px;
+  }
+  .course-card .crd-bottom {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    left: 10px;
+  }
+  .crd-info-txt {
+    font-size: 12px;
+  }
+  /** Course Card CSS End  **/
+
+  .crd-img-wrap {
+    overflow: hidden;
+    transition: 0.5s;
+  }
+
+  .wish-heart {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    stroke-width: 20px;
+    stroke: #fff;
+    transition: all 0.5s 0s;
+  }
+  
+  .wish-heart.active .heart__svg {
+    stroke: red;
+    fill: red;
+  }
+  
+  .wish-heart.active .heart__path,
+  .wish-heart.active .heart__stroke {
+    fill: red;
+  }
+
+  /*
+================================================
+3. Search Courses Cards CSS
+================================================
+*/
+.courses-search .sec-header .btn-secondary.active {
+    box-shadow: 0 7px 15px -2px #ccc;
+  }
+  
+  .courses-search .sec-header .btn-secondary:focus, .courses-search .sec-header .btn-secondary:hover {
+    color: #fff;
+    box-shadow: 0 7px 15px -2px #ccc;
+    background-color: #565e64;
+  }
+  
+
+  .sec-header-btn a {
+  white-space: nowrap;
+}

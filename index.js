@@ -137,6 +137,11 @@ app.get('/main', (req, res) => {
 	}
 });
 
+// Renders the my courses page
+app.get('/myCourses', (req, res) => {
+    res.render('myCourses');
+});
+
 // Renders the course detail page
 app.get('/courseDetail', (req, res) => {
     res.render('courseDetail');
