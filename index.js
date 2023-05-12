@@ -101,19 +101,19 @@ function sessionValidation(req, res, next) {
     }
 }
 
-// log out function 
-function logout() {
-    // AJAX call
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/logout');
+// // log out function 
+// function logout() {
+//     // AJAX call
+//     var xhr = new XMLHttpRequest();
+//     xhr.open('GET', '/logout');
 
-    // send logout call 
-    xhr.onload = function () {
-        // redirect to index page 
-        window.location.href = '/index';
-    };
-    xhr.send();
-}
+//     // send logout call 
+//     xhr.onload = function () {
+//       // redirect to index page 
+//         window.location.href = '/index';
+//     };
+//     xhr.send();
+// }
 
 /* Home Section */
 
@@ -144,14 +144,38 @@ app.get('/courseDetail', (req, res) => {
 
 /* Profile Section */
 
-// profile 
+// renders profile 
 app.get('/profile', (req, res) => {
-    res.render('profile');
-});
+    var isAuthenticated = req.session.authenticated || false;
+  
+    // When the user is not logged in - login page
+    // When the user is logged in - profile page
+    if (!isAuthenticated) {
+      res.redirect('/login');
+    } else {
+      res.render('profile', {
+        authenticated: req.session.authenticated,
+        username: req.session.username,
+        email: req.session.email, // Include the email variable here
+        job: req.session.job
+      });
+    }
+  });
 
 // edit basic profile Section
-app.get('/editProfile', (req, res) => {
-    res.render('editProfile');
+app.get('/editProfile', (req,res) => {
+    var isAuthenticated = req.session.authenticated || false;
+    
+    //When the user not logged in - login page
+    //When the user logged in - profile page
+    if (!isAuthenticated) {
+		res.redirect('/login');
+	} else {
+		res.render('editProfile', { authenticated: req.session.authenticated, 
+            username: req.session.username, 
+            email: req.session.email, 
+            job: req.session.job });
+    }
 });
 
 // edit skill Section
@@ -164,6 +188,44 @@ app.get('/editInterest', (req, res) => {
     res.render('editInterest');
 });
 
+//update the user profile
+app.post('/submitProfile', async (req, res) => {
+    const { job, email } = req.body;
+  
+    try {
+      // Retrieve the existing email from the database
+      const existingUser = await userCollection.findOne(
+        { username: req.session.username },
+        { projection: { email: 1 } } // Specify to include only the email field
+      );
+      const existingEmail = existingUser.email;
+  
+      // Use the existing email as a fallback if the email field is empty in the form submission
+      const updatedEmail = email || existingEmail;
+  
+      // Update the user's profile in the database
+      const updateResult = await userCollection.updateOne(
+        { username: req.session.username },
+        { $set: { job, email: updatedEmail } }
+      );
+  
+      if (updateResult.modifiedCount === 1) {
+        // Update the session with the new profile information
+        req.session.job = job;
+        req.session.email = updatedEmail;
+  
+        // Redirect to the profile page on successful update
+        res.redirect('/profile');
+      } else {
+        throw new Error('Failed to update user profile');
+      }
+    } catch (error) {
+      console.error(error);
+      // Display an error message to the user
+      res.status(500).send('Error updating profile');
+    }
+  });
+  
 /* Profile Section end */
 
 /* Login Section */
@@ -252,7 +314,7 @@ app.get('/login', (req, res) => {
 // logout 
 app.get("/logout", (req, res) => {
     req.session.destroy();
-    res.redirect("/index");
+    res.redirect("/");
 });
 
 app.post('/submitLogin', async (req, res) => {
