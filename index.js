@@ -15,7 +15,7 @@ const nodemailer = require("nodemailer");       // Import nodemailer
 const saltRounds = 12;                          // Set the number of salt rounds for bcrypt
 
 // Our website URL
-const WebsiteURL = "http://localhost:3000";
+const WebsiteURL = "http://wjxdvnhtuk.eu09.qoddiapp.com";
 
 // Set expiration time for session to 1 hour
 const expireTime = 1 * 60 * 60 * 1000;
