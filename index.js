@@ -1,77 +1,55 @@
+// Import required modules
 require("./utils.js");
 require("dotenv").config();
 
-const express = require("express");
+const express = require("express");             // Import express
+const session = require("express-session");     // Import express-session
+const MongoStore = require("connect-mongo");    // Import connect-mongo
+const bcrypt = require("bcrypt");               // Import bcrypt
+const { ObjectId } = require("mongodb");        // Import ObjectId from mongodb
+const port = process.env.PORT || 3000;          // Set the port to 3000 or the port specified in the environment
+const app = express();                          // Create an express application
+const Joi = require("joi");                     // Import Joi
+const jwt = require("jsonwebtoken");            // Import jsonwebtoken
+const nodemailer = require("nodemailer");       // Import nodemailer
+const saltRounds = 12;                          // Set the number of salt rounds for bcrypt
 
-// For storing session information in the database
-const session = require("express-session");
+// Our website URL
+const WebsiteURL = "http://localhost:3000";
 
-// For storing session information in the database
-const MongoStore = require("connect-mongo");
-
-// bcrypt for password hashing
-const bcrypt = require("bcrypt");
-const saltRounds = 12;
-
-// To access ObjectID in MongoDB
-const { ObjectId } = require("mongodb");
-
-// For developers to test on their local machine
-const port = process.env.PORT || 3000;
-
-/* Create the express app */
-const app = express();
-
-const Joi = require("joi");
-
-// For JSON Web Tokens to reset password
-const jwt = require("jsonwebtoken");
-
-// For sending emails
-const nodemailer = require("nodemailer");
-
-const WebsiteURL = "http://wjxdvnhtuk.eu09.qoddiapp.com";
-
-//Set expiration time for session to 1 hour
+// Set expiration time for session to 1 hour
 const expireTime = 1 * 60 * 60 * 1000;
 
-/* Secret Information Section */
+// Secret Information Section
 const mongodb_host = process.env.MONGODB_HOST;
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
 const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
-
 const node_session_secret = process.env.NODE_SESSION_SECRET;
-
 const JWT_SECRET = process.env.JWT_SECRET;
-/* End Secret Information Section */
+// End Secret Information Section
 
-/* Session Section */
-var mongoStore = MongoStore.create({
+// Session Section
+const mongoStore = MongoStore.create({
     mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/sessions`,
     crypto: {
         secret: mongodb_session_secret,
     },
 });
 
-/* Database Section */
-var { database } = require("./databaseConnection");
-const userCollection = database.db(mongodb_database).collection("users");
-const coursesCollection = database.db(mongodb_database).collection("courses");
+// Database Section
+const { database } = require("./databaseConnection");                           // Import the database connection
+const userCollection = database.db(mongodb_database).collection("users");       // Specify the collection to store users
+const coursesCollection = database.db(mongodb_database).collection("courses");  // Specify the collection to store courses
 
-/* Set the ejs view engine */
+// Set the ejs view engine
 app.set("view engine", "ejs");
 
-/* Sets up middleware for an Express.js */
+// Middleware
+app.use(express.urlencoded({ extended: false }));   // Handles URL-encoded form data.
+app.use(express.static(__dirname + "/public"));     // Serves the static assets from the specified directory
 
-// Handles URL-encoded form data.
-app.use(express.urlencoded({ extended: false }));
-
-// Serves the static assets from the specified directory
-app.use(express.static(__dirname + "/public"));
-
-// Sets the session
 app.use(
     session({
         secret: node_session_secret,
@@ -79,20 +57,17 @@ app.use(
         saveUninitialized: false,
         resave: true,
         cookie: {
-            maxAge: 3600000, // set session expiration time to 1 hour
+            maxAge: 3600000, // Set session expiration time to 1 hour
         },
     })
 );
 
 // Check if the session is valid
 function isValidSession(req) {
-    if (req.session.authenticated) {
-        return true;
-    }
-    return false;
+    return req.session.authenticated || false;
 }
 
-// Check if the session is valid
+// Middleware to check session validation
 function sessionValidation(req, res, next) {
     if (isValidSession(req)) {
         next();
@@ -101,30 +76,18 @@ function sessionValidation(req, res, next) {
     }
 }
 
-// // log out function
-// function logout() {
-//     // AJAX call
-//     var xhr = new XMLHttpRequest();
-//     xhr.open('GET', '/logout');
-
-//     // send logout call
-//     xhr.onload = function () {
-//       // redirect to index page
-//         window.location.href = '/index';
-//     };
-//     xhr.send();
-// }
-
 /* Home Section */
-
-const csv = require("csv-parser");
-const fs = require("fs");
 
 const mycollection = "mycollection";
 
 // Renders the index page
-app.get("/", (req, res) => {
-    res.render("index");
+app.get('/', (req, res) => {
+    if (!req.session.authenticated) {
+        res.render("index");
+    }
+    else {
+        res.redirect('/main');
+    }
 });
 
 // Renders the dataset page
@@ -144,6 +107,7 @@ app.post("/datasetUpload", upload.single("csvfile"), async (req, res) => {
         const stream = fs.createReadStream(csvfile).pipe(csv());
         let keys = null;
         for await (const data of stream) {
+
             // Use the first row of the CSV file to create object keys
             if (!keys) {
                 keys = Object.keys(data);
@@ -154,10 +118,10 @@ app.post("/datasetUpload", upload.single("csvfile"), async (req, res) => {
             keys.forEach((key) => {
                 course[key] = data[key];
             });
+
             // Insert the course object into the collection
             coursesCollection.insertOne(course);
         }
-
         console.log("Import complete!");
         res.redirect("/dataset");
     } catch (err) {
@@ -167,19 +131,11 @@ app.post("/datasetUpload", upload.single("csvfile"), async (req, res) => {
 });
 
 // Renders the main page
-app.get("/main", (req, res) => {
-    var isAuthenticated = req.session.authenticated || false;
-
-    //When the user not logged in - login page
-    //When the user logged in - main page
-    if (!isAuthenticated) {
-        res.redirect("/login");
-    } else {
-        res.render("main", {
-            authenticated: req.session.authenticated,
-            username: req.session.username,
-        });
-    }
+app.get("/main", sessionValidation, (req, res) => {
+    res.render("main", {
+        authenticated: req.session.authenticated,
+        username: req.session.username,
+    });
 });
 
 // Renders the course detail page
@@ -190,48 +146,36 @@ app.get("/courseDetail", (req, res) => {
 /* Profile Section */
 
 // renders profile
-app.get("/profile", (req, res) => {
-    var isAuthenticated = req.session.authenticated || false;
-
+app.get("/profile", sessionValidation, (req, res) => {
     // When the user is not logged in - login page
     // When the user is logged in - profile page
-    if (!isAuthenticated) {
-        res.redirect("/login");
-    } else {
-        res.render("profile", {
-            authenticated: req.session.authenticated,
-            username: req.session.username,
-            email: req.session.email, // Include the email variable here
-            job: req.session.job,
-        });
-    }
+    res.render("profile", {
+        authenticated: req.session.authenticated,
+        username: req.session.username,
+        email: req.session.email, // Include the email variable here
+        job: req.session.job,
+    });
 });
 
 // edit basic profile Section
-app.get("/editProfile", (req, res) => {
-    var isAuthenticated = req.session.authenticated || false;
-
-    //When the user not logged in - login page
-    //When the user logged in - profile page
-    if (!isAuthenticated) {
-        res.redirect("/login");
-    } else {
-        res.render("editProfile", {
-            authenticated: req.session.authenticated,
-            username: req.session.username,
-            email: req.session.email,
-            job: req.session.job,
-        });
-    }
+app.get("/editProfile", sessionValidation, (req, res) => {
+    // When the user not logged in - login page
+    // When the user logged in - profile page
+    res.render("editProfile", {
+        authenticated: req.session.authenticated,
+        username: req.session.username,
+        email: req.session.email,
+        job: req.session.job,
+    });
 });
 
 // edit skill Section
-app.get("/editSkill", (req, res) => {
+app.get("/editSkill", sessionValidation, (req, res) => {
     res.render("editSKill");
 });
 
 // edit interest Section
-app.get("/editInterest", (req, res) => {
+app.get("/editInterest", sessionValidation, (req, res) => {
     res.render("editInterest");
 });
 
@@ -272,16 +216,10 @@ app.post("/submitProfile", async (req, res) => {
         res.status(500).send("Error updating profile");
     }
 });
-
 /* Profile Section end */
 
-/* Login Section */
-app.get("/users", async (req, res) => {
-    const users = await userCollection.find().toArray();
-    res.render("users", { users });
-});
-
-// For developers to test on their local machine
+/* Sign Up Section */
+// Renders the signup page
 app.get("/signup", (req, res) => {
     var msg = req.query.msg || "";
 
@@ -364,19 +302,15 @@ app.post("/submitUser", async (req, res) => {
     // Redirect to main page after signup
     res.redirect("/main");
 });
+/* Sign Up Section end */
 
+/* Login Section */
 // Renders the login page
 app.get("/login", (req, res) => {
     // Show error message if there is one
     var msg = req.query.msg || "";
 
     res.render("login", { msg: msg });
-});
-
-// logout
-app.get("/logout", (req, res) => {
-    req.session.destroy();
-    res.redirect("/");
 });
 
 app.post("/submitLogin", async (req, res) => {
@@ -420,7 +354,9 @@ app.post("/submitLogin", async (req, res) => {
 
     res.redirect("/main");
 });
+/* Login Section end */
 
+/* Password Recovery Section */
 // Renders the forgot password page
 app.get("/forgotPassword", (req, res, next) => {
     var msg = req.query.msg || "";
@@ -443,7 +379,6 @@ app.post("/forgotPassword", async (req, res, next) => {
             id: user._id,
         };
         const token = jwt.sign(payload, secret, { expiresIn: "15m" });
-        // const link = `${WebsiteURL}/resetPassword/${user._id}/${token}`;
         const link = `${WebsiteURL}/resetPassword/${user._id}/${token}`;
 
         const transporter = nodemailer.createTransport({
@@ -478,17 +413,20 @@ app.post("/forgotPassword", async (req, res, next) => {
 
 // Renders the reset password page
 app.get("/resetPassword/:id/:token", async (req, res, next) => {
-    // Get user id and token from url
+    // Get user id and token from URL
     const { id, token } = req.params;
 
-    // Find user in database
+    // Check if the id parameter is a valid ObjectId
+    if (!ObjectId.isValid(id)) {
+        return res.render("error", { errorMessage: "Invalid ID!" });
+    }
+
+    // Find user in the database
     const user = await userCollection.findOne({ _id: new ObjectId(id) });
 
-    // If user does not exist, return error message
+    // If user does not exist, render error message
     if (!user) {
-        // res.render('resetPassword', { msg: "ID not found!" });
-        res.send("ID not found!");
-        return;
+        return res.render('error', { errorMessage: "ID not found!" });
     }
 
     // Create secret for JWT
@@ -498,26 +436,24 @@ app.get("/resetPassword/:id/:token", async (req, res, next) => {
         res.render("resetPassword", { email: user.email });
     } catch (error) {
         console.log(error);
-        res.send(error);
+        return res.render("error", { errorMessage: "Invalid token!" });
     }
 });
 
 // Resets the user's password
 app.post("/resetPassword/:id/:token", async (req, res, next) => {
-    // Get user id and token from url
+    // Get user id and token from URL
     const { id, token } = req.params;
 
     // Get new password from form
     const { newPassword } = req.body;
 
-    // Find user in database
+    // Find user in the database
     const user = await userCollection.findOne({ _id: new ObjectId(id) });
 
-    // If user does not exist, return error message
+    // If user does not exist, render error message
     if (!user) {
-        // res.render('resetPassword', { msg: "ID not found!" });
-        res.send("ID not found!");
-        return;
+        return res.render('error', { errorMessage: "ID not found!" });
     }
 
     // Create secret for JWT
@@ -529,7 +465,7 @@ app.post("/resetPassword/:id/:token", async (req, res, next) => {
         // Hash the new password
         user.password = await bcrypt.hash(newPassword, saltRounds);
 
-        // Update password in database
+        // Update password in the database
         await userCollection.updateOne(
             { _id: new ObjectId(id) },
             { $set: { password: user.password } }
@@ -539,23 +475,32 @@ app.post("/resetPassword/:id/:token", async (req, res, next) => {
         res.render("passwordUpdated");
     } catch (error) {
         console.log(error);
-        res.send(error);
+        return res.render("error", { errorMessage: "Invalid token!" });
     }
 });
+
+/* Password Recovery Section end */
 
 // Renders the chatbot page
 app.get("/chatbot", (req, res) => {
     res.render("chatbot");
 });
 
+
+// Renders the search page
 app.get("/search", (req, res) => {
     res.render("search");
 });
 
 // Renders the user to the root URL after the session is destroyed (logged out).
 app.get("/logout", (req, res) => {
-    req.session.destroy();
-    res.redirect("/");
+    req.session.destroy((err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.redirect("/");
+        }
+    });
 });
 
 // Renders the custom 404 error page to users instead of displaying a generic error message or a stack trace.
