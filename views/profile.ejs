@@ -1,32 +1,35 @@
 <%- include("templates/header") %>
+
     <section class="h-100 gradient-custom-2">
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col col-lg-9 col-xl-7">
 
                     <!-- All profiles -->
-                    <div class="card">
+                    <div class="card" style="margin-bottom: 20px;">
                         <!-- Basic profile -->
                         <div class="rounded-top text-white d-flex flex-row"
-                            style="background-color: #000; height:200px;">
-                            <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
-                                    alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
-                                    style="width: 150px; z-index: 1">
+                            style="background-color: #4A596D; height:200px;">
+                            <div class="ms-4 mt-auto mb-auto d-flex flex-column" style="width: 150px;">
+                                <img src="<%= image || '/images/profile/avatar-1.webp' %>" alt="Profile Image"
+                                    class="img-fluid img-thumbnail" style="width: 150px; z-index: 1;">
                             </div>
-                            <div class="ms-3" style="margin-top: 80px; font-size: small; color: #d0d4d6;">
-                                <h5>Username: <%=username%></h5>
-                                <h6>Job: <%=job%></h6>
-                                <h6>Email: <%=email%></h6>
-                                <span id="edit-icon" style="font-size: 20px; float: right; line-height:20px;"
-                                    class="material-symbols-outlined">
-                                    edit
-                                </span>
-
+                            <div class="ms-3"
+                                style="font-size: small; color: #d0d4d6; margin-top: auto; margin-bottom: auto;">
+                                <h5 style="margin-bottom: 5px;">
+                                    <%= username %>
+                                </h5>
+                                <h6 style="margin-bottom: 5px;">Job: <%= job %>
+                                </h6>
+                                <h6 style="margin-bottom: 0;">Email: <%= email %>
+                                </h6>
+                                <span id="edit-icon"
+                                    style="font-size: 20px; float: right; position: absolute; top:170px; right: 10px"
+                                    class="material-icons-outlined">edit</span>
                             </div>
                         </div>
                         <!-- Basic profile end -->
-
+                        <!-- Basic profile end -->
 
                         <!-- Skills&interests  -->
                         <div class="card-body p-4 text-black" style="margin-top: 20px;">
@@ -52,8 +55,10 @@
                                     style=" border: 1px solid #ccc;
                                     border-radius: 10px;
                                     padding: 10px;">
-                                    <span style="font-size:4rem" class="material-symbols-outlined mb-2">
-                                        laptop_mac
+                                    <span id="edit-icon"
+                                        style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
+                                        class="material-icons-outlined">
+                                        computer
                                     </span>
                                     <p style="font-size:1rem" class="text-center mt-2">Skills</p>
                                 </div>
@@ -62,8 +67,10 @@
                                     style=" border: 1px solid #ccc;
                                     border-radius: 10px;
                                     padding: 10px;">
-                                    <span style="font-size:4rem" class="material-symbols-outlined mb-2">
-                                        library_books
+                                    <span id="edit-icon"
+                                        style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
+                                        class="material-icons-outlined">
+                                        menu_book
                                     </span>
                                     <p style="font-size:1rem" class="text-center mt-2">Interests</p>
                                 </div>
@@ -71,7 +78,8 @@
                             <!-- edit skills&interests end -->
 
                             <!-- log out  -->
-                            <button onclick="window.location.href='/logout'"class="btn btn-sm btn-dark profile-button" type="button"
+                            <button onclick="window.location.href='/logout'" class="btn btn-sm btn-dark profile-button"
+                                type="button"
                                 style="border-radius: 10px; align-items: center; margin-top: 50px; width: 100%; margin-bottom: 50px;">Log
                                 out</button>
                             <!-- log out end  -->
@@ -81,7 +89,7 @@
                 </div>
             </div>
     </section>
-
+    </div>
     <!-- function section -->
     <script>
 

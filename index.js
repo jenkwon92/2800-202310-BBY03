@@ -145,36 +145,51 @@ app.get('/courseDetail', (req, res) => {
 /* Profile Section */
 
 // renders profile 
-app.get('/profile', (req, res) => {
+app.get('/profile', async (req, res) => {
     var isAuthenticated = req.session.authenticated || false;
   
-    // When the user is not logged in - login page
-    // When the user is logged in - profile page
     if (!isAuthenticated) {
       res.redirect('/login');
     } else {
-      res.render('profile', {
-        authenticated: req.session.authenticated,
-        username: req.session.username,
-        email: req.session.email, // Include the email variable here
-        job: req.session.job
-      });
+      try {
+        const user = await userCollection.findOne({ username: req.session.username });
+  
+        if (!user) {
+          throw new Error('User not found');
+        }
+  
+        res.render('profile', {
+          authenticated: req.session.authenticated,
+          username: req.session.username,
+          email: user.email,
+          job: user.job,
+          image: user.image || '/images/profile/avatar-1.webp' // Add the 'image' variable here
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Error retrieving user profile');
+      }
     }
   });
 
+  
+
 // edit basic profile Section
-app.get('/editProfile', (req,res) => {
+app.get('/editProfile', (req, res) => {
     var isAuthenticated = req.session.authenticated || false;
     
-    //When the user not logged in - login page
-    //When the user logged in - profile page
+    // When the user is not logged in - login page
+    // When the user is logged in - profile page
     if (!isAuthenticated) {
-		res.redirect('/login');
-	} else {
-		res.render('editProfile', { authenticated: req.session.authenticated, 
+        res.redirect('/login');
+    } else {
+        res.render('editProfile', { 
+            authenticated: req.session.authenticated, 
             username: req.session.username, 
             email: req.session.email, 
-            job: req.session.job });
+            job: req.session.job,
+            image: req.session.image // Add the 'image' variable here
+        });
     }
 });
 
@@ -188,31 +203,54 @@ app.get('/editInterest', (req, res) => {
     res.render('editInterest');
 });
 
-//update the user profile
-app.post('/submitProfile', async (req, res) => {
-    const { job, email } = req.body;
-  
+//update the user profile(username, email, job, image)
+const multer = require('multer');
+
+// Set up multer for handling file uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/images/profile');
+  },
+  filename: function (req, file, cb) {
+    const extension = file.mimetype.split('/')[1];
+    cb(null, `${req.session.username}.${extension}`);
+  }
+});
+
+// Initialize multer middleware for file upload with the specified storage configuration
+const upload = multer({ storage: storage });
+
+// Update the user's profile
+app.post('/submitProfile', upload.single('image'), async (req, res) => {
+    const { name, job, email } = req.body;
+    let image = null;
+    
+    if (req.file) {
+      image = `/images/profile/${req.session.username}.${req.file.filename.split('.').pop()}`;
+    } else if (req.session.image) {
+      image = req.session.image;
+    }
+    
     try {
-      // Retrieve the existing email from the database
-      const existingUser = await userCollection.findOne(
-        { username: req.session.username },
-        { projection: { email: 1 } } // Specify to include only the email field
-      );
-      const existingEmail = existingUser.email;
-  
-      // Use the existing email as a fallback if the email field is empty in the form submission
-      const updatedEmail = email || existingEmail;
-  
       // Update the user's profile in the database
+      const updateFields = { job, email, image };
+      
+      // Exclude 'name' from updateFields if it is not provided
+      if (name) {
+        updateFields.name = name;
+      }
+      
       const updateResult = await userCollection.updateOne(
         { username: req.session.username },
-        { $set: { job, email: updatedEmail } }
+        { $set: updateFields }
       );
   
       if (updateResult.modifiedCount === 1) {
         // Update the session with the new profile information
+        req.session.name = name;
         req.session.job = job;
-        req.session.email = updatedEmail;
+        req.session.email = email;
+        req.session.image = image;
   
         // Redirect to the profile page on successful update
         res.redirect('/profile');
@@ -225,6 +263,7 @@ app.post('/submitProfile', async (req, res) => {
       res.status(500).send('Error updating profile');
     }
   });
+  
   
 /* Profile Section end */
 
