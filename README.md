@@ -5,3 +5,4 @@ This is my readme file.
 * Main Page - Yongeun Kwon
 * Profile page - Munyoung Cho
 * Footer/Header - Munyoung Cho
+* Recommendation - Munyoung Cho
