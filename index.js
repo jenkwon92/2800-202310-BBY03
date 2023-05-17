@@ -360,8 +360,9 @@ app.post("/submitLogin", async (req, res) => {
 // Renders the forgot password page
 app.get("/forgotPassword", (req, res, next) => {
     var msg = req.query.msg || "";
+    var msgType = req.query.msgType || "";
 
-    res.render("forgotPassword", { msg: msg });
+    res.render("forgotPassword", { msg: { text: msg, type: msgType } });
 });
 
 // Sends the reset password email
@@ -371,7 +372,7 @@ app.post("/forgotPassword", async (req, res, next) => {
     const user = await userCollection.findOne({ email: email });
 
     if (!user) {
-        res.render("forgotPassword", { msg: "User email not found!" });
+        res.render("forgotPassword", { msg: { text: "User email not found!", type: "error" } });
     } else {
         const secret = JWT_SECRET + user.password;
         const payload = {
@@ -402,12 +403,12 @@ app.post("/forgotPassword", async (req, res, next) => {
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log(error);
-            } else {
-                console.log("Email sent: " + info.response);
+                return res.render("forgotPassword", { msg: { text: "An error occurred while sending the email.", type: "error" } });
             }
-        });
 
-        res.render("forgotPassword", { msg: "Password reset link has been sent!" });
+            console.log("Email sent: " + info.response);
+            res.render("forgotPassword", { msg: { text: "Password reset link has been sent!", type: "success" } });
+        });
     }
 });
 
