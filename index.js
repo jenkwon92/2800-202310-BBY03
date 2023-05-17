@@ -174,6 +174,11 @@ app.get("/courseDetail", (req, res) => {
   res.render("courseDetail");
 });
 
+// Renders the see all page
+app.get('/recommendation', (req, res) => {
+  res.render('recommendation');
+});
+
 /* Profile Section */
 
 app.get("/profile", async (req, res) => {
