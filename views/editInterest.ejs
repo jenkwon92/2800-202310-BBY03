@@ -1,70 +1,130 @@
 <%- include("templates/header") %>
-<div style="display: flex; flex-direction: column; margin-left: 20px; margin-top: 20px;">
-  <div class="select-wrapper" style="margin-bottom: 20px;">
-    <strong style="margin-left:15px;">Interests</strong>
-    <select id="multiple-checkboxes-interest" multiple="multiple" style="display: none;">
-      <option value="php">PHP</option>
-      <option value="javascript">JavaScript</option>
-      <option value="java">Java</option>
-      <option value="sql">SQL</option>
-      <option value="jquery">Jquery</option>
-      <option value=".net">.Net</option>
-    </select>
-  </br>
-    <div class="btn-group" style="width:90%; margin: 20px;">
-      <button type="button" class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" title="None selected" aria-expanded="false">
-        <span class="multiselect-selected-text">Select your interests</span>
-      </button>
-      <ul class="multiselect-container dropdown-menu">
-        <li class="multiselect-item multiselect-all">
-          <a tabindex="0" class="multiselect-all"><label class="checkbox"><input type="checkbox" value="multiselect-all">  Select all</label></a>
-        </li>
-        <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="php"> PHP</label></a></li>
-        <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="javascript"> JavaScript</label></a></li>
-        <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="java"> Java</label></a></li>
-        <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="sql"> SQL</label></a></li>
-        <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value="jquery"> Jquery</label></a></li>
-        <li><a tabindex="0"><label class="checkbox"><input type="checkbox" value=".net"> .Net</label></a></li>
-      </ul>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+
+<style>
+  .selected-interest {
+    display: inline-block;
+    margin: 0 5px 5px 0;
+    padding: 5px 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+  }
+
+  .selected-interest .close {
+    margin-left: 10px;
+    cursor: pointer;
+  }
+
+  .multiselect-container.dropdown-menu {
+    display: none !important;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h4>Interests</h4>
+      <div class="row">
+        <div class="col">
+          <div class="dropdown" style="margin-bottom:40px">
+            <button style="width:80%;" class="btn btn-secondary dropdown-toggle" type="button" id="multiSelectButton"
+              data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Select your interests
+            </button>
+            <div class="dropdown-menu" aria-labelledby="multiSelectButton" style="width:100%;">
+              <select id="multiSelect" multiple style="width:100%;">
+                <option value="php">PHP</option>
+                <option value="javascript">JavaScript</option>
+                <option value="java">Java</option>
+                <option value="React">React</option>
+                <option value="jquery">jQuery</option>
+                <option value="C++">C++</option>
+                <option value="Python">Python</option>
+                <option value="HTML">HTML</option>
+                <option value="CSS">CSS</option>
+                <option value="MySQL">MySQL</option>
+                <option value="MongoDB">MongoDB</option>
+              </select>
+            </div>
+          </div>
+          <div id="interestSet1" class="border p-3 mt-3">
+            <h4>Selected Interests</h4>
+            <div id="selectedInterests"></div>
+          </div>
+          <button id="save-button" class="btn btn-sm btn-dark profile-button" type="submit"
+            style="font-size: 15px; float: right; margin-top: 20px;">Save</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="card-body p-4 text-black" style="margin-top: 20px;">
-  <div class="mb-5">
-      <div class="p-4" style="background-color: #d0d4d6; height: 180px;">
-        <button type="button" class="btn btn-secondary btn-rounded" id="js-div">
-          JS
-          <span id="js-close" class="material-symbols-outlined" style="font-size: smaller; margin-left: 10px;">
-              close
-          </span>
-      </button>
-      </div>
-  </div>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
-  <button class="btn btn-sm btn-dark profile-button" type="button" style="align-items: center; margin-top: 10px; width: 100%;">Save the changes</button>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
-
-  <script>
-    // $(document).ready(function() {
-    //   $('#multiple-checkboxes-interest').multiselect({
-    //     includeSelectAllOption: true,
-    //   });
-    // });
-
-    // Close the interest button
-     const closeButton = document.getElementById("js-close");
-    const jsDiv = document.getElementById("js-div");
-    closeButton.addEventListener("click", function() {
-        jsDiv.style.display = "none";
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const select = new Choices('#multiSelect', {
+      placeholder: true,
+      placeholderValue: 'Select your interests',
+      removeItemButton: true,
+      maxItemCount: -1,
+      allowHTML: true
     });
 
-  </script>
-  
-  <%- include("templates/footer") %>
+    const selectedInterests = document.querySelector('#selectedInterests');
+
+    select.passedElement.element.addEventListener('change', function () {
+      selectedInterests.innerHTML = '';
+      const selectedOptions = Array.from(this.selectedOptions);
+      selectedOptions.forEach(option => {
+        const interestContainer = document.createElement('div');
+        interestContainer.className = 'selected-interest';
+        const interestText = document.createElement('span');
+        interestText.textContent = option.text;
+
+        const closeButton = document.createElement('span');
+        closeButton.className = 'close';
+        closeButton.innerHTML = '&times;';
+        closeButton.addEventListener('click', function () {
+          select.removeActiveItemsByValue(option.value);
+          saveInterests(); // Call saveInterests() after removing the interest
+        });
+
+        interestContainer.appendChild(interestText);
+        interestContainer.appendChild(closeButton);
+
+        selectedInterests.appendChild(interestContainer);
+      });
+    });
+
+    const saveButton = document.querySelector('#save-button');
+    saveButton.addEventListener('click', saveInterests);
+
+    function saveInterests() {
+      const selectedOptions = Array.from(select.getValue(false));
+      const interests = selectedOptions.map(option => option.value).join(',');
+
+      if (interests.trim() === '') {
+        console.error('Interests data is missing');
+        return;
+      }
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/saveInterests');
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          console.log('Interests saved successfully');
+          window.location.href = '/profile'; // redirect to the profile page
+        } else {
+          console.error('Error saving interests');
+        }
+      };
+      xhr.send(JSON.stringify({ interests: interests })); // Send interests data as JSON object
+    }
+  });
+</script>
+
+<%- include("templates/footer") %>

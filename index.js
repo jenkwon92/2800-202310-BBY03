@@ -1,20 +1,20 @@
 require("./utils.js");
-require('dotenv').config();
+require("dotenv").config();
 
-const express = require('express');
-
-// For storing session information in the database
-const session = require('express-session');
+const express = require("express");
 
 // For storing session information in the database
-const MongoStore = require('connect-mongo');
+const session = require("express-session");
+
+// For storing session information in the database
+const MongoStore = require("connect-mongo");
 
 // bcrypt for password hashing
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const saltRounds = 12;
 
 // To access ObjectID in MongoDB
-const { ObjectId } = require('mongodb');
+const { ObjectId } = require("mongodb");
 
 // For developers to test on their local machine
 const port = process.env.PORT || 3000;
@@ -24,13 +24,19 @@ const app = express();
 
 const Joi = require("joi");
 
+// Middleware for parsing request bodies
+const bodyParser = require("body-parser");
+
+// Parse JSON bodies
+app.use(bodyParser.json());
+
 // For JSON Web Tokens to reset password
 const jwt = require("jsonwebtoken");
 
 // For sending emails
 const nodemailer = require("nodemailer");
 
-const WebsiteURL = 'http://wjxdvnhtuk.eu09.qoddiapp.com';
+const WebsiteURL = "http://wjxdvnhtuk.eu09.qoddiapp.com";
 
 //Set expiration time for session to 1 hour
 const expireTime = 1 * 60 * 60 * 1000;
@@ -47,22 +53,22 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET;
 /* End Secret Information Section */
 
-
 /* Session Section */
 var mongoStore = MongoStore.create({
-    mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/sessions`,
-    crypto: {
-        secret: mongodb_session_secret
-    }
+  mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/sessions`,
+  crypto: {
+    secret: mongodb_session_secret,
+  },
 });
 
 /* Database Section */
 var { database } = require("./databaseConnection");
-const userCollection = database.db(mongodb_database).collection("users");
+const userCollection = database.db(mongodb_database).collection("users"); //create user db
+const skillCollection = database.db(mongodb_database).collection("skills"); //create skills db
+const interestCollection = database.db(mongodb_database).collection("interests"); //create skills db
 
 /* Set the ejs view engine */
-app.set('view engine', 'ejs');
-
+app.set("view engine", "ejs");
 
 /* Sets up middleware for an Express.js */
 
@@ -70,46 +76,47 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 
 // Serves the static assets from the specified directory
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + "/public"));
 
 // Sets the session
-app.use(session({
+app.use(
+  session({
     secret: node_session_secret,
     store: mongoStore,
     saveUninitialized: false,
     resave: true,
     cookie: {
-        maxAge: 3600000 // set session expiration time to 1 hour
-    }
-}));
+      maxAge: 3600000, // set session expiration time to 1 hour
+    },
+  })
+);
 
 // Check if the session is valid
 function isValidSession(req) {
-    if (req.session.authenticated) {
-        return true;
-    }
-    return false;
+  if (req.session.authenticated) {
+    return true;
+  }
+  return false;
 }
 
 // Check if the session is valid
 function sessionValidation(req, res, next) {
-    if (isValidSession(req)) {
-        next();
-    }
-    else {
-        res.redirect('/login');
-    }
+  if (isValidSession(req)) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
 }
 
-// // log out function 
+// // log out function
 // function logout() {
 //     // AJAX call
 //     var xhr = new XMLHttpRequest();
 //     xhr.open('GET', '/logout');
 
-//     // send logout call 
+//     // send logout call
 //     xhr.onload = function () {
-//       // redirect to index page 
+//       // redirect to index page
 //         window.location.href = '/index';
 //     };
 //     xhr.send();
@@ -118,128 +125,175 @@ function sessionValidation(req, res, next) {
 /* Home Section */
 
 // Renders the index page
-app.get('/', (req, res) => {
-    res.render('index');
+app.get("/", (req, res) => {
+  res.render("index");
 });
 
 // Renders the main page
 
+app.get("/main", (req, res) => {
+  var isAuthenticated = req.session.authenticated || false;
 
-app.get('/main', (req, res) => {
-    var isAuthenticated = req.session.authenticated || false;
-
-    //When the user not logged in - login page
-    //When the user logged in - main page
-    if (!isAuthenticated) {
-        res.redirect('/login');
-    } else {
-        res.render('main', { authenticated: req.session.authenticated, username: req.session.username });
-    }
+  //When the user not logged in - login page
+  //When the user logged in - main page
+  if (!isAuthenticated) {
+    res.redirect("/login");
+  } else {
+    res.render("main", {
+      authenticated: req.session.authenticated,
+      username: req.session.username,
+    });
+  }
 });
 
 // Renders the course detail page
-app.get('/courseDetail', (req, res) => {
-    res.render('courseDetail');
+app.get("/courseDetail", (req, res) => {
+  res.render("courseDetail");
 });
 
 /* Profile Section */
 
-// renders profile 
-app.get('/profile', async (req, res) => {
-    var isAuthenticated = req.session.authenticated || false;
+app.get("/profile", async (req, res) => {
+  var isAuthenticated = req.session.authenticated || false;
+
+  if (!isAuthenticated) {
+    res.redirect("/login");
+  } else {
+    try {
+      const user = await userCollection.findOne({
+        username: req.session.username,
+      });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      res.render("profile", {
+        authenticated: req.session.authenticated,
+        username: req.session.username,
+        email: user.email,
+        job: user.job,
+        image: user.image || "/images/profile/avatar-1.webp", // Add the 'image' variable here
+        skills: user.skills || [], // Add the 'skills' variable here with a default value of an empty array
+        interests: user.interests || [] // Add the 'skills' variable here with a default value of an empty array
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error retrieving user profile");
+    }
+  }
+});
+
+// edit basic profile Section
+app.get("/editProfile", (req, res) => {
+  var isAuthenticated = req.session.authenticated || false;
+
+  // When the user is not logged in - login page
+  // When the user is logged in - profile page
+  if (!isAuthenticated) {
+    res.redirect("/login");
+  } else {
+    res.render("editProfile", {
+      authenticated: req.session.authenticated,
+      username: req.session.username,
+      email: req.session.email,
+      job: req.session.job,
+      image: req.session.image || "/images/profile/avatar-1.webp", // Add the 'image' variable here
+    });
+  }
+});
+
+app.get("/editSkill", async (req, res) => {
+    try {
+      // Retrieve Skills data from the database and store it in the `skills` variable
+      const skills = await skillCollection
+        .find({ userId: req.session.username })
+        .toArray();
   
-    if (!isAuthenticated) {
-      res.redirect('/login');
-    } else {
-      try {
-        const user = await userCollection.findOne({ username: req.session.username });
+      // Retrieve the user's skills from the database
+      const user = await userCollection.findOne({
+        username: req.session.username,
+      });
   
-        if (!user) {
-          throw new Error('User not found');
-        }
+      if (!user) {
+        throw new Error("User not found");
+      }
   
-        res.render('profile', {
-          authenticated: req.session.authenticated,
-          username: req.session.username,
-          email: user.email,
-          job: user.job,
-          image: user.image || '/images/profile/avatar-1.webp' // Add the 'image' variable here
+      // Retrieve selected skills for the user
+      const selectedSkills = user.skills || [];
+  
+      res.render("editSkill", {
+        authenticated: req.session.authenticated,
+        username: req.session.username,
+        skills: skills.map((skill) => ({
+          name: skill.skill,
+          selected: selectedSkills.includes(skill.skill),
+        })),
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error retrieving skills");
+    }
+  });
+  
+
+// edit interest Section
+app.get("/editInterest", async (req, res) => {
+    try {
+        // Retrieve Skills data from the database and store it in the `skills` variable
+        const interests = await interestCollection
+          .find({ userId: req.session.username })
+          .toArray();
+    
+        res.render("editInterest", {
+            interests: interests.map((interest) => interest.interest), // Extract the skill names from the skills data
         });
       } catch (error) {
         console.error(error);
-        res.status(500).send('Error retrieving user profile');
+        res.status(500).send("Error retrieving interests");
       }
-    }
-  });
-
-  
-
-// edit basic profile Section
-app.get('/editProfile', (req, res) => {
-    var isAuthenticated = req.session.authenticated || false;
-    
-    // When the user is not logged in - login page
-    // When the user is logged in - profile page
-    if (!isAuthenticated) {
-        res.redirect('/login');
-    } else {
-        res.render('editProfile', { 
-            authenticated: req.session.authenticated, 
-            username: req.session.username, 
-            email: req.session.email, 
-            job: req.session.job,
-            image: req.session.image // Add the 'image' variable here
-        });
-    }
-});
-
-// edit skill Section
-app.get('/editSkill', (req, res) => {
-    res.render('editSKill');
-});
-
-// edit interest Section
-app.get('/editInterest', (req, res) => {
-    res.render('editInterest');
-});
+    });
 
 //update the user profile(username, email, job, image)
-const multer = require('multer');
+const multer = require("multer");
 
 // Set up multer for handling file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/images/profile');
+    cb(null, "public/images/profile");
   },
   filename: function (req, file, cb) {
-    const extension = file.mimetype.split('/')[1];
+    const extension = file.mimetype.split("/")[1];
     cb(null, `${req.session.username}.${extension}`);
-  }
+  },
 });
 
 // Initialize multer middleware for file upload with the specified storage configuration
 const upload = multer({ storage: storage });
 
-// Update the user's profile
-app.post('/submitProfile', upload.single('image'), async (req, res) => {
-    const { name, job, email } = req.body;
+// update the user profile(username, email, job, image)
+app.post("/submitProfile", upload.single("image"), async (req, res) => {
+    const { name, job, email, skills } = req.body;
     let image = null;
-    
+  
     if (req.file) {
-      image = `/images/profile/${req.session.username}.${req.file.filename.split('.').pop()}`;
+      image = `/images/profile/${req.session.username}.${req.file.filename
+        .split(".")
+        .pop()}`;
+      req.session.image = image; // Update session image
     } else if (req.session.image) {
       image = req.session.image;
     }
-    
+  
     try {
       // Update the user's profile in the database
-      const updateFields = { job, email, image };
-      
+      const updateFields = { job, email, image, skills };
+  
       // Exclude 'name' from updateFields if it is not provided
       if (name) {
         updateFields.name = name;
       }
-      
+  
       const updateResult = await userCollection.updateOne(
         { username: req.session.username },
         { $set: updateFields }
@@ -250,303 +304,376 @@ app.post('/submitProfile', upload.single('image'), async (req, res) => {
         req.session.name = name;
         req.session.job = job;
         req.session.email = email;
-        req.session.image = image;
+        req.session.skills = skills;
+        req.session.interests = interests;
+  
+        // Save user's skills in the skills collection
+        const skillList = skills.split(",");
+  
+        await skillCollection.deleteMany({ userId: req.session.username }); // Remove existing user skills
+  
+        for (const skill of skillList) {
+          await skillCollection.insertOne({
+            userId: req.session.username,
+            skill,
+          });
+        }
   
         // Redirect to the profile page on successful update
-        res.redirect('/profile');
+        res.redirect("/profile");
       } else {
-        throw new Error('Failed to update user profile');
+        throw new Error("Failed to update user profile");
       }
     } catch (error) {
       console.error(error);
       // Display an error message to the user
-      res.status(500).send('Error updating profile');
+      res.status(500).send("Error updating profile");
     }
   });
+
+//update the user's skill
+app.post("/saveSkills", sessionValidation, async (req, res) => {
+    try {
+      const { skills } = req.body;
+      const username = req.session.username;
   
+      if (!skills) {
+        throw new Error("Skills data is missing");
+      }
   
+      const skillList = skills.split(",").map((skill) => skill.trim());
+      const updateResult = await userCollection.updateOne(
+        { username: username },
+        { $set: { skills: skillList } }
+      );
+      if (updateResult.modifiedCount === 1) {
+        res.sendStatus(200); // Skills saved successfully
+      } else {
+        throw new Error("Failed to save skills");
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error saving skills"); // Error saving skills
+    }
+  });
+
+//update the user's interests
+  app.post("/saveInterests", sessionValidation, async (req, res) => {
+    try {
+      const { interests } = req.body;
+      const username = req.session.username;
+  
+      if (!interests) {
+        throw new Error("Interests data is missing");
+      }
+  
+      const interestList = interests.split(",").map((interest) => interest.trim());
+      const updateResult = await userCollection.updateOne(
+        { username: username },
+        { $set: { interests: interestList } }
+      );
+      if (updateResult.modifiedCount === 1) {
+        res.sendStatus(200); // Interests saved successfully
+      } else {
+        throw new Error("Failed to save interests");
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error saving interests"); // Error saving interests
+    }
+  });
 /* Profile Section end */
 
 /* Login Section */
-app.get('/users', async (req, res) => {
-    const users = await userCollection.find().toArray();
-    res.render('users', { users });
+app.get("/users", async (req, res) => {
+  const users = await userCollection.find().toArray();
+  res.render("users", { users });
 });
 
 // For developers to test on their local machine
-app.get('/signup', (req, res) => {
-    var msg = req.query.msg || '';
+app.get("/signup", (req, res) => {
+  var msg = req.query.msg || "";
 
-    res.render('signUp', { msg: msg });
+  res.render("signUp", { msg: msg });
 });
 
 // Creates a new user
-app.post('/submitUser', async (req, res) => {
-    const { email, username, firstName, lastName, password } = req.body;
+app.post("/submitUser", async (req, res) => {
+  const { email, username, firstName, lastName, password } = req.body;
 
-    // Check if user with the same email or username already exists
-    const existingUser = await userCollection.findOne({
-        $or: [{ email: email }, { username: username }]
-    });
+  // Check if user with the same email or username already exists
+  const existingUser = await userCollection.findOne({
+    $or: [{ email: email }, { username: username }],
+  });
 
-    // If user already exists, return error message
-    if (existingUser) {
-        if (existingUser.email === email) {
-            res.render('signUp', { msg: "User with this email already exists." });
-            return;
-        } else {
-            res.render('signUp', { msg: "User with this username already exists." });
-            return;
-        }
+  // If user already exists, return error message
+  if (existingUser) {
+    if (existingUser.email === email) {
+      res.render("signUp", { msg: "User with this email already exists." });
+      return;
+    } else {
+      res.render("signUp", { msg: "User with this username already exists." });
+      return;
     }
+  }
 
-    const schema = Joi.object(
-        {
-            email: Joi.string().email().required().messages({ 'string.empty': 'Email is required' }),
-            username: Joi.string().alphanum().max(20).required().messages({ 'string.empty': 'Username is required' }),
-            firstName: Joi.string().required().messages({ 'string.empty': 'First name is required' }),
-            password: Joi.string().max(20).required().messages({ 'string.empty': 'Password is required' })
-        });
+  const schema = Joi.object({
+    email: Joi.string()
+      .email()
+      .required()
+      .messages({ "string.empty": "Email is required" }),
+    username: Joi.string()
+      .alphanum()
+      .max(20)
+      .required()
+      .messages({ "string.empty": "Username is required" }),
+    firstName: Joi.string()
+      .required()
+      .messages({ "string.empty": "First name is required" }),
+    password: Joi.string()
+      .max(20)
+      .required()
+      .messages({ "string.empty": "Password is required" }),
+  });
 
-    const validationResult = schema.validate({ email, username, firstName, password });
-    if (validationResult.error != null) {
-        console.log(validationResult.error);
-        var errorMessage = validationResult.error.details[0].message;
-        res.render('signUp', { msg: errorMessage });
-        return;
-    }
+  const validationResult = schema.validate({
+    email,
+    username,
+    firstName,
+    password,
+  });
+  if (validationResult.error != null) {
+    console.log(validationResult.error);
+    var errorMessage = validationResult.error.details[0].message;
+    res.render("signUp", { msg: errorMessage });
+    return;
+  }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+  // Hash the password
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Create new user
-    const newUser = {
-        email: email,
-        username: username,
-        firstName: firstName,
-        lastName: lastName,
-        password: hashedPassword
-    };
+  // Create new user
+  const newUser = {
+    email: email,
+    username: username,
+    firstName: firstName,
+    lastName: lastName,
+    password: hashedPassword,
+  };
 
-    // Insert new user into database
-    await userCollection.insertOne(newUser);
-    // Console log to show that user was added
-    console.log("User added to database");
+  // Insert new user into database
+  await userCollection.insertOne(newUser);
+  // Console log to show that user was added
+  console.log("User added to database");
 
-    // Set session variables
-    req.session.authenticated = true;
-    req.session.username = username;
+  // Set session variables
+  req.session.authenticated = true;
+  req.session.username = username;
 
-    // Redirect to main page after signup
-    res.redirect("/main");
+  // Redirect to main page after signup
+  res.redirect("/main");
 });
 
 // Renders the login page
-app.get('/login', (req, res) => {
+app.get("/login", (req, res) => {
+  // Show error message if there is one
+  var msg = req.query.msg || "";
 
-    // Show error message if there is one
-    var msg = req.query.msg || '';
-
-    res.render("login", { msg: msg })
+  res.render("login", { msg: msg });
 });
 
-// logout 
+// logout
 app.get("/logout", (req, res) => {
-    req.session.destroy();
-    res.redirect("/");
+  req.session.destroy();
+  res.redirect("/");
 });
 
-app.post('/submitLogin', async (req, res) => {
-    var email = req.body.email;
-    var password = req.body.password;
+app.post("/submitLogin", async (req, res) => {
+  var email = req.body.email;
+  var password = req.body.password;
 
-    const schema = Joi.string().required();
-    const validationResult = schema.validate(email);
+  const schema = Joi.string().required();
+  const validationResult = schema.validate(email);
 
-    // If email is invalid, return error message
-    if (validationResult.error != null) {
-        console.log(validationResult.error);
-        res.render('login', { msg: "Invalid Email!" });
-        return;
-    }
+  // If email is invalid, return error message
+  if (validationResult.error != null) {
+    console.log(validationResult.error);
+    res.render("login", { msg: "Invalid Email!" });
+    return;
+  }
 
-    const user = await userCollection.findOne({ email: email });
+  const user = await userCollection.findOne({ email: email });
 
-    // If email does not exist, return error message
-    if (!user) {
-        console.log("Email not found");
-        res.render('login', { msg: "User with this email does not exist." });
-        return;
-    }
+  // If email does not exist, return error message
+  if (!user) {
+    console.log("Email not found");
+    res.render("login", { msg: "User with this email does not exist." });
+    return;
+  }
 
-    // Checks if the password matches using bcrypt compare
-    const passwordMatch = await bcrypt.compare(password, user.password);
+  // Checks if the password matches using bcrypt compare
+  const passwordMatch = await bcrypt.compare(password, user.password);
 
-    // If password does not match, return error message
-    if (passwordMatch) {
-        // Set session variables
-        req.session.authenticated = true;
-        req.session.username = user.username;
-        req.session.email = email;
-        req.session.cookie.maxAge = expireTime;
-    } else {
-        console.log("Incorrect password");
-        res.render('login', { msg: "Password is incorrect." });
-        return;
-    }
+  // If password does not match, return error message
+  if (passwordMatch) {
+    // Set session variables
+    req.session.authenticated = true;
+    req.session.username = user.username;
+    req.session.email = email;
+    req.session.cookie.maxAge = expireTime;
+  } else {
+    console.log("Incorrect password");
+    res.render("login", { msg: "Password is incorrect." });
+    return;
+  }
 
-    res.redirect('/main');
+  res.redirect("/main");
 });
 
 // Renders the forgot password page
-app.get('/forgotPassword', (req, res, next) => {
-    var msg = req.query.msg || '';
+app.get("/forgotPassword", (req, res, next) => {
+  var msg = req.query.msg || "";
 
-    res.render('forgotPassword', { msg: msg })
+  res.render("forgotPassword", { msg: msg });
 });
 
 // Sends the reset password email
-app.post('/forgotPassword', async (req, res, next) => {
-    const { email } = req.body;
+app.post("/forgotPassword", async (req, res, next) => {
+  const { email } = req.body;
 
-    const user = await userCollection.findOne({ email: email });
+  const user = await userCollection.findOne({ email: email });
 
-    if (!user) {
-        res.render('forgotPassword', { msg: "User email not found!" });
-    } else {
-        const secret = JWT_SECRET + user.password;
-        const payload = {
-            email: email,
-            id: user._id
-        };
-        const token = jwt.sign(payload, secret, { expiresIn: '15m' });
-        // const link = `${WebsiteURL}/resetPassword/${user._id}/${token}`;
-        const link = `${WebsiteURL}/resetPassword/${user._id}/${token}`;
+  if (!user) {
+    res.render("forgotPassword", { msg: "User email not found!" });
+  } else {
+    const secret = JWT_SECRET + user.password;
+    const payload = {
+      email: email,
+      id: user._id,
+    };
+    const token = jwt.sign(payload, secret, { expiresIn: "15m" });
+    // const link = `${WebsiteURL}/resetPassword/${user._id}/${token}`;
+    const link = `${WebsiteURL}/resetPassword/${user._id}/${token}`;
 
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true,
-            auth: {
-                user: process.env.COURSEPILOT_SUPPORT_EMAIL,
-                pass: process.env.COURSEPILOT_SUPPORT_PASSWORD
-            }
-        });
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.COURSEPILOT_SUPPORT_EMAIL,
+        pass: process.env.COURSEPILOT_SUPPORT_PASSWORD,
+      },
+    });
 
-        // send mail with defined transport object
-        const mailOptions = {
-            from: `"CoursePilot" <${process.env.COURSEPILOT_SUPPORT_EMAIL}>`, // Sender address
-            to: user.email, // Recipient address
-            subject: 'CoursePilot Password Recovery', // Subject line
-            html: `<p>Please click this <a href="${link}">link</a> to reset your password.</p>` // HTML body
-        };
+    // send mail with defined transport object
+    const mailOptions = {
+      from: `"CoursePilot" <${process.env.COURSEPILOT_SUPPORT_EMAIL}>`, // Sender address
+      to: user.email, // Recipient address
+      subject: "CoursePilot Password Recovery", // Subject line
+      html: `<p>Please click this <a href="${link}">link</a> to reset your password.</p>`, // HTML body
+    };
 
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('Email sent: ' + info.response);
-            }
-        });
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
 
-        res.render('forgotPassword', { msg: "Password reset link has been sent!" });
-    }
+    res.render("forgotPassword", { msg: "Password reset link has been sent!" });
+  }
 });
-
 
 // Renders the reset password page
-app.get('/resetPassword/:id/:token', async (req, res, next) => {
-    // Get user id and token from url
-    const { id, token } = req.params;
+app.get("/resetPassword/:id/:token", async (req, res, next) => {
+  // Get user id and token from url
+  const { id, token } = req.params;
 
-    // Find user in database
-    const user = await userCollection.findOne({ _id: new ObjectId(id) });
+  // Find user in database
+  const user = await userCollection.findOne({ _id: new ObjectId(id) });
 
-    // If user does not exist, return error message
-    if (!user) {
-        // res.render('resetPassword', { msg: "ID not found!" });
-        res.send("ID not found!");
-        return;
-    }
+  // If user does not exist, return error message
+  if (!user) {
+    // res.render('resetPassword', { msg: "ID not found!" });
+    res.send("ID not found!");
+    return;
+  }
 
-    // Create secret for JWT
-    const secret = JWT_SECRET + user.password;
-    try {
-        const payload = jwt.verify(token, secret);
-        res.render('resetPassword', { email: user.email });
-    }
-    catch (error) {
-        console.log(error);
-        res.send(error);
-    }
+  // Create secret for JWT
+  const secret = JWT_SECRET + user.password;
+  try {
+    const payload = jwt.verify(token, secret);
+    res.render("resetPassword", { email: user.email });
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
 });
 
-
 // Resets the user's password
-app.post('/resetPassword/:id/:token', async (req, res, next) => {
-    // Get user id and token from url
-    const { id, token } = req.params;
+app.post("/resetPassword/:id/:token", async (req, res, next) => {
+  // Get user id and token from url
+  const { id, token } = req.params;
 
-    // Get new password from form
-    const { newPassword } = req.body;
+  // Get new password from form
+  const { newPassword } = req.body;
 
-    // Find user in database
-    const user = await userCollection.findOne({ _id: new ObjectId(id) });
+  // Find user in database
+  const user = await userCollection.findOne({ _id: new ObjectId(id) });
 
-    // If user does not exist, return error message
-    if (!user) {
-        // res.render('resetPassword', { msg: "ID not found!" });
-        res.send("ID not found!");
-        return;
-    }
+  // If user does not exist, return error message
+  if (!user) {
+    // res.render('resetPassword', { msg: "ID not found!" });
+    res.send("ID not found!");
+    return;
+  }
 
-    // Create secret for JWT
-    const secret = JWT_SECRET + user.password;
-    try {
-        // Verify the token
-        const payload = jwt.verify(token, secret);
+  // Create secret for JWT
+  const secret = JWT_SECRET + user.password;
+  try {
+    // Verify the token
+    const payload = jwt.verify(token, secret);
 
-        // Hash the new password
-        user.password = await bcrypt.hash(newPassword, saltRounds);
+    // Hash the new password
+    user.password = await bcrypt.hash(newPassword, saltRounds);
 
-        // Update password in database
-        await userCollection.updateOne(
-            { _id: new ObjectId(id) },
-            { $set: { password: user.password } }
-        );
+    // Update password in database
+    await userCollection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { password: user.password } }
+    );
 
-        // Password successfully updated
-        res.render('passwordUpdated');
-    }
-    catch (error) {
-        console.log(error);
-        res.send(error);
-    }
+    // Password successfully updated
+    res.render("passwordUpdated");
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
 });
 
 // Renders the chatbot page
-app.get('/chatbot', (req, res) => {
-    res.render('chatbot');
+app.get("/chatbot", (req, res) => {
+  res.render("chatbot");
 });
 
-app.get('/search', (req, res) => {
-    res.render('search');
+app.get("/search", (req, res) => {
+  res.render("search");
 });
 
 // Renders the user to the root URL after the session is destroyed (logged out).
-app.get('/logout', (req, res) => {
-    req.session.destroy();
-    res.redirect('/');
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
 });
 
 // Renders the custom 404 error page to users instead of displaying a generic error message or a stack trace.
-app.get('*', (req, res) => {
-    res.status(404);
-    res.render('404');
+app.get("*", (req, res) => {
+  res.status(404);
+  res.render("404");
 });
 
 // For developers to test on their local machine
 app.listen(port, () => {
-    console.log("Node application listening on port " + port);
+  console.log("Node application listening on port " + port);
 });
-
