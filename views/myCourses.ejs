@@ -1,1213 +1,136 @@
-<%- include("templates/header") %>
-<link rel="stylesheet" href="/css/myCourses.css">
-    <main class="main-page-content">
-        <!-- Hero banner Start-->
-        <section class="courses-banner py-8 bg-secondary position-relative">
+<!-- <html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>CoursePilot Main</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/album/">
+
+    Custom styles for this template
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+    Links for slick carousel
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css" />
+
+    
+</head>
+
+<body> -->
+    <link rel="stylesheet" href="/css/myCourses.css">
+    <%- include("templates/header") %>
+    <main role="main">
+        <section>
             <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-md-4">
-                        <h1 class="banner-heading m-0">Courses</h1>
-                    </div>
-                    <div class="col-md-8 text-center mt-5 mt-md-0">
-                        <form role="search">
-                            <div class="input-group banner-form">
-                                <input class="index-banner-search form-control py-sm-3 py-2 px-sm-4 px-3 border-0"
-                                    placeholder="Search your favourite course" name="srch-term" type="text">
-                                <button class="btn btn-primary" type="submit"><img src="images/svg/search-white.svg"
-                                        alt="Image Description"></button>
-                            </div>
-                        </form>
+                <div class="col-lg-12 col-md-12 mb-3">
+                    <div>
+                        <div class="sec-left mb-3">
+                            <h3>My Courses</h3>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-12 text-center mt-3 mt-md-0">
+                            <form role="search">
+                                <div class="input-group banner-form" style="border: 1px solid #ced4da; border-radius: 0.25rem;">
+                                    <input class="index-banner-search form-control py-sm-3 py-2 px-sm-4 px-3 border-0"
+                                        placeholder="Search your course" name="srch-term" type="text">
+                                    <button class="btn btn-primary" type="submit"><img src="cat1.jpg" alt="Image Description" style="width:10px;"></button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- Hero banner End-->
-        <!-- Course main sec Start-->
-        <section class="py-8 courses-search">
+
+        <section class="light-2">
             <div class="container">
-                <div class="sec-content tab-content" id="pills-tabContent">
-                    <!-- courses All-->
-                    <div class="tab-pane fade show active" id="courses-all-crd" role="tabpanel">
-                        <div class="row multi-course-crd-list">
-                            
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img2.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img2.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.3</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Statistics Data Science and Business Analysis
-                                            </h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Nicole Brown</span>
-                                            </a>
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-12">
+                        <div class="box mb-15 my_courses_grid">
+                            <div class="my_courses_body">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <div class="d-flex flex-column fw-500">
+                                            <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a></h4>
+                                            <span class="text-fade">Instructor name</span>
                                         </div>
                                     </div>
+                                    <a href="course.html">
+                                        <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span
+                                            class="path2"></span></span>
+                                    </a>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img3.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img3.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.7</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Learn HTML5 Programming Beginning</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Anna Sthesia</span>
-                                            </a>
+                        </div>
+                        <div class="box mb-15 my_courses_grid">
+                            <div class="my_courses_body">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <div class="d-flex flex-column fw-500">
+                                            <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a></h4>
+                                            <span class="text-fade">Instructor name</span>
                                         </div>
                                     </div>
+                                    <a href="course.html">
+                                        <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span
+                                            class="path2"></span></span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="courses-design-crd" role="tabpanel">
-                        <div class="row multi-course-crd-list">
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img3.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img3.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.7</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">70,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">15</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Learn HTML5 Programming Beginning</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Anna Sthesia</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img3.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img3.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.2</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">35,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">12</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Software Development From A to Z Beginner </h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Anna Sthesia</span>
-                                            </a>
-                                            <div class="crd-price d-flex align-items-baseline">
-                                                <del class="me-2">$250.00</del><span>$220.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.5</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">49,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">9</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Learn Python Programming Beginner</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Petey Cruiser</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img2.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img2.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.3</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">23,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">7</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Statistics Data Science and Business Analysis
-                                            </h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Nicole Brown</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img4.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img4.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.5</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">49,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">9</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Graphic Design Masterclass for Beginning</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Paul Molive</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img5.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img5.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.8</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">85,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">17</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">The Complete JavaScript Course Beginner</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Pankaj Kumar</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="courses-development-crd" role="tabpanel">
-                        <div class="row multi-course-crd-list">
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.5</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">49,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">9</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Learn Python Programming Beginner</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Petey Cruiser</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img2.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img2.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.3</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">23,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">7</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Statistics Data Science and Business Analysis
-                                            </h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Nicole Brown</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img3.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img3.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.7</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">70,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">15</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Learn HTML5 Programming Beginning</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Anna Sthesia</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img3.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img3.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.2</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">35,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">12</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Software Development From A to Z Beginner </h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Anna Sthesia</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img4.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img4.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.5</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">49,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">9</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Graphic Design Masterclass for Beginning</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Paul Molive</span>
-                                            </a>
-                                            <div class="crd-price d-flex align-items-baseline">
-                                                <del class="me-2">$100.00</del><span>$50.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img5.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img5.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.8</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">85,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">17</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">The Complete JavaScript Course Beginner</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Pankaj Kumar</span>
-                                            </a>
-                                            <div class="crd-price d-flex align-items-baseline">
-                                                <del class="me-2">320.00</del><span>$270.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="courses-marketing-crd" role="tabpanel">
-                        <div class="row multi-course-crd-list">
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img4.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img4.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.5</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">49,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">9</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Graphic Design Masterclass for Beginning</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Paul Molive</span>
-                                            </a>
-                                            <div class="crd-price d-flex align-items-baseline">
-                                                <del class="me-2">$100.00</del><span>$50.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img5.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img5.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.8</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">85,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">17</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">The Complete JavaScript Course Beginner</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Pankaj Kumar</span>
-                                            </a>
-                                            <div class="crd-price d-flex align-items-baseline">
-                                                <del class="me-2">320.00</del><span>$270.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.5</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">49,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">9</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Learn Python Programming Beginner</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Petey Cruiser</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img2.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img2.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.3</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">23,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">7</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Statistics Data Science and Business Analysis
-                                            </h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Nicole Brown</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img3.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img3.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.7</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">70,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">15</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Learn HTML5 Programming Beginning</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Anna Sthesia</span>
-                                            </a>
-                                            <div class="crd-price d-flex align-items-baseline">
-                                                <del class="me-2">$100.00</del><span>$70.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img3.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img3.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.2</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">35,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">12</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Software Development From A to Z Beginner </h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Anna Sthesia</span>
-                                            </a>
-                                            <div class="crd-price d-flex align-items-baseline">
-                                                <del class="me-2">$250.00</del><span>$220.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="courses-photography-crd" role="tabpanel">
-                        <div class="row multi-course-crd-list">
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img5.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img5.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.8</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">85,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">17</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">The Complete JavaScript Course Beginner</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Pankaj Kumar</span>
-                                            </a>
-                                            <div class="crd-price d-flex align-items-baseline">
-                                                <del class="me-2">320.00</del><span>$270.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img2.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img2.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.3</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">23,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">7</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Statistics Data Science and Business Analysis
-                                            </h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Nicole Brown</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.5</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">49,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">9</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Learn Python Programming Beginner</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Petey Cruiser</span>
-                                            </a>
-                                            <div class="crd-price d-flex align-items-baseline">
-                                                <del class="me-2">$200.00</del><span>$150.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img3.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img3.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.7</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">70,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">15</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Learn HTML5 Programming Beginning</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html">
-                                                <picture>
-                                                    <source srcset="images/webp/profile-img2.webp" type="image/webp">
-                                                    <img src="images/img/profile-img2.jpg" alt="Image Description">
-                                                </picture><span class="profile-name ms-2">Anna Sthesia</span>
-                                            </a>
-                                            <div class="crd-price d-flex align-items-baseline">
-                                                <del class="me-2">$100.00</del><span>$70.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img3.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img3.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.2</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">35,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">12</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Software Development From A to Z Beginner </h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Anna Sthesia</span>
-                                            </a>
-                                            <div class="crd-price d-flex align-items-baseline">
-                                                <del class="me-2">$250.00</del><span>$220.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="course-card">
-                                    <div class="crd-img-wrap position-relative">
-                                        <button class="wish-heart" type="button">
-                                            <svg class="heart__svg" height="20px" viewBox="0 -20 480 480" width="25px"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path class="heart__path"
-                                                    d="m348 8c-44.773438.003906-86.066406 24.164062-108 63.199219-21.933594-39.035157-63.226562-63.195313-108-63.199219-68.480469 0-124 63.519531-124 132 0 172 232 292 232 292s232-120 232-292c0-68.480469-55.519531-132-124-132zm0 0">
-                                                </path>
-                                                <path class="heart__stroke"
-                                                    d="m348 0c-43 .0664062-83.28125 21.039062-108 56.222656-24.71875-35.183594-65-56.1562498-108-56.222656-70.320312 0-132 65.425781-132 140 0 72.679688 41.039062 147.535156 118.6875 216.480469 35.976562 31.882812 75.441406 59.597656 117.640625 82.625 2.304687 1.1875 5.039063 1.1875 7.34375 0 42.183594-23.027344 81.636719-50.746094 117.601563-82.625 77.6875-68.945313 118.726562-143.800781 118.726562-216.480469 0-74.574219-61.679688-140-132-140zm-108 422.902344c-29.382812-16.214844-224-129.496094-224-282.902344 0-66.054688 54.199219-124 116-124 41.867188.074219 80.460938 22.660156 101.03125 59.128906 1.539062 2.351563 4.160156 3.765625 6.96875 3.765625s5.429688-1.414062 6.96875-3.765625c20.570312-36.46875 59.164062-59.054687 101.03125-59.128906 61.800781 0 116 57.945312 116 124 0 153.40625-194.617188 266.6875-224 282.902344zm0 0">
-                                                </path>
-                                            </svg>
-                                        </button><a href="course-detail-version1.html">
-                                            <picture>
-                                                <source srcset="images/webp/crd-img4.webp" type="image/webp"><img
-                                                    class="crd-img" src="images/img/crd-img4.jpg"
-                                                    alt="Image Description">
-                                            </picture>
-                                        </a>
-                                    </div>
-                                    <div class="crd-content">
-                                        <div class="crd-info py-2 d-flex align-items-center justify-content-between">
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/star.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">4.5</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-view.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">49,00</span></div>
-                                            <div class="crd-info-item d-flex align-items-center"><img class="me-1"
-                                                    src="images/svg/crd-play.svg" alt="Image Description"><span
-                                                    class="crd-info-txt">9</span></div>
-                                        </div><a href="course-detail-version1.html">
-                                            <h3 class="card-title my-3">Graphic Design Masterclass for Beginning</h3>
-                                        </a>
-                                        <div class="crd-bottom d-flex align-items-center justify-content-between"> <a
-                                                class="crd-profile d-flex align-items-center"
-                                                href="teacher-profile.html"><span class="profile-name ms-2">Paul Molive</span>
-                                            </a>
-                                            <div class="crd-price d-flex align-items-baseline">
-                                                <del class="me-2">$100.00</del><span>$50.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
-            </div>
-            <div class="container">
-                <div
-                    class="sec-header mb-5 d-md-flex align-items-center justify-content-between text-center text-md-start">
-                    <div class="sec-header-btn mt-4 m-md-0"><a class="btn btn-primary" href="courses.html">View all</a>
-                    </div>
-                </div>
+
             </div>
         </section>
     </main>
-<%- include("templates/footer") %>
+    <!-- Scripts for Jquery -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    <!-- Scripts for slick carousel -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
+    <script>
+        // My Courses carousel function
+        $(document).ready(function () {
+            // Slide For dots Three
+            $('.my_courses').slick({
+                slidesToShow: 3,
+                arrows: true,
+                autoplay: true,
+                dots: true,
+                responsive: [
+                    {
+                        breakpoint: 800,
+                        settings: {
+                            arrows: false,
+                            slidesToShow: 2
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            arrows: false,
+                            slidesToShow: 1
+                        }
+                    }
+                ]
+            });
+        });
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous">
+    </script>
+ <%- include("templates/footer") %>
