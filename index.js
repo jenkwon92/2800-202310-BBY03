@@ -138,6 +138,11 @@ app.get("/main", sessionValidation, (req, res) => {
     });
 });
 
+// Renders the my courses page
+app.get('/myCourses', (req, res) => {
+    res.render('myCourses');
+});
+
 // Renders the course detail page
 app.get("/courseDetail", (req, res) => {
     res.render("courseDetail");
@@ -360,8 +365,9 @@ app.post("/submitLogin", async (req, res) => {
 // Renders the forgot password page
 app.get("/forgotPassword", (req, res, next) => {
     var msg = req.query.msg || "";
+    var msgType = req.query.msgType || "";
 
-    res.render("forgotPassword", { msg: msg });
+    res.render("forgotPassword", { msg: { text: msg, type: msgType } });
 });
 
 // Sends the reset password email
@@ -371,7 +377,7 @@ app.post("/forgotPassword", async (req, res, next) => {
     const user = await userCollection.findOne({ email: email });
 
     if (!user) {
-        res.render("forgotPassword", { msg: "User email not found!" });
+        res.render("forgotPassword", { msg: { text: "User email not found!", type: "error" } });
     } else {
         const secret = JWT_SECRET + user.password;
         const payload = {
@@ -402,12 +408,12 @@ app.post("/forgotPassword", async (req, res, next) => {
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log(error);
-            } else {
-                console.log("Email sent: " + info.response);
+                return res.render("forgotPassword", { msg: { text: "An error occurred while sending the email.", type: "error" } });
             }
-        });
 
-        res.render("forgotPassword", { msg: "Password reset link has been sent!" });
+            console.log("Email sent: " + info.response);
+            res.render("forgotPassword", { msg: { text: "Password reset link has been sent!", type: "success" } });
+        });
     }
 });
 
@@ -486,11 +492,52 @@ app.get("/chatbot", (req, res) => {
     res.render("chatbot");
 });
 
-
+/* Search Section */
 // Renders the search page
 app.get("/search", (req, res) => {
-    res.render("search");
+    const searchQuery = req.query.search; // Get the search query from the URL query parameters
+    const page = parseInt(req.query.page) || 1; // Get the page number from the URL query parameters, default to 1 if not provided
+    const itemsPerPage = 10; // Set the number of items to display per page
+
+    if (!searchQuery) {
+        // If searchQuery is empty, render the search page without results
+        res.render("search", { courses: [], searchQuery, page: 1, totalPages: 1 });
+        return;
+    }
+
+    // Create a regex pattern to match the search query in a case-insensitive manner
+    const escapedSearchQuery = searchQuery.replace(/[-.*+?^${}()|[\]\\]/g, '\\$&');
+    const searchRegex = new RegExp(escapedSearchQuery, "i");
+
+    // Count the total number of matching documents
+    const totalCountPromise = coursesCollection.countDocuments({
+        $or: [{ title: searchRegex }, { details: searchRegex }],
+    });
+
+    // Search for courses that match the search query with pagination
+    const searchPromise = coursesCollection
+        .find({ $or: [{ title: searchRegex }, { details: searchRegex }] })
+        .skip((page - 1) * itemsPerPage)
+        .limit(itemsPerPage)
+        .toArray();
+
+    Promise.all([totalCountPromise, searchPromise])
+        .then(([totalCount, results]) => {
+            const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+            res.render("search", {
+                courses: results,
+                searchQuery: searchQuery,
+                page,
+                totalPages,
+            });
+        })
+        .catch((error) => {
+            console.error("Error finding documents:", error);
+            res.render("error"); // Render an error page if there's an error
+        });
 });
+/* Search Section end */
 
 // Renders the user to the root URL after the session is destroyed (logged out).
 app.get("/logout", (req, res) => {
