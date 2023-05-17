@@ -13,6 +13,7 @@ const Joi = require("joi");                     // Import Joi
 const jwt = require("jsonwebtoken");            // Import jsonwebtoken
 const nodemailer = require("nodemailer");       // Import nodemailer
 const saltRounds = 12;                          // Set the number of salt rounds for bcrypt
+const bodyParser = require("body-parser");      // Middleware for parsing request bodies
 
 // Our website URL
 const WebsiteURL = "http://wjxdvnhtuk.eu09.qoddiapp.com";
@@ -84,6 +85,9 @@ app.use(
     })
 );
 
+// Parse JSON bodies
+app.use(bodyParser.json());
+
 // Check if the session is valid
 function isValidSession(req) {
     return req.session.authenticated || false;
@@ -118,7 +122,7 @@ app.get("/dataset", async (req, res) => {
 });
 
 const multer = require("multer");
-const data_upload = multer({ dest: __dirname + "/public" + "/dataset" + "/" }); // specify the upload directory
+const data_upload = multer({ dest: "./public/dataset" }); // specify the upload directory
 
 // Imports a CSV file, reads its data, creates an object using the headers as keys, inserts the data into a MongoDB collection.
 app.post("/datasetUpload", data_upload.single("csvfile"), async (req, res) => {
@@ -272,9 +276,6 @@ app.get("/editInterest", async (req, res) => {
         res.status(500).send("Error retrieving interests");
       }
     });
-
-//update the user profile(username, email, job, image)
-const multer = require("multer");
 
 // Set up multer for handling file uploads
 const storage = multer.diskStorage({
