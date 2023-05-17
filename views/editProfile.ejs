@@ -1,39 +1,40 @@
 <%- include("templates/header") %>
-  <section class="h-100 gradient-custom-2">
+  <section class="h-100 gradient-custom-2" id="wrap">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col col-lg-9 col-xl-7">
 
           <!-- All profiles -->
-          <form id="profile-form" action="/submitProfile" method="POST">
+          <form id="profile-form" action="/submitProfile" method="POST" enctype="multipart/form-data">
             <div class="card">
               <!-- Basic profile form -->
-              <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
-                <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
-                    alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
-                    style="width: 150px; z-index: 1">
+              <div class="rounded-top text-white d-flex flex-row" style="background-color: #4A596D; height:200px;">
+                <div class="ms-4 mt-auto mb-auto d-flex flex-column" style="width: 150px;">
+                  <input style="display: none;" type="file" id="image-input" accept="image/*" name="image">
+                  <label for="image-input" class="image-label">
+                    <img src="<%= image || '/images/profile/avatar-1.webp' %>" alt="Profile Image"
+                      class="img-fluid img-thumbnail" style="width: 150px; z-index: 1;">
+                  </label>
                 </div>
-                <div class="ms-3" style="margin-top: 65px; font-size: small">
+                <div class="ms-3" style="font-size: small; color: #d0d4d6; margin-top: auto; margin-bottom: auto;">
                   <div class="col-md-6">
                     <label class="labels" for="name-input">ID</label>
-                    <input style="width:100px;" class="form-control form-control-sm" id="name-input" name="name"
+                    <input style="width:120px;" class="form-control form-control-sm" id="name-input" name="name"
                       type="text" class="form-control" value="<%=username%>">
-
                   </div>
                   <div class="col-md-6">
                     <label class="labels" for="job-input">Job</label>
-                    <input style="width:110px;" class="form-control form-control-sm" id="job-input" name="job"
-                      type="text" class="form-control" placeholder="Enter your job" value="">
+                    <input style="width:140px;" class="form-control form-control-sm" id="job-input" name="job"
+                      type="text" class="form-control" placeholder="enter your job" value="<%=job%>">
                   </div>
                   <div class="col-md-6">
                     <label class="labels" for="job-input">Email</label>
-                    <input style="width:110px;" class="form-control form-control-sm" id="email-input" name="email"
+                    <input style="width:140px;" class="form-control form-control-sm" id="email-input" name="email"
                       type="text" class="form-control" value="<%=email%>">
                   </div>
                   <button onclick="window.location.href='/profile'" id="save-button"
                     class="btn btn-sm btn-dark profile-button" type="submit"
-                    style="float:right; margin-left: 100px; margin-top: 20px;">Save</button>
+                    style="font-size: 15px; float: right; position: absolute; top:210px; right: 10px">Save</button>
                 </div>
               </div>
             </div>
@@ -60,15 +61,23 @@
               <p class="lead fw-normal mb-0"></p>
             </div>
             <div class="row g-2">
-              <div class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center">
-                <span style="font-size:4rem" class="material-symbols-outlined mb-2">
-                  laptop_mac
+              <div id="go-skill"
+                class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center" style=" border: 1px solid #ccc;
+                  border-radius: 10px;
+                  padding: 10px;">
+                <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
+                  class="material-icons-outlined">
+                  computer
                 </span>
                 <p style="font-size:1rem" class="text-center mt-2">Skills</p>
               </div>
-              <div class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center">
-                <span style="font-size:4rem" class="material-symbols-outlined mb-2">
-                  library_books
+              <div id="go-interest"
+                class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center" style=" border: 1px solid #ccc;
+                  border-radius: 10px;
+                  padding: 10px;">
+                <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
+                  class="material-icons-outlined">
+                  menu_book
                 </span>
                 <p style="font-size:1rem" class="text-center mt-2">Interests</p>
               </div>
@@ -79,33 +88,38 @@
       </div>
     </div>
   </section>
+  </div>
 
+  <!-- script -->
   <script>
     const form = document.getElementById('profile-form');
     const saveButton = document.getElementById('save-button');
-  
-    saveButton.addEventListener('click', (event) => {
+
+    form.addEventListener('submit', (event) => {
       event.preventDefault();
-  
+
       const name = form.name.value;
       const job = form.job.value;
       const email = form.email.value;
-  
-      // Create a URL-encoded string from the form data
-      const formData = new URLSearchParams();
+      const imageInput = form.image.files[0];
+
+      // Create a FormData object to send the form data including the image
+      const formData = new FormData();
       formData.append('name', name);
       formData.append('job', job);
       formData.append('email', email);
-  
+      formData.append('image', imageInput);
+
       fetch('/submitProfile', {
         method: 'POST',
         body: formData
       })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          if (data.success) {
+        .then(response => {
+          if (response.ok) {
+            // Redirect to the profile page on successful update
             window.location.href = '/profile';
+          } else {
+            throw new Error('Failed to update user profile');
           }
         })
         .catch(error => {
@@ -113,7 +127,8 @@
           alert('Error updating profile');
         });
     });
+
   </script>
-  
+
 
   <%- include("templates/footer") %>
