@@ -25,8 +25,7 @@
         crossorigin="anonymous"></script> -->
 
     <!-- Google Icons (Material Design)-->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons">
 
     <!-- Links for slick carousel -->
     <link rel="stylesheet" type="text/css"
@@ -41,26 +40,44 @@
 
     <!--Style -->
     <style>
-       html,
-      body {
-        height: 100%;
-        padding: 0px;
-        margin: 0px;
-      }
+        html,
+        body {
+            height: 100%;
+            padding: 0px;
+            margin: 0px;
+        }
 
-      header {
-        height: 60px;
-        background-color: #e9eaed;
-      }
+        header {
+            height: 60px;
+            background-color: #e9eaed;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            z-index: 100;
+        }
 
-      #wrap {
-        min-height: calc(100% - 120px);
-      }
+        #wrap {
+            min-height: calc(100vh - 60px);       
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-top: 60px; /* Add top padding to account for the fixed header */
+            padding-bottom: 60px; /* Add bottom padding to account for the fixed footer */
+        }
 
-      footer {
-        height: 60px;
-        background-color: #e9eaed;
-      }
+
+        footer {
+            height: 60px;
+            background-color: #e9eaed;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
         #plane {
             position: absolute;
             bottom: 50%;
@@ -77,9 +94,7 @@
     <div class="container">
         <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-                <svg class="bi me-2" width="40" height="32">
-                    <use xlink:href="#bootstrap"></use>
-                </svg>
+                <img src="logo.png" alt="Logo" width="30" height="30" class="ms-2" style="margin-right: 10px;">
                 CoursePilot
             </a>
         </header>
