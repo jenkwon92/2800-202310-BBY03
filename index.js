@@ -486,11 +486,52 @@ app.get("/chatbot", (req, res) => {
     res.render("chatbot");
 });
 
-
+/* Search Section */
 // Renders the search page
 app.get("/search", (req, res) => {
-    res.render("search");
+    const searchQuery = req.query.search; // Get the search query from the URL query parameters
+    const page = parseInt(req.query.page) || 1; // Get the page number from the URL query parameters, default to 1 if not provided
+    const itemsPerPage = 10; // Set the number of items to display per page
+
+    if (!searchQuery) {
+        // If searchQuery is empty, render the search page without results
+        res.render("search", { courses: [], searchQuery, page: 1, totalPages: 1 });
+        return;
+    }
+
+    // Create a regex pattern to match the search query in a case-insensitive manner
+    const escapedSearchQuery = searchQuery.replace(/[-.*+?^${}()|[\]\\]/g, '\\$&');
+    const searchRegex = new RegExp(escapedSearchQuery, "i");
+
+    // Count the total number of matching documents
+    const totalCountPromise = coursesCollection.countDocuments({
+        $or: [{ title: searchRegex }, { details: searchRegex }],
+    });
+
+    // Search for courses that match the search query with pagination
+    const searchPromise = coursesCollection
+        .find({ $or: [{ title: searchRegex }, { details: searchRegex }] })
+        .skip((page - 1) * itemsPerPage)
+        .limit(itemsPerPage)
+        .toArray();
+
+    Promise.all([totalCountPromise, searchPromise])
+        .then(([totalCount, results]) => {
+            const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+            res.render("search", {
+                courses: results,
+                searchQuery: searchQuery,
+                page,
+                totalPages,
+            });
+        })
+        .catch((error) => {
+            console.error("Error finding documents:", error);
+            res.render("error"); // Render an error page if there's an error
+        });
 });
+/* Search Section end */
 
 // Renders the user to the root URL after the session is destroyed (logged out).
 app.get("/logout", (req, res) => {
