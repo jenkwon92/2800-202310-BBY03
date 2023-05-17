@@ -1,62 +1,57 @@
 <%- include("templates/header") %>
-    <link href="/css/search.css" rel="stylesheet" type="text/css">
     <div class="search-wrapper d-flex flex-column gap-2 mb-2">
-        <label for="search"></label>
-        <input type="search" id="search" class="form-control" placeholder="Search...">
+        <form id="search-form" action="/search" method="GET">
+            <label for="search"></label>
+            <input type="search" id="search" name="search" class="form-control" placeholder="Search..."
+                value="<%= searchQuery %>">
+        </form>
     </div>
 
     <!-- Popular Tags -->
     <div class="popular-tags mb-2">
         <h3>What's Popular</h3>
         <div class="tag-list">
-            <a href="#" class="btn btn-secondary bg-transparent text-dark mb-2">Java</a>
-            <a href="#" class="btn btn-secondary bg-transparent text-dark mb-2">Python</a>
-            <a href="#" class="btn btn-secondary bg-transparent text-dark mb-2">JavaScript</a>
-            <a href="#" class="btn btn-secondary bg-transparent text-dark mb-2">C++</a>
+            <button class="btn btn-secondary bg-transparent text-dark mb-2"
+                onclick="populateSearch('Java')">Java</button>
+            <button class="btn btn-secondary bg-transparent text-dark mb-2"
+                onclick="populateSearch('Python')">Python</button>
+            <button class="btn btn-secondary bg-transparent text-dark mb-2"
+                onclick="populateSearch('JavaScript')">JavaScript</button>
+            <button class="btn btn-secondary bg-transparent text-dark mb-2" onclick="populateSearch('C++')">C++</button>
         </div>
     </div>
 
-    <!-- Display example of how cards will look -->
-    <div class="search-results">
-        <a href="" class="text-decoration-none text-dark">
-            <div class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-4">
-                        <img src="https://dummyimage.com/200x200/000/fff" alt="placeholder image"
-                            class="rounded img-fluid">
-                    </div>
-                    <div class="col-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Python</h5>
-                            <p class="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut eos
-                                nostrum hic non asperiores, sit minima soluta! </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-
-    <!-- Actual template to load in cards from Javascript -->
-    <template courses-data>
-        <a href="">
+    <!-- Display search results -->
+    <% courses.forEach((course)=> { %>
+        <a href="<%= course.link %>" target="_blank">
             <div class="search-results">
                 <div class="card mb-3">
                     <div class="row g-0">
-                        <div class="col-4">
-                            <img src="https://dummyimage.com/200x200/000/fff" alt="placeholder image"
-                                class="rounded img-fluid">
+                        <div class="col-2 col-md-1">
+                            <img src="GeeksForGeeksLogo.png" alt="placeholder image" class="rounded img-fluid">
                         </div>
-                        <div class="col-8">
+                        <div class="col-10 col-md-11">
                             <div class="card-body">
-                                <h5 class="card-title">Course Name</h5>
-                                <p class="card-text">Course Details</p>
+                                <h6 class="card-title">
+                                    <%= course.title %>
+                                </h6>
+                                <p class="card-text">
+                                    <%= course.details %>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </a>
-    </template>
-</div>
-    <%- include("templates/footer") %>
+        <% }); %>
+            <%- include("templates/footer") %>
+
+                <script>
+                    function populateSearch(tag) {
+                        const searchInput = document.getElementById('search');
+                        searchInput.value = tag;
+                        const searchForm = document.getElementById('search-form');
+                        searchForm.submit();
+                    }
+                </script>
