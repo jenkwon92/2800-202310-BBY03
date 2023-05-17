@@ -1,29 +1,107 @@
 </div>
 <footer class="footer mt-auto py-3 bg-body-tertiary bg-primary" style="position: fixed; bottom: 0; width: 100%;">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-auto">
-          <div class="icons-container d-flex justify-content-between justify-content-lg-center align-items-center flex-wrap" style="gap: 40px;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-auto">
+        <div
+          class="icons-container d-flex justify-content-between justify-content-lg-center align-items-center flex-wrap"
+          style="gap: 40px;">
 
-            <!-- Go to home -->
-            <a href="/main"><span class="material-symbols-outlined text-white" style="font-size: 2rem;">home</span></a>
-            
-            <!-- Go to MyCourses -->
-            <a href="/myCourses"><span class="material-symbols-outlined text-white" style="font-size: 2rem;">menu_book</span></a>
-            
-            <!-- Go to Search -->
-            <a href="/search"><span class="material-symbols-outlined text-white" style="font-size: 2rem;">search</span></a>
-            
-            <!-- Go to Chatbot -->
-            <a href="/chatbot"><span class="material-symbols-outlined text-white" style="font-size: 2rem;">smart_toy</span></a>
-            
-            <!-- Go to Profile -->
-            <a href="/profile"><span class="material-symbols-outlined text-white" style="font-size: 2rem;">person</span></a>
-          </div>
+          <!-- Go to home -->
+          <a href="/main"><span class="material-symbols-outlined text-white" style="font-size: 2rem;">home</span></a>
+
+          <!-- Go to MyCourses -->
+          <a href="/myCourses"><span class="material-symbols-outlined text-white"
+              style="font-size: 2rem;">menu_book</span></a>
+
+          <!-- Go to Search -->
+          <a href="/search"><span class="material-symbols-outlined text-white"
+              style="font-size: 2rem;">search</span></a>
+
+          <!-- Go to Chatbot -->
+          <a href="/chatbot"><span class="material-symbols-outlined text-white"
+              style="font-size: 2rem;">smart_toy</span></a>
+
+          <!-- Go to Profile -->
+          <a href="/profile"><span class="material-symbols-outlined text-white"
+              style="font-size: 2rem;">person</span></a>
         </div>
       </div>
     </div>
-  </footer>
+  </div>
+</footer>
+<img id="plane" src="plane.png">
 </body>
+<!-- Scripts for Jquery -->
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+<!-- Scripts for slick carousel -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    // My Courses carousel function
+    // Slide For My Courses
+    $('.my_courses').slick({                         // Initialize Slick carousel on elements with class 'my_courses'
+      slidesToShow: 3,                               // Display 3 slides at a time
+      arrows: true,                                  // Enable arrow navigation
+      autoplay: true,                                // Autoplay the carousel
+      dots: true,                                    // Show dots navigation
+      responsive: [                                  // Define responsive breakpoints for different screen sizes
+        {
+          breakpoint: 800,                           // For screens with a maximum width of 800px
+          settings: {                                // Adjust the settings for the carousel
+            arrows: false,                           // Hide arrow navigation
+            slidesToShow: 2                          // Display 2 slides at a time
+          }
+        },
+        {
+          breakpoint: 480,                          // For screens with a maximum width of 480px
+          settings: {                               // Adjust the settings for the carousel
+            arrows: false,                          // Hide arrow navigation
+            slidesToShow: 1                         // Display 1 slide at a time
+          }
+        }
+      ]
+    });
+  });
+
+  $(function () {
+    const plane = $("#plane");                      // Get the plane element and the screen width
+    const screenWidth = $(window).width();
+    const planeWidth = plane.width();
+    let planeX = -planeWidth;                       // Set the initial position of the plane to the left of the screen
+    const sound = new Audio('plane.wav');           // Use the Audio API to play the sound file
+
+    function movePlane() {                          // Define a function to move the plane to the right                                     
+      planeX += 2.5;                                  // Change this value to adjust the speed of the plane
+      if (planeX + planeWidth >= screenWidth) {
+        planeX = screenWidth - planeWidth;
+        plane.hide();                               // Hide and stop the plane when it reaches the right end of the screen
+        clearInterval(planeInterval);
+      }
+      plane.css("left", planeX);                    // Set the new position of the plane
+    }
+
+    let planeInterval;                              // Define variables to keep track of the interval
+    let clickCount = 0;                             // Define variables to keep track of the number of clicks
+
+    $("#hello_plane").click(function () {           // Attach a click event listener to the button with id "hello_plane"
+      clickCount++;                                 // Increase the click count by one
+      if (clickCount === 3) {                       // If it's the third click, show the plane and start the animation
+        plane.show();                               // Show the plane on the third click
+        planeInterval = setInterval(movePlane, 50); // Change the interval time to adjust the smoothness of the animation
+        sound.play();                               // Play the sound file using the Audio API
+      } else if (clickCount === 4) {                // If it's the fourth click, hide the plane and stop the animation
+        plane.hide();                               // Hide the plane on the fourth click
+        clearInterval(planeInterval);               // Stop the animation loop by clearing the interval timer
+        clickCount = 0;                             // Reset the click count back to zero        
+        sound.pause();                              // Pause the sound file using the Audio API
+      }
+      return false;                                 // Prevent the default action of the button
+    });
+  });
+</script>
 
 </html>
