@@ -14,11 +14,11 @@
                                     alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
                                     style="width: 150px; z-index: 1">
                             </div>
-                            <div class="ms-3" style="margin-top: 80px; font-size: small">
-                                <h5>Tim Kwon</h5>
-                                <p>Junior web-developer</p>
-                                <p>Level 5</p>
-                                <span id="edit-icon" style="font-size: 20px; float: right; line-height:2px;"
+                            <div class="ms-3" style="margin-top: 80px; font-size: small; color: #d0d4d6;">
+                                <h5>Username: <%=username%></h5>
+                                <h6>Job: <%=job%></h6>
+                                <h6>Email: <%=email%></h6>
+                                <span id="edit-icon" style="font-size: 20px; float: right; line-height:20px;"
                                     class="material-symbols-outlined">
                                     edit
                                 </span>
@@ -71,7 +71,7 @@
                             <!-- edit skills&interests end -->
 
                             <!-- log out  -->
-                            <button class="btn btn-sm btn-dark profile-button" type="button"
+                            <button onclick="window.location.href='/logout'"class="btn btn-sm btn-dark profile-button" type="button"
                                 style="border-radius: 10px; align-items: center; margin-top: 50px; width: 100%; margin-bottom: 50px;">Log
                                 out</button>
                             <!-- log out end  -->
