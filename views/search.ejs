@@ -22,22 +22,33 @@
     </div>
 
     <!-- Display search results -->
-    <% courses.forEach((course)=> { %>
-        <a href="<%= course.link %>" target="_blank">
-            <div class="search-results" style="padding-bottom: 60px;">
+    <% courses.forEach((course)=> {
+        const url = new URL(course.link);
+        const domain = url.origin;
+        %>
+        <a href="/courseDetail/<%= course._id %>" class="text-decoration-none">
+            <div class="search-results">
                 <div class="card mb-3">
                     <div class="row g-0">
                         <div class="col-2 col-md-1">
-                            <img src="GeeksForGeeksLogo.png" alt="placeholder image" class="rounded img-fluid">
+                            <% if (domain=="https://www.datacamp.com" ) { %>
+                                <img src="datacamp.png" alt="placeholder image" class="rounded img-fluid">
+                                <% } else if (domain=="https://www.udemy.com" ) { %>
+                                    <img src="udemy.png" alt="placeholder image" class="rounded img-fluid">
+                                    <% } else { %>
+                                        <img src="default_logo.png" alt="placeholder image" class="rounded img-fluid">
+                                        <% } %>
                         </div>
                         <div class="col-10 col-md-11">
                             <div class="card-body">
                                 <h6 class="card-title">
                                     <%= course.title %>
                                 </h6>
-                                <p class="card-text">
-                                    <%= course.details %>
-                                </p>
+                                <% if (course.tags) { %>
+                                    <button class="btn btn-secondary bg-transparent text-dark mb-2">
+                                        <%= course.tags.charAt(0).toUpperCase() + course.tags.slice(1) %>
+                                    </button>
+                                    <% } %>
                             </div>
                         </div>
                     </div>

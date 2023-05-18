@@ -20,7 +20,7 @@
   </div>
 </footer>
 <!-- <img id="cloud" class="cloud" src="cloud.png"> -->
-<img id="plane" src="plane.png">
+<img id="plane" src="/plane.png">
 
 <!-- Bootstrap JS -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> -->
@@ -70,7 +70,7 @@
     const screenWidth = $(window).width();
     const planeWidth = plane.width();
     let planeX = -planeWidth;                       // Set the initial position of the plane to the left of the screen
-    const sound = new Audio('plane.wav');           // Use the Audio API to play the sound file
+    const sound = new Audio('/plane.wav');           // Use the Audio API to play the sound file
 
     function movePlane() {                          // Define a function to move the plane to the right                                     
       planeX += 2.5;                                  // Change this value to adjust the speed of the plane

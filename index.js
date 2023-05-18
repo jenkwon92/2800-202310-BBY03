@@ -40,13 +40,11 @@ const mongoStore = MongoStore.create({
 });
 
 // Database Section
-const { database } = require("./databaseConnection"); // Import the database connection
-const userCollection = database.db(mongodb_database).collection("users"); // Specify the collection to store users
-const coursesCollection = database.db(mongodb_database).collection("courses"); // Specify the collection to store courses //create user db
-const skillCollection = database.db(mongodb_database).collection("skills"); //create skills db
-const interestCollection = database
-  .db(mongodb_database)
-  .collection("interests"); //create skills db
+const { database } = require("./databaseConnection");                               // Import the database connection
+const userCollection = database.db(mongodb_database).collection("users");           // Specify the collection to store users
+const coursesCollection = database.db(mongodb_database).collection("courses");      // Specify the collection to store courses //create user db
+const skillCollection = database.db(mongodb_database).collection("skills");         // Create skills db
+const interestCollection = database.db(mongodb_database).collection("interests");   // Create interest db
 
 // Set the ejs view engine
 app.set("view engine", "ejs");
@@ -102,11 +100,12 @@ function sessionValidation(req, res, next) {
 const mycollection = "mycollection";
 
 // Renders the index page
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   if (!req.session.authenticated) {
     res.render("index");
-  } else {
-    res.redirect("/main");
+  }
+  else {
+    res.redirect('/main');
   }
 });
 
@@ -160,11 +159,6 @@ app.get("/main", sessionValidation, (req, res) => {
 // Renders the my courses page
 app.get("/myCourses", (req, res) => {
   res.render("myCourses");
-});
-
-// Renders the course detail page
-app.get("/courseDetail", (req, res) => {
-  res.render("courseDetail");
 });
 
 // Renders the see all page
@@ -747,6 +741,32 @@ app.get("/search", (req, res) => {
     });
 });
 /* Search Section end */
+
+/* Course Detail Section */
+
+// Renders the course detail page
+app.get("/courseDetail/:courseId", (req, res) => {
+  const courseId = req.params.courseId; // Get the courseId from the URL parameters
+
+  // Find the course with the given courseId
+  coursesCollection.findOne({ _id: new ObjectId(courseId) })
+    .then((course) => {
+      if (!course) {
+        // If the course is not found, render an error page or a not-found page
+        res.render("error", { errorMessage: "Course not found" });
+        return;
+      }
+
+      // Render the course detail page with the retrieved course
+      res.render("courseDetail", { course });
+    })
+    .catch((error) => {
+      console.error("Error finding course:", error);
+      res.render("error", { errorMessage: error });
+    });
+});
+
+/* Course Detail Section end */
 
 // Renders the custom 404 error page to users instead of displaying a generic error message or a stack trace.
 app.get('*', (req, res) => {
