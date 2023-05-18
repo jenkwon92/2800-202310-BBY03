@@ -27,7 +27,7 @@
     <div class="col">
       <h4>Interests</h4>
       <div class="row">
-        <div class="col">
+        <div class="col" style="margin-top: 30px;">
           <div class="dropdown" style="margin-bottom:40px">
             <button style="width:80%;" class="btn btn-secondary dropdown-toggle" type="button" id="multiSelectButton"
               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -50,8 +50,17 @@
             </div>
           </div>
           <div id="interestSet1" class="border p-3 mt-3">
-            <h4>Selected Interests</h4>
-            <div id="selectedInterests"></div>
+            <div id="selectedInterests">
+              <% if (interests && interests.length> 0) { %>
+                <% interests.forEach(function(interest) { %>
+                    <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
+                        <%= interest %>
+                    </button>
+                    <% }); %>
+                        <% } else { %>
+                            <p>No interests available</p>
+                            <% } %>
+            </div>
           </div>
           <button id="save-button" class="btn btn-sm btn-dark profile-button" type="submit"
             style="font-size: 15px; float: right; margin-top: 20px;">Save</button>
@@ -65,6 +74,7 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    // Initialize the Choices library for the multi-select dropdown
     const select = new Choices('#multiSelect', {
       placeholder: true,
       placeholderValue: 'Select your interests',
@@ -75,21 +85,27 @@
 
     const selectedInterests = document.querySelector('#selectedInterests');
 
+    // Event listener for the change event on the multi-select dropdown
     select.passedElement.element.addEventListener('change', function () {
       selectedInterests.innerHTML = '';
       const selectedOptions = Array.from(this.selectedOptions);
       selectedOptions.forEach(option => {
+
+        // Create a container for each selected interest
         const interestContainer = document.createElement('div');
         interestContainer.className = 'selected-interest';
         const interestText = document.createElement('span');
         interestText.textContent = option.text;
 
+        // Create a close button for removing the interest
         const closeButton = document.createElement('span');
         closeButton.className = 'close';
         closeButton.innerHTML = '&times;';
         closeButton.addEventListener('click', function () {
+          
+          // Remove the selected interest and call saveInterests()
           select.removeActiveItemsByValue(option.value);
-          saveInterests(); // Call saveInterests() after removing the interest
+          saveInterests();
         });
 
         interestContainer.appendChild(interestText);
@@ -103,6 +119,7 @@
     saveButton.addEventListener('click', saveInterests);
 
     function saveInterests() {
+      // Get the selected interests and convert them to a comma-separated string
       const selectedOptions = Array.from(select.getValue(false));
       const interests = selectedOptions.map(option => option.value).join(',');
 
@@ -111,13 +128,14 @@
         return;
       }
 
+      // Send a POST request to save the interests
       const xhr = new XMLHttpRequest();
       xhr.open('POST', '/saveInterests');
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onload = function () {
         if (xhr.status === 200) {
           console.log('Interests saved successfully');
-          window.location.href = '/profile'; // redirect to the profile page
+          window.location.href = '/profile'; // Redirect to the profile page
         } else {
           console.error('Error saving interests');
         }
@@ -126,5 +144,6 @@
     }
   });
 </script>
+
 
 <%- include("templates/footer") %>

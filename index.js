@@ -2,18 +2,18 @@
 require("./utils.js");
 require("dotenv").config();
 
-const express = require("express");             // Import express
-const session = require("express-session");     // Import express-session
-const MongoStore = require("connect-mongo");    // Import connect-mongo
-const bcrypt = require("bcrypt");               // Import bcrypt
-const { ObjectId } = require("mongodb");        // Import ObjectId from mongodb
-const port = process.env.PORT || 3000;          // Set the port to 3000 or the port specified in the environment
-const app = express();                          // Create an express application
-const Joi = require("joi");                     // Import Joi
-const jwt = require("jsonwebtoken");            // Import jsonwebtoken
-const nodemailer = require("nodemailer");       // Import nodemailer
-const saltRounds = 12;                          // Set the number of salt rounds for bcrypt
-const bodyParser = require("body-parser");      // Middleware for parsing request bodies
+const express = require("express"); // Import express
+const session = require("express-session"); // Import express-session
+const MongoStore = require("connect-mongo"); // Import connect-mongo
+const bcrypt = require("bcrypt"); // Import bcrypt
+const { ObjectId } = require("mongodb"); // Import ObjectId from mongodb
+const port = process.env.PORT || 3000; // Set the port to 3000 or the port specified in the environment
+const app = express(); // Create an express application
+const Joi = require("joi"); // Import Joi
+const jwt = require("jsonwebtoken"); // Import jsonwebtoken
+const nodemailer = require("nodemailer"); // Import nodemailer
+const saltRounds = 12; // Set the number of salt rounds for bcrypt
+const bodyParser = require("body-parser"); // Middleware for parsing request bodies
 
 // Our website URL
 const WebsiteURL = "http://wjxdvnhtuk.eu09.qoddiapp.com";
@@ -40,11 +40,13 @@ const mongoStore = MongoStore.create({
 });
 
 // Database Section
-const { database } = require("./databaseConnection");                           // Import the database connection
-const userCollection = database.db(mongodb_database).collection("users");       // Specify the collection to store users
-const coursesCollection = database.db(mongodb_database).collection("courses");  // Specify the collection to store courses //create user db
+const { database } = require("./databaseConnection"); // Import the database connection
+const userCollection = database.db(mongodb_database).collection("users"); // Specify the collection to store users
+const coursesCollection = database.db(mongodb_database).collection("courses"); // Specify the collection to store courses //create user db
 const skillCollection = database.db(mongodb_database).collection("skills"); //create skills db
-const interestCollection = database.db(mongodb_database).collection("interests"); //create skills db
+const interestCollection = database
+  .db(mongodb_database)
+  .collection("interests"); //create skills db
 
 // Set the ejs view engine
 app.set("view engine", "ejs");
@@ -63,8 +65,8 @@ app.use(
 );
 
 // Middleware
-app.use(express.urlencoded({ extended: false }));   // Handles URL-encoded form data.
-app.use(express.static(__dirname + "/public"));     // Serves the static assets from the specified directory
+app.use(express.urlencoded({ extended: false })); // Handles URL-encoded form data.
+app.use(express.static(__dirname + "/public")); // Serves the static assets from the specified directory
 
 app.use(
   session({
@@ -100,12 +102,11 @@ function sessionValidation(req, res, next) {
 const mycollection = "mycollection";
 
 // Renders the index page
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   if (!req.session.authenticated) {
     res.render("index");
-  }
-  else {
-    res.redirect('/main');
+  } else {
+    res.redirect("/main");
   }
 });
 
@@ -126,7 +127,6 @@ app.post("/datasetUpload", data_upload.single("csvfile"), async (req, res) => {
     const stream = fs.createReadStream(csvfile).pipe(csv());
     let keys = null;
     for await (const data of stream) {
-
       // Use the first row of the CSV file to create object keys
       if (!keys) {
         keys = Object.keys(data);
@@ -158,13 +158,18 @@ app.get("/main", sessionValidation, (req, res) => {
 });
 
 // Renders the my courses page
-app.get('/myCourses', (req, res) => {
-  res.render('myCourses');
+app.get("/myCourses", (req, res) => {
+  res.render("myCourses");
 });
 
 // Renders the course detail page
 app.get("/courseDetail", (req, res) => {
   res.render("courseDetail");
+});
+
+// Renders the see all page
+app.get('/recommendation', (req, res) => {
+  res.render('recommendation');
 });
 
 /* Profile Section */
@@ -191,7 +196,7 @@ app.get("/profile", async (req, res) => {
         job: user.job,
         image: user.image || "/images/profile/avatar-1.webp", // Add the 'image' variable here
         skills: user.skills || [], // Add the 'skills' variable here with a default value of an empty array
-        interests: user.interests || [] // Add the 'skills' variable here with a default value of an empty array
+        interests: user.interests || [], // Add the 'skills' variable here with a default value of an empty array
       });
     } catch (error) {
       console.error(error);
@@ -200,8 +205,7 @@ app.get("/profile", async (req, res) => {
   }
 });
 
-// edit basic profile Section
-app.get("/editProfile", (req, res) => {
+app.get("/editProfile", async (req, res) => {
   var isAuthenticated = req.session.authenticated || false;
 
   // When the user is not logged in - login page
@@ -209,13 +213,28 @@ app.get("/editProfile", (req, res) => {
   if (!isAuthenticated) {
     res.redirect("/login");
   } else {
-    res.render("editProfile", {
-      authenticated: req.session.authenticated,
-      username: req.session.username,
-      email: req.session.email,
-      job: req.session.job,
-      image: req.session.image || "/images/profile/avatar-1.webp", // Add the 'image' variable here
-    });
+    try {
+      const user = await userCollection.findOne({
+        username: req.session.username,
+      });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      res.render("editProfile", {
+        authenticated: req.session.authenticated,
+        username: req.session.username,
+        email: user.email,
+        job: user.job,
+        image: user.image || "/images/profile/avatar-1.webp",
+        skills: user.skills || [], // Use the user's skills field directly
+        interests: user.interests || [], // Use the user's interests field directly
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error retrieving user profile");
+    }
   }
 });
 
@@ -252,18 +271,24 @@ app.get("/editSkill", async (req, res) => {
   }
 });
 
-
 // edit interest Section
 app.get("/editInterest", async (req, res) => {
   try {
-    // Retrieve Skills data from the database and store it in the `skills` variable
-    const interests = await interestCollection
-      .find({ userId: req.session.username })
-      .toArray();
-
-    res.render("editInterest", {
-      interests: interests.map((interest) => interest.interest), // Extract the skill names from the skills data
+    // Retrieve user information from the user database
+    const user = await userCollection.findOne({
+      username: req.session.username,
     });
+
+    if (user) {
+      // Get the 'interests' field from the user db
+      const interests = user.interests || [];
+
+      res.render("editInterest", {
+        interests: interests,
+      });
+    } else {
+      res.status(404).send("User not found");
+    }
   } catch (error) {
     console.error(error);
     res.status(500).send("Error retrieving interests");
@@ -380,7 +405,9 @@ app.post("/saveInterests", sessionValidation, async (req, res) => {
       throw new Error("Interests data is missing");
     }
 
-    const interestList = interests.split(",").map((interest) => interest.trim());
+    const interestList = interests
+      .split(",")
+      .map((interest) => interest.trim());
     const updateResult = await userCollection.updateOne(
       { username: username },
       { $set: { interests: interestList } }
@@ -485,21 +512,25 @@ app.post("/submitUser", async (req, res) => {
 
 /* Login Section */
 // Renders the login page
-app.get('/login', (req, res) => {
-
+app.get("/login", (req, res) => {
   // Show error message if there is one
-  var msg = req.query.msg || '';
+  var msg = req.query.msg || "";
 
-  res.render("login", { msg: msg })
+  res.render("login", { msg: msg });
 });
 
-// logout 
+// logout
 app.get("/logout", (req, res) => {
-  req.session.destroy();
-  res.redirect("/");
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/");
+    }
+  });
 });
 
-app.post('/submitLogin', async (req, res) => {
+app.post("/submitLogin", async (req, res) => {
   var email = req.body.email;
   var password = req.body.password;
 
@@ -509,7 +540,7 @@ app.post('/submitLogin', async (req, res) => {
   // If email is invalid, return error message
   if (validationResult.error != null) {
     console.log(validationResult.error);
-    res.render('login', { msg: "Invalid Email!" });
+    res.render("login", { msg: "Invalid Email!" });
     return;
   }
 
@@ -518,7 +549,7 @@ app.post('/submitLogin', async (req, res) => {
   // If email does not exist, return error message
   if (!user) {
     console.log("Email not found");
-    res.render('login', { msg: "User with this email does not exist." });
+    res.render("login", { msg: "User with this email does not exist." });
     return;
   }
 
@@ -534,11 +565,11 @@ app.post('/submitLogin', async (req, res) => {
     req.session.cookie.maxAge = expireTime;
   } else {
     console.log("Incorrect password");
-    res.render('login', { msg: "Password is incorrect." });
+    res.render("login", { msg: "Password is incorrect." });
     return;
   }
 
-  res.redirect('/main');
+  res.redirect("/main");
 });
 /* Login Section end */
 
@@ -552,7 +583,7 @@ app.get("/forgotPassword", (req, res, next) => {
 });
 
 // Sends the reset password email
-app.post('/forgotPassword', async (req, res, next) => {
+app.post("/forgotPassword", async (req, res, next) => {
   const { email } = req.body;
 
   const user = await userCollection.findOne({ email: email });
@@ -566,11 +597,10 @@ app.post('/forgotPassword', async (req, res, next) => {
       id: user._id
     };
     const token = jwt.sign(payload, secret, { expiresIn: '15m' });
-    // const link = `${WebsiteURL}/resetPassword/${user._id}/${token}`;
     const link = `${WebsiteURL}/resetPassword/${user._id}/${token}`;
 
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
+      host: "smtp.gmail.com",
       port: 465,
       secure: true,
       auth: {
@@ -583,7 +613,7 @@ app.post('/forgotPassword', async (req, res, next) => {
     const mailOptions = {
       from: `"CoursePilot" <${process.env.COURSEPILOT_SUPPORT_EMAIL}>`, // Sender address
       to: user.email, // Recipient address
-      subject: 'CoursePilot Password Recovery', // Subject line
+      subject: "CoursePilot Password Recovery", // Subject line
       html: `<p>Please click this <a href="${link}">link</a> to reset your password.</p>` // HTML body
     };
 
@@ -600,7 +630,7 @@ app.post('/forgotPassword', async (req, res, next) => {
 });
 
 // Renders the reset password page
-app.get('/resetPassword/:id/:token', async (req, res, next) => {
+app.get("/resetPassword/:id/:token", async (req, res, next) => {
   // Get user id and token from url
   const { id, token } = req.params;
 
@@ -656,7 +686,7 @@ app.post('/resetPassword/:id/:token', async (req, res, next) => {
     );
 
     // Password successfully updated
-    res.render('passwordUpdated');
+    res.render("passwordUpdated");
   }
   catch (error) {
     console.log(error);
@@ -667,8 +697,8 @@ app.post('/resetPassword/:id/:token', async (req, res, next) => {
 /* Password Recovery Section end */
 
 // Renders the chatbot page
-app.get('/chatbot', (req, res) => {
-  res.render('chatbot');
+app.get("/chatbot", (req, res) => {
+  res.render("chatbot");
 });
 
 /* Search Section */
@@ -685,7 +715,7 @@ app.get("/search", (req, res) => {
   }
 
   // Create a regex pattern to match the search query in a case-insensitive manner
-  const escapedSearchQuery = searchQuery.replace(/[-.*+?^${}()|[\]\\]/g, '\\$&');
+  const escapedSearchQuery = searchQuery.replace(/[-.*+?^${}()|[\]\\]/g, "\\$&");
   const searchRegex = new RegExp(escapedSearchQuery, "i");
 
   // Count the total number of matching documents
@@ -717,17 +747,6 @@ app.get("/search", (req, res) => {
     });
 });
 /* Search Section end */
-
-// Renders the user to the root URL after the session is destroyed (logged out).
-app.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.redirect("/");
-    }
-  });
-});
 
 // Renders the custom 404 error page to users instead of displaying a generic error message or a stack trace.
 app.get('*', (req, res) => {
