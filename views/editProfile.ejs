@@ -47,11 +47,28 @@
             <div class="mb-5">
               <p class="lead fw-normal mb-1">Skills</p>
               <div class="p-4" style="background-color: #d0d4d6;">
-                <button type="button" class="btn btn-secondary btn-rounded">JS</button>
+                <% if (skills && skills.length> 0) { %>
+                  <% skills.forEach(function(skill) { %>
+                      <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
+                          <%= skill %>
+                      </button>
+                      
+                      <% }); %>
+                          <% } else { %>
+                              <p>No skills available</p>
+                              <% } %>
               </div>
               <p class="lead fw-normal mb-1">Interests</p>
               <div class="p-4" style="background-color: #d0d4d6;">
-                <button type="button" class="btn btn-secondary btn-rounded">Python</button>
+                <% if (interests && interests.length> 0) { %>
+                  <% interests.forEach(function(interest) { %>
+                      <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
+                          <%= interest %>
+                      </button>
+                      <% }); %>
+                          <% } else { %>
+                              <p>No interests available</p>
+                              <% } %>
               </div>
             </div>
             <!-- Skills&interests end  -->
@@ -66,7 +83,7 @@
                   border-radius: 10px;
                   padding: 10px;">
                 <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
-                  class="material-icons-outlined">
+                  class="material-icons">
                   computer
                 </span>
                 <p style="font-size:1rem" class="text-center mt-2">Skills</p>
@@ -76,7 +93,7 @@
                   border-radius: 10px;
                   padding: 10px;">
                 <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
-                  class="material-icons-outlined">
+                  class="material-icons">
                   menu_book
                 </span>
                 <p style="font-size:1rem" class="text-center mt-2">Interests</p>

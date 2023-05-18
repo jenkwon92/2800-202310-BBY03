@@ -207,8 +207,7 @@ app.get("/profile", async (req, res) => {
   }
 });
 
-// edit basic profile Section
-app.get("/editProfile", (req, res) => {
+app.get("/editProfile", async (req, res) => {
   var isAuthenticated = req.session.authenticated || false;
 
   // When the user is not logged in - login page
@@ -216,13 +215,28 @@ app.get("/editProfile", (req, res) => {
   if (!isAuthenticated) {
     res.redirect("/login");
   } else {
-    res.render("editProfile", {
-      authenticated: req.session.authenticated,
-      username: req.session.username,
-      email: req.session.email,
-      job: req.session.job,
-      image: req.session.image || "/images/profile/avatar-1.webp", // Add the 'image' variable here
-    });
+    try {
+      const user = await userCollection.findOne({
+        username: req.session.username,
+      });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      res.render("editProfile", {
+        authenticated: req.session.authenticated,
+        username: req.session.username,
+        email: user.email,
+        job: user.job,
+        image: user.image || "/images/profile/avatar-1.webp",
+        skills: user.skills || [], // Use the user's skills field directly
+        interests: user.interests || [], // Use the user's interests field directly
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error retrieving user profile");
+    }
   }
 });
 
