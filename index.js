@@ -40,15 +40,11 @@ const mongoStore = MongoStore.create({
 });
 
 // Database Section
-const { database } = require("./databaseConnection");                           // Import the database connection
-const userCollection = database.db(mongodb_database).collection("users");       // Specify the collection to store users
-const coursesCollection = database.db(mongodb_database).collection("courses");  // Specify the collection to store courses //create user db
-const skillCollection = database.db(mongodb_database).collection("skills"); //create skills db
-const interestCollection = database.db(mongodb_database).collection("interests"); //create skills db
-
-/* Test Database Section MUST DELETE AFTER TEST */
-const coursesTestCollection = database.db(mongodb_database).collection("coursestest");  // Specify the collection to store courses //create user db
-/* Test Database Section MUST DELETE AFTER TEST */
+const { database } = require("./databaseConnection");                               // Import the database connection
+const userCollection = database.db(mongodb_database).collection("users");           // Specify the collection to store users
+const coursesCollection = database.db(mongodb_database).collection("courses");      // Specify the collection to store courses //create user db
+const skillCollection = database.db(mongodb_database).collection("skills");         // Create skills db
+const interestCollection = database.db(mongodb_database).collection("interests");   // Create interest db
 
 // Set the ejs view engine
 app.set("view engine", "ejs");
@@ -572,7 +568,6 @@ app.post('/forgotPassword', async (req, res, next) => {
       id: user._id
     };
     const token = jwt.sign(payload, secret, { expiresIn: '15m' });
-    // const link = `${WebsiteURL}/resetPassword/${user._id}/${token}`;
     const link = `${WebsiteURL}/resetPassword/${user._id}/${token}`;
 
     const transporter = nodemailer.createTransport({
@@ -699,12 +694,12 @@ app.get("/search", (req, res) => {
   const searchRegex = new RegExp(escapedSearchQuery, "i");
 
   // Count the total number of matching documents
-  const totalCountPromise = coursesTestCollection.countDocuments({
+  const totalCountPromise = coursesCollection.countDocuments({
     $or: [{ title: searchRegex }, { details: searchRegex }],
   });
 
   // Search for courses that match the search query with pagination
-  const searchPromise = coursesTestCollection
+  const searchPromise = coursesCollection
     .find({ $or: [{ title: searchRegex }, { details: searchRegex }] })
     .skip((page - 1) * itemsPerPage)
     .limit(itemsPerPage)
@@ -735,11 +730,11 @@ app.get("/courseDetail/:courseId", (req, res) => {
   const courseId = req.params.courseId; // Get the courseId from the URL parameters
 
   // Find the course with the given courseId
-  coursesTestCollection.findOne({ _id: new ObjectId(courseId) })
+  coursesCollection.findOne({ _id: new ObjectId(courseId) })
     .then((course) => {
       if (!course) {
         // If the course is not found, render an error page or a not-found page
-        res.render("error");
+        res.render("error", { errorMessage: "Course not found" });
         return;
       }
 
@@ -748,7 +743,7 @@ app.get("/courseDetail/:courseId", (req, res) => {
     })
     .catch((error) => {
       console.error("Error finding course:", error);
-      res.render("error"); // Render an error page if there's an error
+      res.render("error", { errorMessage: error });
     });
 });
 
