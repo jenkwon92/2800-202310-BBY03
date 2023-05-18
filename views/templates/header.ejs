@@ -60,13 +60,14 @@
         }
 
         #wrap {
-            min-height: calc(100vh - 60px);       
+            min-height: calc(100vh - 60px);
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-            padding-top: 60px; /* Add top padding to account for the fixed header */
-            padding-bottom: 60px; /* Add bottom padding to account for the fixed footer */
+            padding-top: 60px;
+            /* Add top padding to account for the fixed header */
+            padding-bottom: 60px;
+            /* Add bottom padding to account for the fixed footer */
         }
-
 
         footer {
             height: 60px;
@@ -78,14 +79,32 @@
             z-index: 100;
         }
 
+        .cloud {
+            position: absolute;
+            left: -120px;
+            top: 50px;
+            width: 50px;
+            height: auto;
+            display:none;
+        }
+
         #plane {
             position: absolute;
             bottom: 50%;
             transform: translateX(-0%);
             left: -10%;
-            width: 50px;
+            width: 80px;
             height: auto;
             display: none;
+        }
+
+        #sky {
+            position: absolute;
+            width: 100%;
+            bottom: 25%;
+            height: 500px;
+            /* background-color: #cde4f9; */
+            overflow: hidden;
         }
     </style>
 </head>

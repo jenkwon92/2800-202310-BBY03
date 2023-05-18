@@ -2,18 +2,18 @@
 require("./utils.js");
 require("dotenv").config();
 
-const express = require("express"); // Import express
-const session = require("express-session"); // Import express-session
-const MongoStore = require("connect-mongo"); // Import connect-mongo
-const bcrypt = require("bcrypt"); // Import bcrypt
-const { ObjectId } = require("mongodb"); // Import ObjectId from mongodb
-const port = process.env.PORT || 3000; // Set the port to 3000 or the port specified in the environment
-const app = express(); // Create an express application
-const Joi = require("joi"); // Import Joi
-const jwt = require("jsonwebtoken"); // Import jsonwebtoken
-const nodemailer = require("nodemailer"); // Import nodemailer
-const saltRounds = 12; // Set the number of salt rounds for bcrypt
-const bodyParser = require("body-parser"); // Middleware for parsing request bodies
+const express = require("express");             // Import express
+const session = require("express-session");     // Import express-session
+const MongoStore = require("connect-mongo");    // Import connect-mongo
+const bcrypt = require("bcrypt");               // Import bcrypt
+const { ObjectId } = require("mongodb");        // Import ObjectId from mongodb
+const port = process.env.PORT || 3000;          // Set the port to 3000 or the port specified in the environment
+const app = express();                          // Create an express application
+const Joi = require("joi");                     // Import Joi
+const jwt = require("jsonwebtoken");            // Import jsonwebtoken
+const nodemailer = require("nodemailer");       // Import nodemailer
+const saltRounds = 12;                          // Set the number of salt rounds for bcrypt
+const bodyParser = require("body-parser");      // Middleware for parsing request bodies
 
 // Our website URL
 const WebsiteURL = "http://wjxdvnhtuk.eu09.qoddiapp.com";
