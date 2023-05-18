@@ -24,7 +24,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col">
+    <div class="col" style="margin-top: 30px;">
       <h4>Skills</h4>
       <div class="row">
         <div class="col">
@@ -50,14 +50,17 @@
             </div>
           </div>
           <div id="skillSet1" class="border p-3 mt-3">
-            <h4>Selected Skills</h4>
             <div id="selectedSkills">
-              <% skills.forEach(skill => { %>
-                <div class="selected-skill">
-                  <span><%= skill.name %></span>
-                  <span class="close" data-skill="<%= skill.name %>">&times;</span>
-                </div>
-              <% }) %>
+              <% if (skills && skills.length> 0) { %>
+                <% skills.forEach(function(skill) { %>
+                    <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
+                        <%= skill %>
+                    </button>
+                    
+                    <% }); %>
+                        <% } else { %>
+                            <p>No skills available</p>
+                            <% } %>
             </div>
           </div>
           <button id="save-button" class="btn btn-sm btn-dark profile-button" type="submit"
