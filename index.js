@@ -206,21 +206,29 @@ app.get("/recommendation", sessionValidation, async (req, res) => {
       username: req.session.username,
     });
 
-    // Retrieve user's interests from db
+    // Retrieve user's interests from the database
     const userInterests = user.interests || [];
     const interestsPattern = new RegExp(userInterests.map(interest => `\\b${interest}\\b`).join("|"), "i");
 
     // Retrieve courses matching the user's interests (case-insensitive)
-    const recommendedCourses = await coursesCollection
+    let recommendedCourses = await coursesCollection
       .find({ tags: interestsPattern })
       .limit(recommendedCourseLimit)
       .toArray();
+
+    // If no matching courses found, retrieve random courses from the course collection
+    if (recommendedCourses.length === 0) {
+      recommendedCourses = await coursesCollection.aggregate([
+        { $sample: { size: recommendedCourseLimit } }
+      ]).toArray();
+    }
+
     console.log(recommendedCourses);
     if (recommendedCourses.length === 0) {
       throw new Error("No recommended courses found");
     }
 
-    res.render("recommendation", { recommendedCourses: recommendedCourses, username: req.session.username });
+    res.render("recommendation", { recommendedCourses, username: req.session.username });
   } catch (error) {
     console.error("Error retrieving course recommendation:", error);
     res.status(500).send("Error retrieving course recommendation");
