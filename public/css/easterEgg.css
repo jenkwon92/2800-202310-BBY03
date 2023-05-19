@@ -21,8 +21,8 @@
 #sky {
   position: fixed;
   width: 100%;
-  bottom: 25%;
-  height: 500px;
+  top: 20%;
+  height: 350px;
   /* background-color: #cde4f9; */
   overflow: hidden;
 }

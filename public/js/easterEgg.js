@@ -12,6 +12,8 @@ $(document).ready(function () {
       plane.hide();                                 // Hide the plane when it reaches the right edge
       $(".cloud").hide();                           // Hide all the clouds
       clearInterval(planeInterval);                 // Stop the plane movement interval
+      clickCount = 0;     
+       removeEasterEgg();
     }
     plane.css("left", planeX);                      // Update the plane's position
   }
@@ -39,6 +41,7 @@ $(document).ready(function () {
 
   $("#hello_plane").click(function () {
     clickCount++;                                   // Increment the click count
+    console.log(clickCount);
     if (clickCount === 3) {                         // When a user clicks the button third times.
       placeClouds();                                // Place the clouds on the third click
       plane.show();                                 // Show the plane
@@ -49,8 +52,53 @@ $(document).ready(function () {
       plane.hide();                                 // Hide the plane on the fourth click
       $(".cloud").hide();                           // Hide all the clouds
       clearInterval(planeInterval);                 // Stop the plane movement interval
-      sound.pause();                                // Pause the plane sound
+      sound.pause();
+      removeEasterEgg();                            // Pause the plane sound
+      clickCount = 0;
     }
     return false;                                   // Prevent the default click behavior
   });
+
+  // Function to remove the created HTML structure
+  function removeEasterEgg() {
+    var skyDiv = document.getElementById('sky');
+    if (skyDiv) {
+      skyDiv.parentNode.removeChild(skyDiv);
+    }
+  }
+
+  function createEasterEgg() {
+  // Create the necessary elements
+  var skyDiv = document.createElement('div');
+  skyDiv.id = 'sky';
+
+  var cloudsDiv = document.createElement('div');
+  cloudsDiv.id = 'clouds';
+
+  var planeImg = document.createElement('img');
+  planeImg.id = 'plane';
+  planeImg.src = '/easterEgg/plane.png';
+
+  var cloudImgs = [];
+  var cloudSrcs = [
+    '/easterEgg/cloud1.png',
+    '/easterEgg/cloud2.png',
+    '/easterEgg/cloud3.png',
+    '/easterEgg/cloud4.png',
+    '/easterEgg/cloud5.png',
+    '/easterEgg/cloud6.png'
+  ];
+  
+  for (var i = 0; i < cloudSrcs.length; i++) {
+    var cloudImg = document.createElement('img');
+    cloudImg.classList.add('cloud');
+    cloudImg.src = cloudSrcs[i];
+    cloudImgs.push(cloudImg);
+  }
+
+  // Append elements to the document
+  cloudsDiv.append(...cloudImgs);
+  skyDiv.append(cloudsDiv, planeImg);
+  document.body.appendChild(skyDiv);
+}
 });
