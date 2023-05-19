@@ -95,7 +95,7 @@ function sessionValidation(req, res, next) {
   }
 }
 
-/* Home Section */
+/* Main Section */
 
 const mycollection = "mycollection";
 

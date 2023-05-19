@@ -178,7 +178,7 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: capitalize;
 }
 
-.btn-check:focus + .btn, .btn:focus {
+.btn-check:focus+.btn, .btn:focus {
   outline: 0;
   box-shadow: none;
 }
@@ -706,9 +706,11 @@ button {
   .header .mega-nav-item {
     position: static;
   }
+
   .header .mega-nav-item .dropdown-menu {
     margin-top: -20px !important;
   }
+
   .header .dropdown-menu {
     min-width: 220px;
     display: block;
@@ -721,9 +723,11 @@ button {
     overflow: hidden;
     margin-top: 0;
   }
+
   .header .nav-item.dropdown:hover .dropdown-icon {
     transform: rotate(-180deg);
   }
+
   .header .nav-item.dropdown:hover .dropdown-menu,
   .header .dropdown-menu:hover {
     z-index: 9;
@@ -732,14 +736,17 @@ button {
     top: 100%;
     transition: all .2s ease-out;
   }
+
   .header .nav-item.dropdown:hover .dropdown-menu .dropdown-item,
   .header .dropdown-menu:hover .dropdown-item {
     transition: all .2s ease-out 0s;
   }
+
   .header .dropdown-item {
     transition: all 0s ease-out;
     box-shadow: 0px 30px 60px -10px rgba(0, 0, 0, 0.1);
   }
+
   .header .dropdown-item:hover {
     box-shadow: 0px 30px 60px 0px rgba(0, 0, 0, 0.1);
     transform: scale(1.05);
@@ -900,7 +907,7 @@ button {
   background-repeat: no-repeat;
   background-position: bottom;
   background-size: contain;
-  margin: 0  0 0 auto;
+  margin: 0 0 0 auto;
   transition: 0.5s;
 }
 
@@ -961,32 +968,40 @@ button {
 ================================================
 */
 @media only screen and (max-width: 1024px) {
+
   /** multi choice crd sec CSS Start  **/
   .multi-choice-crd-list {
     grid-template-columns: repeat(3, 1fr);
   }
+
   /** multi choice crd sec CSS End  **/
   /** teacher profile page css Start **/
   .teacher-profile-banner {
     padding-bottom: 80px;
   }
+
   .teacher-profile-banner::after {
     height: 0;
   }
+
   .teacher-profile-banner .profile-banner-img {
     border: 5px solid #fff;
   }
+
   .teacher-profile-banner .profile-banner-txt {
     padding-bottom: 0;
   }
+
   /** teacher profile  page css END **/
 }
 
 @media only screen and (max-width: 991px) {
+
   /** Header CSS Start  **/
   .dropdown-toggle.show .dropdown-icon {
     transform: rotate(180deg);
   }
+
   .navbar-collapse {
     position: fixed;
     width: 250px;
@@ -1001,25 +1016,32 @@ button {
     padding: 20px 15px;
     padding-bottom: 85px;
   }
+
   .navbar-collapse.show {
     right: 0;
     box-shadow: #f56b64 -10px 21px 50px -25px;
   }
+
   .header.sticky .navbar-collapse {
     top: 65px;
   }
+
   .header.sticky .navbar {
     transform: none;
   }
+
   .header .nav-link {
     width: 100%;
   }
+
   .header .nav-item {
     border-bottom: 1px solid #F56962;
   }
+
   .dropdown-menu.show {
     margin-bottom: 10px;
   }
+
   /** Header CSS End  **/
   /** Course Detail css Start **/
   #course-detail-banner-bg {
@@ -1027,58 +1049,71 @@ button {
     margin-left: -15px;
     height: 100%;
   }
+
   .course-detail-banner {
     position: relative;
   }
+
   .course-detail-grid {
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 0 50px;
     grid-template-rows: max-content;
   }
+
   .course-detail-crd-btn {
     width: auto;
   }
+
   /** Course Detail css End **/
   /** Article Card  css Start **/
   .article-crd-list {
     grid-template-columns: repeat(2, 1fr);
   }
+
   /** Article Card  css End **/
 }
 
 @media only screen and (max-width: 768px) {
+
   /** Common Banner CSS Start  **/
   .banner-heading {
     font-size: 40px;
   }
+
   .banner-brief {
     font-size: 20px;
   }
+
   /** Common Banner CSS End  **/
   /** Blog Banner CSS Start  **/
   .blog-banner .banner-content {
-    margin: 0  auto;
+    margin: 0 auto;
   }
+
   /** Blog Banner CSS End  **/
   /** Two side curve Sec css  Start**/
   .two-side-curve-content {
     padding: 50px 15px;
     border-radius: 0 70px 0 70px;
   }
+
   /** Two side curve Sec css  End**/
   /** Course Detail css Start **/
   .course-detail-crd-btn {
     width: 100%;
   }
+
   /** Course Detail css End **/
   /** Contact us css Start **/
   .contactus-item .sec-heading {
     font-size: 30px;
   }
+
   .contactus-item .sec-sub-heading {
     font-size: 16px;
   }
+
   /** Contact us css End **/
 }
 
@@ -1086,100 +1121,126 @@ button {
   html {
     font-size: 70%;
   }
+
   /** Header Css Start **/
   .navbar-collapse {
     top: 67px;
   }
+
   .header.sticky .navbar-collapse {
     top: 57px;
   }
+
   .main-top-gap {
     margin-top: 79px;
   }
+
   /** Header Css End **/
   /** common code Css Start **/
   .course-card:hover {
     transform: none;
   }
+
   .banner-form .index-banner-search {
     font-size: 14px;
   }
+
   /** common code Css End **/
   /** spacing Classes Css Start **/
   .pt-8, .py-8 {
     padding-top: 50px;
   }
+
   .pb-8, .py-8 {
     padding-bottom: 50px;
   }
+
   .mt-8, .my-8 {
     margin-top: 50px;
   }
+
   .mb-8, .my-8 {
     margin-bottom: 50px;
   }
+
   .readcrumb-sec {
     padding-bottom: 100px;
   }
+
   .cart-main-content {
     margin-top: -50px;
   }
+
   .teacher-profile-banner {
     padding-bottom: 50px;
   }
+
   .skilify-info-sec {
     padding: 0;
   }
+
   .skilify-info-points {
     top: -50px;
   }
+
   /** spacing Classes Css End **/
   /** Index Banner Css Start **/
   .index-banner::after,
   .index-banner::before {
     opacity: 0.3;
   }
+
   /** Index Banner Css End **/
   /** card Css Start **/
   .crd-img {
     height: 260px;
   }
+
   /** card Css End **/
   /** Article Card  css Start **/
   .article-crd-list {
     grid-template-columns: 1fr;
   }
+
   /** Article Card  css End **/
   /** Blog Detail css Start **/
   .blog-detail-img img {
     height: auto;
   }
+
   .blog-detail-banner {
     padding-bottom: 120px;
   }
+
   .clap-response-wrap {
     max-width: 100%;
   }
+
   /** Blog Detail css End **/
   /** Courses  page css Start **/
   .courses-search .sec-header .btn-secondary {
     padding: 10px 15px 10px 15px;
   }
+
   .learn-steps-v3-content::after {
     width: 100%;
     height: 65%;
   }
+
   /** Courses  css End **/
   /** Contact us css Start **/
   .contactus-banner .banner-content {
     padding-bottom: 20px;
   }
+
   .contactus-item .sec-heading {
     font-size: 26px;
   }
+
   .contactus-item::after {
     width: 100%;
   }
+
   /** Contact us css End **/
 }
 
@@ -1187,131 +1248,162 @@ button {
   .main-top-gap {
     margin-top: 77px;
   }
+
   /** Home 2 Css Start **/
   .hero-banner-v2::after {
     border-radius: 25px;
   }
+
   /** Home 2 Css Css **/
   /** Common Banner CSS Start  **/
   .banner-heading {
     font-size: 34px !important;
   }
+
   .banner-brief {
     font-size: 18px !important;
   }
+
   /** Common Banner CSS End  **/
   /** Course Detail css Start **/
   .course-price {
     width: 100%;
   }
+
   /** Course Detail css End **/
   /** Cart css Start **/
   .cart-course-img {
     width: 100%;
     height: auto;
   }
+
   .check-out-crd, .payment-crd-wrap {
     min-width: auto;
   }
+
   /** Cart css End **/
   /** Card CSS Start  **/
   .card-subtitle {
     font-size: 16px;
   }
+
   .card-title {
     font-size: 20px;
   }
+
   .card-text {
     font-size: 14px;
   }
+
   /** Card CSS End  **/
   /** Remote Learning CSS Start  **/
   .remote-learning-content-wrap {
     padding: 0;
   }
+
   .remote-learning-sec::before,
   .remote-learning-sec::after {
     width: 70px;
     height: 100px;
     background-size: contain;
   }
+
   /** Remote Learning CSS End  **/
   /** Course Card CSS Start  **/
   .course-card {
     padding: 10px;
   }
+
   .course-card .crd-bottom {
     position: absolute;
     bottom: 10px;
     right: 10px;
     left: 10px;
   }
+
   .crd-info-txt {
     font-size: 12px;
   }
+
   /** Course Card CSS End  **/
   /** Common section CSS Start  **/
   .sec-heading {
     font-size: 30px;
   }
+
   .sec-brief {
     font-size: 16px;
   }
+
   /** Common section CSS End  **/
   /** Home v3 Css Start **/
   .skilify-info-point img {
     height: 35px;
     width: 35px;
   }
+
   .skilify-info-point .card-title {
     font-size: 18px;
   }
+
   /** Home v3 Css End **/
   /** Two Side Curve section CSS Star  **/
   .two-side-curve-content .sec-heading {
     font-size: 24px;
   }
+
   .two-side-curve-content .sec-brief {
     font-size: 14px;
   }
+
   /** Two Side Curve section CSS End  **/
   /** Blog Detail CSS Start  **/
   .clap-text,
   .respose-text {
     font-size: 14px;
   }
+
   .social-btn {
     min-width: 130px;
   }
+
   .author-writen-by {
     font-size: 12px;
   }
+
   .author-name {
     font-size: 18px;
   }
+
   /** Blog Detail css End **/
   /** Contact us css Satrt **/
   .contactus-banner .sub-banner-heading {
     font-size: 16px;
   }
+
   /** Contact us css End **/
 }
 
 @media only screen and (max-width: 480px) {
+
   /** Index Banner CSS Start  **/
   .index-banner {
     padding-top: 100px;
   }
+
   .banner-form .btn.btn-primary, .banner-form .btn.btn-secondary {
     padding: 10px 15px;
   }
+
   .banner-form .btn.btn-primary img, .banner-form .btn.btn-secondary img {
     width: 25px;
   }
+
   /** Index Banner CSS End  **/
   /** Blog Detail CSS Start  **/
   .crd-img.blog-crd-img {
     height: auto;
   }
+
   /** Blog Detail CSS End  **/
 }
