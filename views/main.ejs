@@ -116,54 +116,46 @@
     </section>
 
     <section class="light-2">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 col-md-12 mb-3">
-            <div class="sec-heading2">
-              <div class="sec-left">
-                <h3>Recommendations</h3>
-              </div>
-              <div class="sec-right">
-                <a href="/recommendation" class="btn-br-more">See All</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-12 col-lg-12 col-12">
-            <div class="box mb-15 recommendations_course_grid">
-              <div class="recommendations_course_body">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="d-flex align-items-center">
-                    <div class="d-flex flex-column fw-500">
-                      <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a>
-                      </h4>
-                      <span class="text-fade">Instructor name</span>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 mb-3">
+                    <div class="sec-heading2">
+                        <div class="sec-left">
+                            <h3>Recommendations</h3>
+                        </div>
+                        <div class="sec-right">
+                            <a href="/recommendation" class="btn-br-more">See All</a>
+                        </div>
                     </div>
-                  </div>
-                  <a href="course.html">
-                    <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span class="path2"></span></span>
-                  </a>
                 </div>
-              </div>
-            </div>
-            <div class="box mb-15 recommendations_course_grid">
-              <div class="recommendations_course_body">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="d-flex align-items-center">
-                    <div class="d-flex flex-column fw-500">
-                      <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a>
-                      </h4>
-                      <span class="text-fade">Instructor name</span>
+                <% if (!recommendedCourses) { %>
+                    <div class="col-12">
+                        <p>No recommended courses found.</p>
                     </div>
-                  </div>
-                  <a href="course.html">
-                    <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span class="path2"></span></span>
-                  </a>
-                </div>
-              </div>
+                <% } else { %>
+                    <% recommendedCourses.slice(0, 2).forEach((course) => { %>
+                        <div class="col-xl-6 col-lg-6 col-12">
+                            <div class="box mb-15 recommendations_course_grid">
+                                <div class="recommendations_course_body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex flex-column fw-500">
+                                                <h4 class="bl-title"><a href="/courseDetail"><%= course.title %></a></h4>
+                                            </div>
+                                        </div>
+                                        <a href="<%= course.link %>">
+                                            <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span
+                                                class="path2"></span></span>
+                                        </a>
+                                    </div>
+                                    <p style="font-size: smaller;"><%= course.description %></p>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } %>
             </div>
-          </div>
         </div>
-      </div>
     </section>
   </main>
   <div id="sky">

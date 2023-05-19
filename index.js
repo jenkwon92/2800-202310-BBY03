@@ -40,11 +40,9 @@ const mongoStore = MongoStore.create({
 });
 
 // Database Section
-const { database } = require("./databaseConnection");                               // Import the database connection
-const userCollection = database.db(mongodb_database).collection("users");           // Specify the collection to store users
-const coursesCollection = database.db(mongodb_database).collection("courses");      // Specify the collection to store courses //create user db
-const skillCollection = database.db(mongodb_database).collection("skills");         // Create skills db
-const interestCollection = database.db(mongodb_database).collection("interests");   // Create interest db
+const { database } = require("./databaseConnection"); // Import the database connection
+const userCollection = database.db(mongodb_database).collection("users"); // Specify the collection to store users
+const coursesCollection = database.db(mongodb_database).collection("courses"); // Specify the collection to store courses
 
 // Set the ejs view engine
 app.set("view engine", "ejs");
@@ -148,12 +146,43 @@ app.post("/datasetUpload", data_upload.single("csvfile"), async (req, res) => {
   }
 });
 
-// Renders the main pageupload
-app.get("/main", sessionValidation, (req, res) => {
-  res.render("main", {
-    authenticated: req.session.authenticated,
-    username: req.session.username,
-  });
+// Helper function to select a random subset of courses from an array
+function getRandomCourses(courses, count) {
+  const shuffled = courses.sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+}
+
+// Renders the main page
+app.get("/main", sessionValidation, async (req, res) => {
+  try {
+    // Retrieve user information from the database
+    const user = await userCollection.findOne({
+      username: req.session.username,
+    });
+
+    // Retrieve user's interests from db
+    const userInterests = user.interests || [];
+
+    // Create a case-insensitive regular expression pattern for matching interests
+    const interestsPattern = new RegExp(userInterests.map(interest => `\\b${interest}\\b`).join("|"), "i");
+
+    // Retrieve courses matching the user's interests (case-insensitive)
+    const recommendedCourses = await coursesCollection
+      .find({ tags: interestsPattern })
+      .toArray();
+
+    // Select a random subset of 2 courses from the recommended courses
+    const randomCourses = getRandomCourses(recommendedCourses, 2);
+
+    res.render("main", {
+      authenticated: req.session.authenticated,
+      username: req.session.username,
+      recommendedCourses: randomCourses,
+    });
+  } catch (error) {
+    console.error("Error retrieving course recommendation:", error);
+    res.status(500).send("Error retrieving course recommendation");
+  }
 });
 
 // Renders the my courses page
@@ -161,10 +190,86 @@ app.get("/myCourses", (req, res) => {
   res.render("myCourses");
 });
 
-// Renders the see all page
-app.get('/recommendation', (req, res) => {
-  res.render('recommendation');
+// Renders the course detail page
+app.get("/courseDetail", (req, res) => {
+  res.render("courseDetail");
 });
+
+/* Recommendation Section */
+
+const recommendedCourseLimit = 100; // Limit the number of initially recommended courses
+
+app.get("/recommendation", sessionValidation, async (req, res) => {
+  try {
+    // Retrieve user information from the database
+    const user = await userCollection.findOne({
+      username: req.session.username,
+    });
+
+    // Retrieve user's interests from db
+    const userInterests = user.interests || [];
+    const interestsPattern = new RegExp(userInterests.map(interest => `\\b${interest}\\b`).join("|"), "i");
+
+    // Retrieve courses matching the user's interests (case-insensitive)
+    const recommendedCourses = await coursesCollection
+      .find({ tags: interestsPattern })
+      .limit(recommendedCourseLimit)
+      .toArray();
+    console.log(recommendedCourses);
+    if (recommendedCourses.length === 0) {
+      throw new Error("No recommended courses found");
+    }
+
+    res.render("recommendation", { recommendedCourses: recommendedCourses, username: req.session.username });
+  } catch (error) {
+    console.error("Error retrieving course recommendation:", error);
+    res.status(500).send("Error retrieving course recommendation");
+  }
+});
+
+// Generate more button click event
+app.get("/generateMore", sessionValidation, async (req, res) => {
+  try {
+    // Retrieve user information from the database
+    const user = await userCollection.findOne({
+      username: req.session.username,
+    });
+
+    // Retrieve user's interests from db
+    const userInterests = user.interests || [];
+    const interestsPattern = new RegExp(userInterests.map(interest => `\\b${interest}\\b`).join("|"), "i");
+
+    // Retrieve all recommended courses for the user
+    const allRecommendedCourses = await coursesCollection
+      .find({ tags: interestsPattern })
+      .toArray();
+
+    // Get the number of initially recommended courses
+    const recommendedCourseLimit = 5;
+
+    // Calculate the number of additional courses to generate
+    const additionalCourseLimit = 5;
+
+    // Determine the starting index for additional courses
+    const startIndex = recommendedCourseLimit + req.session.generatedCoursesCount;
+
+    // Calculate the ending index for additional courses
+    const endIndex = startIndex + additionalCourseLimit;
+
+    // Retrieve the additional recommended courses based on the index range
+    const additionalRecommendedCourses = allRecommendedCourses.slice(startIndex, endIndex);
+
+    // Update the generated courses count in the session
+    req.session.generatedCoursesCount += additionalRecommendedCourses.length;
+
+    res.json({ additionalRecommendedCourses });
+  } catch (error) {
+    console.error("Error retrieving additional recommended courses:", error);
+    res.status(500).send("Error retrieving additional recommended courses");
+  }
+});
+
+/* Recommendation Section end */
 
 /* Profile Section */
 
@@ -234,31 +339,21 @@ app.get("/editProfile", async (req, res) => {
 
 app.get("/editSkill", async (req, res) => {
   try {
-    // Retrieve Skills data from the database and store it in the `skills` variable
-    const skills = await skillCollection
-      .find({ userId: req.session.username })
-      .toArray();
-
-    // Retrieve the user's skills from the database
+    // Retrieve user information from the user database
     const user = await userCollection.findOne({
       username: req.session.username,
     });
 
-    if (!user) {
-      throw new Error("User not found");
+    if (user) {
+      // Get the 'interests' field from the user db
+      const skills = user.skills || [];
+
+      res.render("editSkill", {
+        skills: skills,
+      });
+    } else {
+      res.status(404).send("User not found");
     }
-
-    // Retrieve selected skills for the user
-    const selectedSkills = user.skills || [];
-
-    res.render("editSkill", {
-      authenticated: req.session.authenticated,
-      username: req.session.username,
-      skills: skills.map((skill) => ({
-        name: skill.skill,
-        selected: selectedSkills.includes(skill.skill),
-      })),
-    });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error retrieving skills");
@@ -487,7 +582,7 @@ app.post("/submitUser", async (req, res) => {
     username: username,
     firstName: firstName,
     lastName: lastName,
-    password: hashedPassword
+    password: hashedPassword,
   };
 
   // Insert new user into database
@@ -583,14 +678,16 @@ app.post("/forgotPassword", async (req, res, next) => {
   const user = await userCollection.findOne({ email: email });
 
   if (!user) {
-    res.render("forgotPassword", { msg: { text: "User email not found!", type: "error" } });
+    res.render("forgotPassword", {
+      msg: { text: "User email not found!", type: "error" },
+    });
   } else {
     const secret = JWT_SECRET + user.password;
     const payload = {
       email: email,
-      id: user._id
+      id: user._id,
     };
-    const token = jwt.sign(payload, secret, { expiresIn: '15m' });
+    const token = jwt.sign(payload, secret, { expiresIn: "15m" });
     const link = `${WebsiteURL}/resetPassword/${user._id}/${token}`;
 
     const transporter = nodemailer.createTransport({
@@ -599,8 +696,8 @@ app.post("/forgotPassword", async (req, res, next) => {
       secure: true,
       auth: {
         user: process.env.COURSEPILOT_SUPPORT_EMAIL,
-        pass: process.env.COURSEPILOT_SUPPORT_PASSWORD
-      }
+        pass: process.env.COURSEPILOT_SUPPORT_PASSWORD,
+      },
     });
 
     // send mail with defined transport object
@@ -608,17 +705,24 @@ app.post("/forgotPassword", async (req, res, next) => {
       from: `"CoursePilot" <${process.env.COURSEPILOT_SUPPORT_EMAIL}>`, // Sender address
       to: user.email, // Recipient address
       subject: "CoursePilot Password Recovery", // Subject line
-      html: `<p>Please click this <a href="${link}">link</a> to reset your password.</p>` // HTML body
+      html: `<p>Please click this <a href="${link}">link</a> to reset your password.</p>`, // HTML body
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
         console.log(error);
-        return res.render("forgotPassword", { msg: { text: "An error occurred while sending the email.", type: "error" } });
+        return res.render("forgotPassword", {
+          msg: {
+            text: "An error occurred while sending the email.",
+            type: "error",
+          },
+        });
       }
 
       console.log("Email sent: " + info.response);
-      res.render("forgotPassword", { msg: { text: "Password reset link has been sent!", type: "success" } });
+      res.render("forgotPassword", {
+        msg: { text: "Password reset link has been sent!", type: "success" },
+      });
     });
   }
 });
@@ -633,23 +737,22 @@ app.get("/resetPassword/:id/:token", async (req, res, next) => {
 
   // If user does not exist, return error message
   if (!user) {
-    return res.render('error', { errorMessage: "ID not found!" });
+    return res.render("error", { errorMessage: "ID not found!" });
   }
 
   // Create secret for JWT
   const secret = JWT_SECRET + user.password;
   try {
     const payload = jwt.verify(token, secret);
-    res.render('resetPassword', { email: user.email });
-  }
-  catch (error) {
+    res.render("resetPassword", { email: user.email });
+  } catch (error) {
     console.log(error);
     return res.render("error", { errorMessage: "Invalid token!" });
   }
 });
 
 // Resets the user's password
-app.post('/resetPassword/:id/:token', async (req, res, next) => {
+app.post("/resetPassword/:id/:token", async (req, res, next) => {
   // Get user id and token from url
   const { id, token } = req.params;
 
@@ -661,7 +764,7 @@ app.post('/resetPassword/:id/:token', async (req, res, next) => {
 
   // If user does not exist, return error message
   if (!user) {
-    return res.render('error', { errorMessage: "ID not found!" });
+    return res.render("error", { errorMessage: "ID not found!" });
   }
 
   // Create secret for JWT
@@ -681,8 +784,7 @@ app.post('/resetPassword/:id/:token', async (req, res, next) => {
 
     // Password successfully updated
     res.render("passwordUpdated");
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
     return res.render("error", { errorMessage: "Invalid token!" });
   }
@@ -709,7 +811,10 @@ app.get("/search", (req, res) => {
   }
 
   // Create a regex pattern to match the search query in a case-insensitive manner
-  const escapedSearchQuery = searchQuery.replace(/[-.*+?^${}()|[\]\\]/g, "\\$&");
+  const escapedSearchQuery = searchQuery.replace(
+    /[-.*+?^${}()|[\]\\]/g,
+    "\\$&"
+  );
   const searchRegex = new RegExp(escapedSearchQuery, "i");
 
   // Count the total number of matching documents
@@ -769,9 +874,9 @@ app.get("/courseDetail/:courseId", (req, res) => {
 /* Course Detail Section end */
 
 // Renders the custom 404 error page to users instead of displaying a generic error message or a stack trace.
-app.get('*', (req, res) => {
+app.get("*", (req, res) => {
   res.status(404);
-  res.render('404');
+  res.render("404");
 });
 
 // For developers to test on their local machine
