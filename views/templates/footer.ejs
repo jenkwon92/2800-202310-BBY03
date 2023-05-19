@@ -23,13 +23,13 @@
 <div id="sky">
   <div id="clouds">
   </div>
-  <img id="plane" src="plane.png">
-  <img class="cloud" src="cloud1.png">
-    <img class="cloud" src="cloud2.png">
-    <img class="cloud" src="cloud3.png">
-    <img class="cloud" src="cloud4.png">
-    <img class="cloud" src="cloud5.png">
-    <img class="cloud" src="cloud6.png">
+  <img id="plane" src="/easterEgg/plane.png">
+  <img class="cloud" src="/easterEgg/cloud1.png">
+    <img class="cloud" src="/easterEgg/cloud2.png">
+    <img class="cloud" src="/easterEgg/cloud3.png">
+    <img class="cloud" src="/easterEgg/cloud4.png">
+    <img class="cloud" src="/easterEgg/cloud5.png">
+    <img class="cloud" src="/easterEgg/cloud6.png">
 </div>
 
 
@@ -96,7 +96,7 @@
   const screenWidth = $(window).width();            // Get the screen width
   const planeWidth = plane.width();                 // Get the width of the plane image
   let planeX = -planeWidth;                         // Set the initial position of the plane to the left of the screen
-  const sound = new Audio('/plane.wav');            // Create a new Audio object for the plane sound
+  const sound = new Audio('/easterEgg/plane.wav');            // Create a new Audio object for the plane sound
 
   function movePlane() {
     planeX += 2.5;                                  // Increment the plane's X position to move it to the right
@@ -112,7 +112,7 @@
   function placeClouds() {
     const numClouds = Math.floor(Math.random() * 100) + 1;                      // Generate a random number of clouds between 1 and 100
     for (let i = 0; i < numClouds; i++) {
-      const newCloud = $("<img>").addClass("cloud").attr("src", "cloud6.png");  // Create a new cloud image element
+      const newCloud = $("<img>").addClass("cloud").attr("src", "/easterEgg/cloud6.png");  // Create a new cloud image element
       newCloud.hide();                                                          // Hide the cloud initially
       $("#clouds").append(newCloud);                                            // Append the cloud to the "clouds" container element
     }
