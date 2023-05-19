@@ -49,26 +49,26 @@
               <div class="p-4" style="background-color: #d0d4d6;">
                 <% if (skills && skills.length> 0) { %>
                   <% skills.forEach(function(skill) { %>
-                      <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
-                          <%= skill %>
-                      </button>
-                      
-                      <% }); %>
-                          <% } else { %>
-                              <p>No skills available</p>
-                              <% } %>
+                    <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
+                      <%= skill %>
+                    </button>
+
+                    <% }); %>
+                      <% } else { %>
+                        <p>No skills available</p>
+                        <% } %>
               </div>
               <p class="lead fw-normal mb-1">Interests</p>
               <div class="p-4" style="background-color: #d0d4d6;">
                 <% if (interests && interests.length> 0) { %>
                   <% interests.forEach(function(interest) { %>
-                      <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
-                          <%= interest %>
-                      </button>
-                      <% }); %>
-                          <% } else { %>
-                              <p>No interests available</p>
-                              <% } %>
+                    <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
+                      <%= interest %>
+                    </button>
+                    <% }); %>
+                      <% } else { %>
+                        <p>No interests available</p>
+                        <% } %>
               </div>
             </div>
             <!-- Skills&interests end  -->

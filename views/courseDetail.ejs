@@ -1,66 +1,67 @@
 <%- include("templates/header") %>
-    <link href="/css/courseDetail.css" rel="stylesheet" type="text/css">
-    <section>
-        <div class="ed_detail_head lg bg-light">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 col-md-6">
+  <link href="/css/courseDetail.css" rel="stylesheet" type="text/css">
+  <section>
+    <div class="ed_detail_head lg bg-light">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6 col-md-6">
 
-                        <h1>
-                            <%= course.title %>
-                        </h1>
+            <h1>
+              <%= course.title %>
+            </h1>
 
-                        <div class="property_video lg">
-                            <div class="thumb">
-                                <img class="pro_img img-fluid w100" src="/images/cat1.jpg" alt="cat.jpg">
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-lg-6 col-md-6">
-                        <div class="ed_detail_wrap">
-                            <ul class="list_ed_detail2">
-                                <li class="tag-2"><i class="ti-calendar"></i><strong>Duration:</strong>10 - 25 Weeks
-                                </li>
-                                <li class="tag-1"><i class="ti-user"></i><strong>Enrolled:</strong>712 Students</li>
-                                <li class="tag-3"><i class="ti-book"></i><strong>Lectures:</strong>602 Lectures</li>
-                                <li class="tag-4"><i class="ti-video-camera"></i><strong>Videos:</strong>402 Videos</li>
-                                <li class="tag-5"><i class="ti-tag"></i><strong>Level:</strong>Advance</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            <div class="property_video lg">
+              <div class="thumb">
+                <img class="pro_img img-fluid w100" src="/images/cat1.jpg" alt="cat.jpg">
+              </div>
             </div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-md-8">
-                    <!-- Overview -->
-                    <div class="edu_wraper border">
-                        <h4 class="edu_title">Course Overview</h4>
-                        <p>
-                            <%= course.description %>
-                        </p>
-                        <% if (course.tags) { const tags=course.tags.split(","); %>
-                            <p>Tags: </p>
-                            <ul class="list_ed_detail2">
-                                <% tags.forEach((tag)=> { %>
-                                    <li class="tag">
-                                        <%= tag.trim() %>
-                                    </li>
-                                    <% }) %>
-                            </ul>
-                            <% } %>
-                                <h6>Link: <a href=" <%=course.link %>" target="_blank">
-                                        <%= course.link %>
-                                    </a></h6>
-                    </div>
-                </div>
+
+          </div>
+
+          <div class="col-lg-6 col-md-6">
+            <div class="ed_detail_wrap">
+              <ul class="list_ed_detail2">
+                <li class="tag-2"><i class="ti-calendar"></i><strong>Duration:</strong>10 - 25 Weeks
+                </li>
+                <li class="tag-1"><i class="ti-user"></i><strong>Enrolled:</strong>712 Students</li>
+                <li class="tag-3"><i class="ti-book"></i><strong>Lectures:</strong>602 Lectures</li>
+                <li class="tag-4"><i class="ti-video-camera"></i><strong>Videos:</strong>402 Videos</li>
+                <li class="tag-5"><i class="ti-tag"></i><strong>Level:</strong>Advance</li>
+              </ul>
             </div>
+          </div>
         </div>
-    </section>
+      </div>
     </div>
-    <!-- Display the course details -->
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-8">
+          
+          <!-- Overview -->
+          <div class="edu_wraper border">
+            <h4 class="edu_title">Course Overview</h4>
+            <p>
+              <%= course.description %>
+            </p>
+            <% if (course.tags) { const tags=course.tags.split(","); %>
+              <p>Tags: </p>
+              <ul class="list_ed_detail2">
+                <% tags.forEach((tag)=> { %>
+                  <li class="tag">
+                    <%= tag.trim() %>
+                  </li>
+                  <% }) %>
+              </ul>
+              <% } %>
+                <h6>Link: <a href=" <%=course.link %>" target="_blank">
+                    <%= course.link %>
+                  </a></h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </div>
+  <!-- Display the course details -->
 
-    <%- include("templates/footer") %>
+  <%- include("templates/footer") %>

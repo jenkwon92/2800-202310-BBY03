@@ -1,120 +1,119 @@
 <%- include("templates/header") %>
 
-    <!-- All profiles -->
-    <div class="card" style="margin-top: 50px;">
-        <!-- Basic profile -->
-        <div class="rounded-top text-white d-flex flex-row" style="background-color: #4A596D; height:200px;">
-            <div class="ms-4 mt-auto mb-auto d-flex flex-column" style="width: 150px;">
-                <img src="<%= image || '/images/profile/avatar-1.webp' %>" alt="Profile Image"
-                    class="img-fluid img-thumbnail" style="width: 150px; z-index: 1;">
-            </div>
-            <div class="ms-3" style="font-size: small; color: #d0d4d6; margin-top: auto; margin-bottom: auto;">
-                <h5 style="margin-bottom: 5px;">
-                    <%= username %>
-                </h5>
-                <h6 style="margin-bottom: 5px;">Job: <%= job %>
-                </h6>
-                <h6 style="margin-bottom: 0;">Email: <%= email %>
-                </h6>
-                <span id="edit-icon" style="font-size: 20px; float: right; position: absolute; top:170px; right: 10px"
-                    class="material-icons">edit</span>
-            </div>
+  <!-- All profiles -->
+  <div class="card" style="margin-top: 50px;">
+    <!-- Basic profile -->
+    <div class="rounded-top text-white d-flex flex-row" style="background-color: #4A596D; height:200px;">
+      <div class="ms-4 mt-auto mb-auto d-flex flex-column" style="width: 150px;">
+        <img src="<%= image || '/images/profile/avatar-1.webp' %>" alt="Profile Image" class="img-fluid img-thumbnail"
+          style="width: 150px; z-index: 1;">
+      </div>
+      <div class="ms-3" style="font-size: small; color: #d0d4d6; margin-top: auto; margin-bottom: auto;">
+        <h5 style="margin-bottom: 5px;">
+          <%= username %>
+        </h5>
+        <h6 style="margin-bottom: 5px;">Job: <%= job %>
+        </h6>
+        <h6 style="margin-bottom: 0;">Email: <%= email %>
+        </h6>
+        <span id="edit-icon" style="font-size: 20px; float: right; position: absolute; top:170px; right: 10px"
+          class="material-icons">edit</span>
+      </div>
+    </div>
+    <!-- Basic profile end -->
+
+    <!-- Skills&interests -->
+    <div class="card-body p-4 text-black" style="margin-top: 20px;">
+      <!-- Skills section -->
+      <div class="mb-5">
+        <p class="lead fw-normal mb-1">Skills</p>
+        <div class="p-4" style="background-color: #d0d4d6; border-radius: 10px;">
+          <% if (skills && skills.length> 0) { %>
+            <% skills.forEach(function(skill) { %>
+              <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
+                <%= skill %>
+              </button>
+
+              <% }); %>
+                <% } else { %>
+                  <p>No skills available</p>
+                  <% } %>
         </div>
-        <!-- Basic profile end -->
+      </div>
+      <!-- Skills section end -->
 
-        <!-- Skills&interests -->
-        <div class="card-body p-4 text-black" style="margin-top: 20px;">
-            <!-- Skills section -->
-            <div class="mb-5">
-                <p class="lead fw-normal mb-1">Skills</p>
-                <div class="p-4" style="background-color: #d0d4d6; border-radius: 10px;">
-                    <% if (skills && skills.length> 0) { %>
-                        <% skills.forEach(function(skill) { %>
-                            <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
-                                <%= skill %>
-                            </button>
-                            
-                            <% }); %>
-                                <% } else { %>
-                                    <p>No skills available</p>
-                                    <% } %>
-                </div>
-            </div>
-            <!-- Skills section end -->
-
-            <!-- Interests section -->
-            <div>
-                <p class="lead fw-normal mb-1">Interests</p>
-                <div class="p-4" style="background-color: #d0d4d6; border-radius: 10px;">
-                    <% if (interests && interests.length> 0) { %>
-                        <% interests.forEach(function(interest) { %>
-                            <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
-                                <%= interest %>
-                            </button>
-                            <% }); %>
-                                <% } else { %>
-                                    <p>No interests available</p>
-                                    <% } %>
-                </div>
-            </div>
-            <!-- Interests section end -->
+      <!-- Interests section -->
+      <div>
+        <p class="lead fw-normal mb-1">Interests</p>
+        <div class="p-4" style="background-color: #d0d4d6; border-radius: 10px;">
+          <% if (interests && interests.length> 0) { %>
+            <% interests.forEach(function(interest) { %>
+              <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
+                <%= interest %>
+              </button>
+              <% }); %>
+                <% } else { %>
+                  <p>No interests available</p>
+                  <% } %>
         </div>
-        <!-- Skills&interests end -->
-
-        <!-- Edit skills&interests -->
-        <div class="d-flex justify-content-center align-items-center mb-4">
-            <p class="lead fw-normal mb-0"></p>
-        </div>
-        <div class="row g-2">
-            <div id="go-skill" class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center"
-                style=" border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
-                <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
-                    class="material-icons">
-                    computer
-                </span>
-                <p style="font-size:1rem" class="text-center mt-2">Skills</p>
-            </div>
-            <div id="go-interest"
-                class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center"
-                style=" border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
-                <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
-                    class="material-icons">
-                    menu_book
-                </span>
-                <p style="font-size:1rem" class="text-center mt-2">Interests</p>
-            </div>
-        </div>
-        <!-- Edit skills&interests end -->
-
-        <!-- Log out -->
-        <button onclick="window.location.href='/logout'" class="btn btn-sm btn-dark profile-button" type="button"
-            style="border-radius: 10px; align-items: center; margin-top: 50px; width: 100%; margin-bottom: 100px;">Log
-            out</button>
-        <!-- Log out end -->
+      </div>
+      <!-- Interests section end -->
     </div>
+    <!-- Skills&interests end -->
 
+    <!-- Edit skills&interests -->
+    <div class="d-flex justify-content-center align-items-center mb-4">
+      <p class="lead fw-normal mb-0"></p>
     </div>
+    <div class="row g-2">
+      <div id="go-skill" class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center"
+        style=" border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
+        <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
+          class="material-icons">
+          computer
+        </span>
+        <p style="font-size:1rem" class="text-center mt-2">Skills</p>
+      </div>
+      <div id="go-interest" class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center"
+        style=" border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
+        <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
+          class="material-icons">
+          menu_book
+        </span>
+        <p style="font-size:1rem" class="text-center mt-2">Interests</p>
+      </div>
     </div>
-    </div>
-    </div>
-    </section>
+    <!-- Edit skills&interests end -->
 
-    <!-- Function section -->
-    <script>
-        const editIcon = document.querySelector("#edit-icon");
-        editIcon.addEventListener("click", () => {
-            window.location.href = "/editProfile";
-        });
+    <!-- Log out -->
+    <button onclick="window.location.href='/logout'" class="btn btn-sm btn-dark profile-button" type="button"
+      style="border-radius: 10px; align-items: center; margin-top: 50px; width: 100%; margin-bottom: 100px;">Log
+      out</button>
+    <!-- Log out end -->
+  </div>
 
-        const goSkill = document.querySelector("#go-skill");
-        goSkill.addEventListener("click", () => {
-            window.location.href = "/editSkill";
-        });
+  </div>
+  </div>
+  </div>
+  </div>
+  </section>
 
-        const goInterest = document.querySelector("#go-interest");
-        goInterest.addEventListener("click", () => {
-            window.location.href = "/editInterest";
-        });
-    </script>
+  <!-- Function section -->
+  <script>
+    const editIcon = document.querySelector("#edit-icon");
+    editIcon.addEventListener("click", () => {
+      window.location.href = "/editProfile";
+    });
 
-    <%- include("templates/footer") %>
+    const goSkill = document.querySelector("#go-skill");
+    goSkill.addEventListener("click", () => {
+      window.location.href = "/editSkill";
+    });
+
+    const goInterest = document.querySelector("#go-interest");
+    goInterest.addEventListener("click", () => {
+      window.location.href = "/editInterest";
+    });
+  </script>
+
+  <%- include("templates/footer") %>

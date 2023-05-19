@@ -1,68 +1,66 @@
 <%- include("templates/header") %>
-    <div class="search-wrapper d-flex flex-column gap-2 mb-2">
-        <form id="search-form" action="/search" method="GET">
-            <label for="search"></label>
-            <input type="search" id="search" name="search" class="form-control" placeholder="Search..."
-                value="<%= searchQuery %>">
-        </form>
-    </div>
+  <div class="search-wrapper d-flex flex-column gap-2 mb-2">
+    <form id="search-form" action="/search" method="GET">
+      <label for="search"></label>
+      <input type="search" id="search" name="search" class="form-control" placeholder="Search..."
+        value="<%= searchQuery %>">
+    </form>
+  </div>
 
-    <!-- Popular Tags -->
-    <div class="popular-tags mb-2">
-        <h3>What's Popular</h3>
-        <div class="tag-list">
-            <button class="btn btn-secondary bg-transparent text-dark mb-2"
-                onclick="populateSearch('Java')">Java</button>
-            <button class="btn btn-secondary bg-transparent text-dark mb-2"
-                onclick="populateSearch('Python')">Python</button>
-            <button class="btn btn-secondary bg-transparent text-dark mb-2"
-                onclick="populateSearch('JavaScript')">JavaScript</button>
-            <button class="btn btn-secondary bg-transparent text-dark mb-2" onclick="populateSearch('C++')">C++</button>
-        </div>
+  <!-- Popular Tags -->
+  <div class="popular-tags mb-2">
+    <h3>What's Popular</h3>
+    <div class="tag-list">
+      <button class="btn btn-secondary bg-transparent text-dark mb-2" onclick="populateSearch('Java')">Java</button>
+      <button class="btn btn-secondary bg-transparent text-dark mb-2" onclick="populateSearch('Python')">Python</button>
+      <button class="btn btn-secondary bg-transparent text-dark mb-2"
+        onclick="populateSearch('JavaScript')">JavaScript</button>
+      <button class="btn btn-secondary bg-transparent text-dark mb-2" onclick="populateSearch('C++')">C++</button>
     </div>
+  </div>
 
-    <!-- Display search results -->
-    <% courses.forEach((course)=> {
-        const url = new URL(course.link);
-        const domain = url.origin;
-        %>
-        <a href="/courseDetail/<%= course._id %>" class="text-decoration-none">
-            <div class="search-results">
-                <div class="card mb-3">
-                    <div class="row g-0">
-                        <div class="col-2 col-md-1">
-                            <% if (domain=="https://www.datacamp.com" ) { %>
-                                <img src="/images/datacamp.png" alt="placeholder image" class="rounded img-fluid">
-                                <% } else if (domain=="https://www.udemy.com" ) { %>
-                                    <img src="/images/udemy.png" alt="placeholder image" class="rounded img-fluid">
-                                    <% } else { %>
-                                        <img src="/images/default_logo.png" alt="placeholder image" class="rounded img-fluid">
-                                        <% } %>
-                        </div>
-                        <div class="col-10 col-md-11">
-                            <div class="card-body">
-                                <h6 class="card-title">
-                                    <%= course.title %>
-                                </h6>
-                                <% if (course.tags) { %>
-                                    <button class="btn btn-secondary bg-transparent text-dark mb-2">
-                                        <%= course.tags.charAt(0).toUpperCase() + course.tags.slice(1) %>
-                                    </button>
-                                    <% } %>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <!-- Display search results -->
+  <% courses.forEach((course)=> {
+    const url = new URL(course.link);
+    const domain = url.origin;
+    %>
+    <a href="/courseDetail/<%= course._id %>" class="text-decoration-none">
+      <div class="search-results">
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-2 col-md-1">
+              <% if (domain=="https://www.datacamp.com" ) { %>
+                <img src="/images/datacamp.png" alt="placeholder image" class="rounded img-fluid">
+                <% } else if (domain=="https://www.udemy.com" ) { %>
+                  <img src="/images/udemy.png" alt="placeholder image" class="rounded img-fluid">
+                  <% } else { %>
+                    <img src="/images/default_logo.png" alt="placeholder image" class="rounded img-fluid">
+                    <% } %>
             </div>
-        </a>
-        <% }); %>
-            <%- include("templates/footer") %>
+            <div class="col-10 col-md-11">
+              <div class="card-body">
+                <h6 class="card-title">
+                  <%= course.title %>
+                </h6>
+                <% if (course.tags) { %>
+                  <button class="btn btn-secondary bg-transparent text-dark mb-2">
+                    <%= course.tags.charAt(0).toUpperCase() + course.tags.slice(1) %>
+                  </button>
+                  <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <% }); %>
+      <%- include("templates/footer") %>
 
-                <script>
-                    function populateSearch(tag) {
-                        const searchInput = document.getElementById('search');
-                        searchInput.value = tag;
-                        const searchForm = document.getElementById('search-form');
-                        searchForm.submit();
-                    }
-                </script>
+        <script>
+          function populateSearch(tag) {
+            const searchInput = document.getElementById('search');
+            searchInput.value = tag;
+            const searchForm = document.getElementById('search-form');
+            searchForm.submit();
+          }
+        </script>

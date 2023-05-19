@@ -1,55 +1,52 @@
 <%- include("templates/header") %>
-    <main class="form-signin w-100 m-auto">
-        <div class="d-flex gap-2 justify-content-center py-5">
-            <form class="text-center border bg-light p-5 rounded shadow-lg" action='/submitUser' method='post'>
+  <main class="form-signin w-100 m-auto">
+    <div class="d-flex gap-2 justify-content-center py-5">
+      <form class="text-center border bg-light p-5 rounded shadow-lg" action='/submitUser' method='post'>
 
-                <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
+        <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
 
-                <!-- Email Input -->
-                <div class="form-floating my-3">
-                    <input name='email' type="email" class="form-control" id="emailInput"
-                        placeholder="name@example.com">
-                    <label for="emailInput">Email address</label>
-                </div>
-
-                <!-- Username Input -->
-                <div class="form-floating my-3">
-                    <input name='username' type="text" class="form-control" id="usernameInput" placeholder="Username">
-                    <label for="emailInput">Username</label>
-                </div>
-
-                <!-- First Name Input -->
-                <div class="form-floating my-3">
-                    <input name='firstName' type="text" class="form-control" id="firstNameInput"
-                        placeholder="First Name">
-                    <label for="firstNameInput">First Name</label>
-                </div>
-
-                <!-- Last Name Input -->
-                <div class="form-floating my-3">
-                    <input name='lastName' type="text" class="form-control" id="lastNameInput" placeholder="Last Name">
-                    <label for="lastNameInput">Last Name</label>
-                </div>
-
-                <!-- Password Input -->
-                <div class="form-floating my-3">
-                    <input name='password' type="password" class="form-control" id="floatingPassword"
-                        placeholder="Password">
-                    <label for="floatingPassword">Password</label>
-                </div>
-
-                <!-- Error Message Display -->
-                <p class="text-danger">
-                    <%= msg %>
-                </p>
-
-                <!-- Submit Button -->
-                <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Sign Up</button>
-
-                <p>Already have an account? <a href="/login">Login</a></p>
-
-            </form>
+        <!-- Email Input -->
+        <div class="form-floating my-3">
+          <input name='email' type="email" class="form-control" id="emailInput" placeholder="name@example.com">
+          <label for="emailInput">Email address</label>
         </div>
-    </main>
-</div>
-    <%- include("templates/footer") %>
+
+        <!-- Username Input -->
+        <div class="form-floating my-3">
+          <input name='username' type="text" class="form-control" id="usernameInput" placeholder="Username">
+          <label for="emailInput">Username</label>
+        </div>
+
+        <!-- First Name Input -->
+        <div class="form-floating my-3">
+          <input name='firstName' type="text" class="form-control" id="firstNameInput" placeholder="First Name">
+          <label for="firstNameInput">First Name</label>
+        </div>
+
+        <!-- Last Name Input -->
+        <div class="form-floating my-3">
+          <input name='lastName' type="text" class="form-control" id="lastNameInput" placeholder="Last Name">
+          <label for="lastNameInput">Last Name</label>
+        </div>
+
+        <!-- Password Input -->
+        <div class="form-floating my-3">
+          <input name='password' type="password" class="form-control" id="floatingPassword" placeholder="Password">
+          <label for="floatingPassword">Password</label>
+        </div>
+
+        <!-- Error Message Display -->
+        <p class="text-danger">
+          <%= msg %>
+        </p>
+
+        <!-- Submit Button -->
+        <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Sign Up</button>
+
+        <p>Already have an account? <a href="/login">Login</a></p>
+
+      </form>
+    </div>
+  </main>
+  </div>
+  <%- include("templates/footer") %>
