@@ -20,24 +20,10 @@
     </div>
   </div>
 </footer>
-<div id="sky">
-  <div id="clouds">
-  </div>
-  <img id="plane" src="/easterEgg/plane.png">
-  <img class="cloud" src="/easterEgg/cloud1.png">
-    <img class="cloud" src="/easterEgg/cloud2.png">
-    <img class="cloud" src="/easterEgg/cloud3.png">
-    <img class="cloud" src="/easterEgg/cloud4.png">
-    <img class="cloud" src="/easterEgg/cloud5.png">
-    <img class="cloud" src="/easterEgg/cloud6.png">
-</div>
-
-
 <!-- Bootstrap JS -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
-        integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
-        crossorigin="anonymous"></script>
+  integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
 
 <!-- Scripts for Jquery -->
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -46,107 +32,29 @@
 <!-- Scripts for slick carousel -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
+
 <script>
-  $(document).ready(function () {
+  // $(document).ready(function () {
 
-  var currentUrl = window.location.href;
-  var valueAfterSlash = currentUrl.split("/").pop();
-  textValue = valueAfterSlash.replace(/([A-Z])/g, ' $1').toUpperCase();
-  console.log(valueAfterSlash);
+  //   var currentUrl = window.location.href;
+  //   var valueAfterSlash = currentUrl.split("/").pop();
+  //   console.log(valueAfterSlash);
+  //   textValue = valueAfterSlash.replace(/([A-Z])/g, ' $1').toUpperCase();
 
-  if(valueAfterSlash!='main'){
-    $('#header_main').attr('style', 'display:none;');
-    $('#header_sub').attr('style', 'display:show;');
-    $('header #url_name').text(textValue);
-    $('header #url_name').attr('href', '/' + valueAfterSlash);
-    console.log($('header a').text);
-  }else{
-    $('#header_main').attr('style', 'display:show;');
-    $('#header_sub').attr('style', 'display:none;');
-  }
 
-    // My Courses carousel function
-    // Slide For My Courses
-    $('.my_courses').slick({                         // Initialize Slick carousel on elements with class 'my_courses'
-      slidesToShow: 3,                               // Display 3 slides at a time
-      arrows: true,                                  // Enable arrow navigation
-      autoplay: true,                                // Autoplay the carousel
-      dots: true,                                    // Show dots navigation
-      responsive: [                                  // Define responsive breakpoints for different screen sizes
-        {
-          breakpoint: 800,                           // For screens with a maximum width of 800px
-          settings: {                                // Adjust the settings for the carousel
-            arrows: false,                           // Hide arrow navigation
-            slidesToShow: 2                          // Display 2 slides at a time
-          }
-        },
-        {
-          breakpoint: 480,                          // For screens with a maximum width of 480px
-          settings: {                               // Adjust the settings for the carousel
-            arrows: false,                          // Hide arrow navigation
-            slidesToShow: 1                         // Display 1 slide at a time
-          }
-        }
-      ]
-    });
-  });
+  //   if (valueAfterSlash != 'main') {
+  //     $('#header_main').attr('style', 'display:none;');
+  //     $('#header_sub').attr('style', 'display:show;');
+  //     $('header #url_name').text(textValue);
+  //     $('header #url_name').attr('href', '/' + valueAfterSlash);
+  //   } else {
+  //     $('#header_main').attr('style', 'display:show;');
+  //     $('#header_sub').attr('style', 'display:none;');
+  //   }
+  // });
 
-  $(function () {
-  const plane = $("#plane");                        // Get the plane element
-  const screenWidth = $(window).width();            // Get the screen width
-  const planeWidth = plane.width();                 // Get the width of the plane image
-  let planeX = -planeWidth;                         // Set the initial position of the plane to the left of the screen
-  const sound = new Audio('/easterEgg/plane.wav');            // Create a new Audio object for the plane sound
-
-  function movePlane() {
-    planeX += 2.5;                                  // Increment the plane's X position to move it to the right
-    if (planeX + planeWidth >= screenWidth) {
-      planeX = screenWidth - planeWidth;            // Limit the plane's position to the right edge of the screen
-      plane.hide();                                 // Hide the plane when it reaches the right edge
-      $(".cloud").hide();                           // Hide all the clouds
-      clearInterval(planeInterval);                 // Stop the plane movement interval
-    }
-    plane.css("left", planeX);                      // Update the plane's position
-  }
-
-  function placeClouds() {
-    const numClouds = Math.floor(Math.random() * 100) + 1;                      // Generate a random number of clouds between 1 and 100
-    for (let i = 0; i < numClouds; i++) {
-      const newCloud = $("<img>").addClass("cloud").attr("src", "/easterEgg/cloud6.png");  // Create a new cloud image element
-      newCloud.hide();                                                          // Hide the cloud initially
-      $("#clouds").append(newCloud);                                            // Append the cloud to the "clouds" container element
-    }
-    $(".cloud").each(function () {
-      const cloud = $(this);                                                    // Get the current cloud element
-      const cloudX = Math.random() * ($("#sky").width() - cloud.width());       // Generate a random X position within the sky container
-      const cloudY = Math.random() * ($("#sky").height() - cloud.height());     // Generate a random Y position within the sky container
-      cloud.css({ left: cloudX, top: cloudY });                                 // Set the cloud's position
-      if (cloudX > screenWidth) {
-        cloud.hide();                                                           // Hide the cloud if it's initially positioned outside the screen
-      }
-    });
-  }
-
-  let planeInterval;                                // Variable to store the interval ID for the plane movement
-  let clickCount = 0;                               // Counter to keep track of the number of clicks
-
-  $("#hello_plane").click(function () {
-    clickCount++;                                   // Increment the click count
-    if (clickCount === 3) {                         // When a user clicks the button third times.
-      placeClouds();                                // Place the clouds on the third click
-      plane.show();                                 // Show the plane
-      $(".cloud").show();                           // Show all the clouds
-      sound.play();                                 // Play the plane sound
-      planeInterval = setInterval(movePlane, 50);   // Start the interval for plane movement
-    } else if (clickCount === 4) {                  // When a user clicks the button fourth times.
-      plane.hide();                                 // Hide the plane on the fourth click
-      $(".cloud").hide();                           // Hide all the clouds
-      clearInterval(planeInterval);                 // Stop the plane movement interval
-      sound.pause();                                // Pause the plane sound
-    }
-    return false;                                   // Prevent the default click behavior
-  });
-});
+  
 </script>
 </body>
-</html>
+
+</html> 
