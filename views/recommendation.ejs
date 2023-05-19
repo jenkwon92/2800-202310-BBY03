@@ -1,110 +1,146 @@
 <link rel="stylesheet" href="/css/myCourses.css">
 <%- include("templates/header") %>
 <main role="main">
-    <section>
-        <div class="container">
-            <div class="col-lg-12 col-md-12 mb-3">
-                <div>
-                    <div class="sec-left mb-3">
-                        <h3>Recommendations</h3>
-                    </div>
-                    <div class="col-xl-12 col-lg-12 col-12 text-center mt-3 mt-md-0">
-                        <form role="search">
-                            <div class="input-group banner-form" style="border: 1px solid #ced4da; border-radius: 0.25rem;">
-                                <input class="index-banner-search form-control py-sm-3 py-2 px-sm-4 px-3 border-0"
-                                    placeholder="Search your course" name="srch-term" type="text">
-                                <button class="btn btn-primary" type="submit"><img src="cat1.jpg" alt="Image Description" style="width:10px;"></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="light-2">
+    <section class="light-2" style="margin-top: 20px;">
         <div class="container">
             <div class="row">
-                <div class="col-xl-12 col-lg-12 col-12">
-                    <div class="box mb-15 my_courses_grid">
-                        <div class="my_courses_body">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <div class="d-flex flex-column fw-500">
-                                        <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a></h4>
-                                        <span class="text-fade">Instructor name</span>
-                                    </div>
-                                </div>
-                                <a href="course.html">
-                                    <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span
-                                        class="path2"></span></span>
-                                </a>
-                            </div>
-                        </div>
+                <h3 id="recommendationHeading">Recommendation for <%= username %></h3>
+                <% if (!recommendedCourses) { %>
+                    <div class="col-12">
+                        <p>No recommended courses found.</p>
                     </div>
-                    <div class="box mb-15 my_courses_grid">
-                        <div class="my_courses_body">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <div class="d-flex flex-column fw-500">
-                                        <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a></h4>
-                                        <span class="text-fade">Instructor name</span>
+                <% } else { %>
+                    <% recommendedCourses.forEach((course) => { %>
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" style="margin-top: 10px;">
+                            <div class="box mb-15 my_courses_grid">
+                                <div class="my_courses_body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex flex-column fw-500">
+                                                <h4 class="bl-title"><a href="/courseDetail"><%= course.title %></a></h4>
+                                                <span class="text-fade"><%= course.instructor %></span>
+                                            </div>
+                                        </div>
+                                        <a href="<%= course.link %>">
+                                            <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span class="path2"></span>
+                                        </a>
                                     </div>
+                                    <p style="font-size: smaller;"><%= course.description %></p>
                                 </div>
-                                <a href="course.html">
-                                    <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span
-                                        class="path2"></span></span>
-                                </a>
                             </div>
                         </div>
+                    <% }) %>
+                <% } %>
+            </div>
+
+            <% if (recommendedCourses && recommendedCourses.length > 0) { %>
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-primary" id="generateMore">Generate More</button>
                     </div>
                 </div>
-
-            </div>
+            <% } %>
 
         </div>
     </section>
 </main>
+
 <!-- Scripts for Jquery -->
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
 <!-- Scripts for slick carousel -->
-<script type="text/javascript"
-    src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 <script>
-    // My Courses carousel function
     $(document).ready(function () {
-        // Slide For dots Three
-        $('.my_courses').slick({
-            slidesToShow: 3,
-            arrows: true,
-            autoplay: true,
-            dots: true,
-            responsive: [
-                {
-                    breakpoint: 800,
-                    settings: {
-                        arrows: false,
-                        slidesToShow: 2
-                    }
-                },
-                {
-                    breakpoint: 480,
-                    settings: {
-                        arrows: false,
-                        slidesToShow: 1
-                    }
-                }
-            ]
+      var generateMoreButton = $('#generateMore');     // generate 5 courses button 
+      var recommendationHeading = $('#recommendationHeading');  // fix the heading 
+    
+      $('.my_courses').slick({
+        slidesToShow: 3,
+        arrows: true,
+        autoplay: true,
+        dots: true,
+        responsive: [
+          {
+            breakpoint: 800,
+            settings: {
+              arrows: false,
+              slidesToShow: 2
+            }
+          },
+          {
+            breakpoint: 480,
+            settings: {
+              arrows: false,
+              slidesToShow: 1
+            }
+          }
+        ]
+      });
+    
+      // Generate more button click event
+      $(document).on('click', '#generateMore', function () {
+        var generateMoreButton = $(this);
+    
+        $.get('/generateMore', function (data) {
+          if (data.additionalRecommendedCourses && data.additionalRecommendedCourses.length > 0) {
+            var coursesToAdd = data.additionalRecommendedCourses.slice(0, 5);     // generate 5 courses 
+    
+            coursesToAdd.forEach(function (course, index) {
+              var courseHtml = `
+                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" style="margin-top: 10px;">
+                  <div class="box mb-15 my_courses_grid">
+                    <div class="my_courses_body">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                          <div class="d-flex flex-column fw-500">
+                            <h4 class="bl-title"><a href="/courseDetail">${course.title}</a></h4>
+                            <p style="font-size: smaller;">${course.description}</p>
+                          </div>
+                        </div>
+                        <a href="${course.link}">
+                          <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span class="path2"></span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+    
+              if ((index + 1) % 5 === 0) {
+                $('.row').append(courseHtml);
+                $('.row').append('<div class="clearfix"></div>');
+              } else {
+                $('.row').append(courseHtml);
+              }
+            });
+    
+            // Show the generateMoreButton and recommendationHeading
+            generateMoreButton.show();
+            recommendationHeading.show();
+          } else {
+            console.log("No additional recommended courses found.");
+            generateMoreButton.hide();
+            generateMoreButton.remove();
+    
+            // Hide the recommendationHeading
+            recommendationHeading.hide();
+          }
         });
+      });
+    
+      if (!$('.row').find('.col-xl-4').length) {
+        generateMoreButton.hide();
+        recommendationHeading.hide();
+      }
     });
+    
+    </script>
 
-
-</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-    crossorigin="anonymous">
-</script>
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous">
+    </script>
+
 <%- include("templates/footer") %>
