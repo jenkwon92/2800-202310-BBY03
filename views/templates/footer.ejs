@@ -37,9 +37,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
         integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
         crossorigin="anonymous"></script>
-</body>
 
-</body>
 <!-- Scripts for Jquery -->
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -49,6 +47,23 @@
 
 <script>
   $(document).ready(function () {
+
+  var currentUrl = window.location.href;
+  var valueAfterSlash = currentUrl.split("/").pop();
+  textValue = valueAfterSlash.replace(/([A-Z])/g, ' $1').toUpperCase();
+  console.log(valueAfterSlash);
+
+  if(valueAfterSlash!='main'){
+    $('#header_main').attr('style', 'display:none;');
+    $('#header_sub').attr('style', 'display:show;');
+    $('header #url_name').text(textValue);
+    $('header #url_name').attr('href', '/' + valueAfterSlash);
+    console.log($('header a').text);
+  }else{
+    $('#header_main').attr('style', 'display:show;');
+    $('#header_sub').attr('style', 'display:none;');
+  }
+
     // My Courses carousel function
     // Slide For My Courses
     $('.my_courses').slick({                         // Initialize Slick carousel on elements with class 'my_courses'
@@ -132,5 +147,5 @@
   });
 });
 </script>
-
+</body>
 </html>
