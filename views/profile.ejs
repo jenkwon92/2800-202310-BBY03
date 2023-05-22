@@ -5,16 +5,18 @@
     <!-- Basic profile -->
     <div class="rounded-top text-white d-flex flex-row" style="background-color: #4A596D; height:200px;">
       <div class="ms-4 mt-auto mb-auto d-flex flex-column" style="width: 150px;">
-        <img src="<%= image || '/images/profile/avatar-1.webp' %>" alt="Profile Image" class="img-fluid img-thumbnail"
-          style="width: 150px; z-index: 1;">
+        <img src="<%= image || '/images/profile/default.png' %>" alt="Profile Image" class="img-fluid img-thumbnail"
+          style="width: 130px; z-index: 1;">
       </div>
       <div class="ms-3" style="font-size: small; color: #d0d4d6; margin-top: auto; margin-bottom: auto;">
-        <h5 style="margin-bottom: 5px;">
+        <h5 style="margin-bottom: 10px; font-weight: 700;">
           <%= username %>
         </h5>
-        <h6 style="margin-bottom: 5px;">Job: <%= job %>
+        <h6 style="margin-bottom: 5px; font-weight: 400;">Name: <%= firstName %> <%= lastName %>
         </h6>
-        <h6 style="margin-bottom: 0;">Email: <%= email %>
+        <h6 style="margin-bottom: 5px; font-weight: 400;">Job: <%= job %>
+        </h6>
+        <h6 style="margin-bottom: 0; font-weight: 400;">Email: <%= email %>
         </h6>
         <span id="edit-icon" style="font-size: 20px; float: right; position: absolute; top:170px; right: 10px"
           class="material-icons">edit</span>
@@ -26,7 +28,7 @@
     <div class="card-body p-4 text-black" style="margin-top: 20px;">
       <!-- Skills section -->
       <div class="mb-5">
-        <p class="lead fw-normal mb-1">Skills</p>
+        <p class="lead fw-normal mb-1" style="font-weight: 400;">Skills</p>
         <div class="p-4" style="background-color: #d0d4d6; border-radius: 10px;">
           <% if (skills && skills.length> 0) { %>
             <% skills.forEach(function(skill) { %>
@@ -36,7 +38,7 @@
 
               <% }); %>
                 <% } else { %>
-                  <p>No skills available</p>
+                  <p style="text-align: center; font-weight:normal; color: blueviolet;">Update your skills!</p>
                   <% } %>
         </div>
       </div>
@@ -44,7 +46,7 @@
 
       <!-- Interests section -->
       <div>
-        <p class="lead fw-normal mb-1">Interests</p>
+        <p class="lead fw-normal mb-1" style="font-weight: 400;">Interests</p>
         <div class="p-4" style="background-color: #d0d4d6; border-radius: 10px;">
           <% if (interests && interests.length> 0) { %>
             <% interests.forEach(function(interest) { %>
@@ -53,7 +55,7 @@
               </button>
               <% }); %>
                 <% } else { %>
-                  <p>No interests available</p>
+                  <p style="text-align: center; font-weight:normal; color: blueviolet;">Update your interests!</p>
                   <% } %>
         </div>
       </div>
@@ -61,29 +63,26 @@
     </div>
     <!-- Skills&interests end -->
 
-    <!-- Edit skills&interests -->
-    <div class="d-flex justify-content-center align-items-center mb-4">
-      <p class="lead fw-normal mb-0"></p>
-    </div>
-    <div class="row g-2">
-      <div id="go-skill" class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center"
-        style=" border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
-        <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
-          class="material-icons">
-          computer
-        </span>
-        <p style="font-size:1rem" class="text-center mt-2">Skills</p>
-      </div>
-      <div id="go-interest" class="col-6 col-md-6 mb-2 d-flex align-items-center flex-column justify-content-center"
-        style=" border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
-        <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
-          class="material-icons">
-          menu_book
-        </span>
-        <p style="font-size:1rem" class="text-center mt-2">Interests</p>
-      </div>
-    </div>
-    <!-- Edit skills&interests end -->
+   <!-- Edit skills&interests -->
+<div class="d-flex justify-content-center align-items-center mb-4">
+  <div class="col-md-4 offset-md-2 col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
+    style="border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
+    <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
+      class="material-icons">
+      computer
+    </span>
+    <p style="font-size:1rem" class="text-center mt-2">Skills</p>
+  </div>
+  <div class="col-md-4 col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
+    style="border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
+    <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
+      class="material-icons">
+      menu_book
+    </span>
+    <p style="font-size:1rem" class="text-center mt-2">Interests</p>
+  </div>
+</div>
+<!-- Edit skills&interests end -->
 
     <!-- Log out -->
     <button onclick="window.location.href='/logout'" class="btn btn-sm btn-dark profile-button" type="button"

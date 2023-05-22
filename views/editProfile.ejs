@@ -1,5 +1,5 @@
 <%- include("templates/header") %>
-  <section class="h-100 gradient-custom-2" id="wrap">
+
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col col-lg-9 col-xl-7">
@@ -8,11 +8,12 @@
           <form id="profile-form" action="/submitProfile" method="POST" enctype="multipart/form-data">
             <div class="card">
               <!-- Basic profile form -->
-              <div class="rounded-top text-white d-flex flex-row" style="background-color: #4A596D; height:200px;">
+              <div class="rounded-top text-white d-flex flex-row" style="background-color: #4A596D; height:300px;">
                 <div class="ms-4 mt-auto mb-auto d-flex flex-column" style="width: 150px;">
-                  <input style="display: none;" type="file" id="image-input" accept="image/*" name="image">
+                  <input style="display: none;" type="file" id="image-input" accept="image/*" name="image"
+                    onchange="displayImage(this)">
                   <label for="image-input" class="image-label">
-                    <img src="<%= image || '/images/profile/avatar-1.webp' %>" alt="Profile Image"
+                    <img id="profile-image" src="<%= image || '/images/profile/default.png' %>" alt="Profile Image"
                       class="img-fluid img-thumbnail" style="width: 150px; z-index: 1;">
                   </label>
                 </div>
@@ -21,6 +22,16 @@
                     <label class="labels" for="name-input">ID</label>
                     <input style="width:120px;" class="form-control form-control-sm" id="name-input" name="name"
                       type="text" class="form-control" value="<%=username%>">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="labels" for="name-input">First Name</label>
+                    <input style="width:120px;" class="form-control form-control-sm" id="firstName-input"
+                      name="firstName" type="text" class="form-control" value="<%=firstName%>">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="labels" for="name-input">Last Name</label>
+                    <input style="width:120px;" class="form-control form-control-sm" id="lastName-input" name="lastName"
+                      type="text" class="form-control" value="<%=lastName%>">
                   </div>
                   <div class="col-md-6">
                     <label class="labels" for="job-input">Job</label>
@@ -34,7 +45,7 @@
                   </div>
                   <button onclick="window.location.href='/profile'" id="save-button"
                     class="btn btn-sm btn-dark profile-button" type="submit"
-                    style="font-size: 15px; float: right; position: absolute; top:210px; right: 10px">Save</button>
+                    style="font-size: 15px; float: right; position: absolute; top:310px; right: 10px;">Save</button>
                 </div>
               </div>
             </div>
@@ -46,7 +57,7 @@
           <div class="card-body p-4 text-black" style="margin-top: 20px;">
             <div class="mb-5">
               <p class="lead fw-normal mb-1">Skills</p>
-              <div class="p-4" style="background-color: #d0d4d6;">
+              <div class="p-4" style="background-color: #d0d4d6; border-radius: 10px;">
                 <% if (skills && skills.length> 0) { %>
                   <% skills.forEach(function(skill) { %>
                     <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
@@ -55,11 +66,11 @@
 
                     <% }); %>
                       <% } else { %>
-                        <p>No skills available</p>
+                        <p style="text-align: center; font-weight:normal; color: blueviolet;">Update your skills!</p>
                         <% } %>
               </div>
               <p class="lead fw-normal mb-1">Interests</p>
-              <div class="p-4" style="background-color: #d0d4d6;">
+              <div class="p-4" style="background-color: #d0d4d6; border-radius: 10px;">
                 <% if (interests && interests.length> 0) { %>
                   <% interests.forEach(function(interest) { %>
                     <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
@@ -67,13 +78,13 @@
                     </button>
                     <% }); %>
                       <% } else { %>
-                        <p>No interests available</p>
+                        <p style="text-align: center; font-weight:normal; color: blueviolet;">Update your interests!</p>
                         <% } %>
               </div>
             </div>
             <!-- Skills&interests end  -->
 
-            <!-- edit skills&interests  -->
+            <!-- Edit skills&interests  -->
             <div class="d-flex justify-content-center align-items-center mb-4">
               <p class="lead fw-normal mb-0"></p>
             </div>
@@ -99,25 +110,45 @@
                 <p style="font-size:1rem" class="text-center mt-2">Interests</p>
               </div>
             </div>
-            <!-- edit skills&interests end -->
+            <!-- Edit skills&interests end -->
           </div>
         </div>
       </div>
     </div>
-  </section>
+  
   </div>
 
   <!-- script -->
   <script>
+
+    //Funtion that updates the displayed image when a new file is selected.
+    function displayImage(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          const profileImage = document.getElementById('profile-image');
+          profileImage.setAttribute('src', e.target.result);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    // Get the form and save button elements
     const form = document.getElementById('profile-form');
     const saveButton = document.getElementById('save-button');
 
+    // Add event listener for form submission
     form.addEventListener('submit', (event) => {
       event.preventDefault();
 
+      // Get values from form inputs
       const name = form.name.value;
       const job = form.job.value;
       const email = form.email.value;
+      const firstName = form.firstName.value;
+      const lastName = form.lastName.value;
       const imageInput = form.image.files[0];
 
       // Create a FormData object to send the form data including the image
@@ -125,14 +156,18 @@
       formData.append('name', name);
       formData.append('job', job);
       formData.append('email', email);
+      formData.append('firstName', firstName);
+      formData.append('lastName', lastName);
       formData.append('image', imageInput);
 
+      // Send a POST request with the form data
       fetch('/submitProfile', {
         method: 'POST',
         body: formData
       })
         .then(response => {
           if (response.ok) {
+
             // Redirect to the profile page on successful update
             window.location.href = '/profile';
           } else {
@@ -141,10 +176,9 @@
         })
         .catch(error => {
           console.error(error);
-          alert('Error updating profile');
+
         });
     });
-
   </script>
 
 

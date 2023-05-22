@@ -296,14 +296,19 @@ app.get("/profile", async (req, res) => {
         throw new Error("User not found");
       }
 
+      // Set the default image URL if the image is not available or has an unknown path
+      const image = user.image || "/images/profile/default.jpg";
+
       res.render("profile", {
         authenticated: req.session.authenticated,
         username: req.session.username,
         email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
         job: user.job,
-        image: user.image || "/images/profile/avatar-1.webp", // Add the 'image' variable here
+        image: image,
         skills: user.skills || [], // Add the 'skills' variable here with a default value of an empty array
-        interests: user.interests || [], // Add the 'skills' variable here with a default value of an empty array
+        interests: user.interests || [], // Add the 'interests' variable here with a default value of an empty array
       });
     } catch (error) {
       console.error(error);
@@ -329,12 +334,17 @@ app.get("/editProfile", async (req, res) => {
         throw new Error("User not found");
       }
 
+      // Set the default image URL if the image is not available or has an unknown path
+      const image = user.image || "/images/profile/default.jpg";
+
       res.render("editProfile", {
         authenticated: req.session.authenticated,
         username: req.session.username,
         email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
         job: user.job,
-        image: user.image || "/images/profile/avatar-1.webp",
+        image: image,
         skills: user.skills || [], // Use the user's skills field directly
         interests: user.interests || [], // Use the user's interests field directly
       });
@@ -392,13 +402,18 @@ app.get("/editInterest", async (req, res) => {
   }
 });
 
+
+// Update the user profile
+const path = require("path");
+
 // Set up multer for handling file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/images/profile");
+    // Update the destination path to use an absolute path
+    cb(null, path.join(__dirname, "public/images/profile"));
   },
   filename: function (req, file, cb) {
-    const extension = file.mimetype.split("/")[1];
+    const extension = file.originalname.split(".").pop();
     cb(null, `${req.session.username}.${extension}`);
   },
 });
@@ -406,27 +421,33 @@ const storage = multer.diskStorage({
 // Initialize multer middleware for file upload with the specified storage configuration
 const upload = multer({ storage: storage });
 
-// update the user profile(username, email, job, image)
 app.post("/submitProfile", upload.single("image"), async (req, res) => {
-  const { name, job, email, skills } = req.body;
+  const { name, job, email, skills, firstName, lastName } = req.body;
   let image = null;
 
   if (req.file) {
-    image = `/images/profile/${req.session.username}.${req.file.filename
-      .split(".")
-      .pop()}`;
+    // Generate a new image path with the user's username and file extension
+    const fileExtension = req.file.filename.split(".").pop();
+    image = `/images/profile/${req.session.username}.${fileExtension}`;
     req.session.image = image; // Update session image
   } else if (req.session.image) {
     image = req.session.image;
+  } else {
+    // Set the default image URL
+    image = "/images/profile/default.jpg";
   }
 
   try {
     // Update the user's profile in the database
-    const updateFields = { job, email, image, skills };
+    const updateFields = { job, email, skills, firstName, lastName };
 
     // Exclude 'name' from updateFields if it is not provided
     if (name) {
       updateFields.name = name;
+    }
+
+    if (image) {
+      updateFields.image = `${image}?t=${Date.now()}`; // Add cache-busting parameter
     }
 
     const updateResult = await userCollection.updateOne(
@@ -439,20 +460,8 @@ app.post("/submitProfile", upload.single("image"), async (req, res) => {
       req.session.name = name;
       req.session.job = job;
       req.session.email = email;
-      req.session.skills = skills;
-      req.session.interests = interests;
-
-      // Save user's skills in the skills collection
-      const skillList = skills.split(",");
-
-      await skillCollection.deleteMany({ userId: req.session.username }); // Remove existing user skills
-
-      for (const skill of skillList) {
-        await skillCollection.insertOne({
-          userId: req.session.username,
-          skill,
-        });
-      }
+      req.session.firstName = firstName;
+      req.session.lastName = lastName;
 
       // Redirect to the profile page on successful update
       res.redirect("/profile");
@@ -461,8 +470,8 @@ app.post("/submitProfile", upload.single("image"), async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    // Display an error message to the user
-    res.status(500).send("Error updating profile");
+    // Redirect to the profile page on error
+    res.redirect("/profile");
   }
 });
 
