@@ -1,104 +1,92 @@
 $(document).ready(function () {
-  const plane = $("#plane");                        // Get the plane element
-  const screenWidth = $(window).width();            // Get the screen width
-  const planeWidth = plane.width();                 // Get the width of the plane image
-  let planeX = -planeWidth;                         // Set the initial position of the plane to the left of the screen
-  const sound = new Audio('/easterEgg/plane.wav');            // Create a new Audio object for the plane sound
+  var clickCount = 0;                                   //Initialize the click count
 
-  function movePlane() {
-    planeX += 2.5;                                  // Increment the plane's X position to move it to the right
-    if (planeX + planeWidth >= screenWidth) {
-      planeX = screenWidth - planeWidth;            // Limit the plane's position to the right edge of the screen
-      plane.hide();                                 // Hide the plane when it reaches the right edge
-      $(".cloud").hide();                           // Hide all the clouds
-      clearInterval(planeInterval);                 // Stop the plane movement interval
-      clickCount = 0;     
-       removeEasterEgg();
+  $(document).on("click", "#hello_plane", function () { //Attaches a click event handler
+    clickCount++;                                       //Increments the value of the variable clickCount by 1.
+
+    if (clickCount === 3) {             
+      sound.play();                                     // Play the plane sound
+      createSky();                                      // Create sky section dynamically
+      placeClouds();                                    // Create and place clouds randomly
+      startPlaneMovement();                             // Start the plane movement
+    } else if (clickCount === 4) {
+      stopPlaneMovement();                              // Stop the plane movement
+      removeSky();                                      // Remove the sky container
     }
-    plane.css("left", planeX);                      // Update the plane's position
+  });
+
+  function removeSky() {                                // Function that removes the sky element from the body.
+    $("#sky").remove();                                 // Remove the sky container
+  } 
+
+  function createSky() {                                // Function to create the sky elements.
+    var skyDiv = $("<div>").attr("id", "sky");          // Create a new div element for the sky container
+    var cloudsDiv = $("<div>").attr("id", "clouds");    // Create a new div element for the clouds container
+    var planeImg = $("<img>").attr({                    // Create a new img element for the plane
+      id: "plane",
+      src: "/easterEgg/plane.png"
+    });
+
+    var cloudImgs = [];
+    for (var i = 1; i <= 6; i++) {                      // Create the special cloud elements.
+      var cloudImg = $("<img>")
+        .addClass("cloud")
+        .attr("src", "/easterEgg/cloud" + i + ".png");  // Create new img elements for the clouds
+      cloudImgs.push(cloudImg);
+    }
+    skyDiv.append(cloudsDiv);                           // Append the clouds container to the sky container
+    skyDiv.append(planeImg);                            // Append the plane to the sky container
+    skyDiv.append(cloudImgs);                           // Append the clouds to the sky container
+    $("body").append(skyDiv);                           // Append the sky container to the body
   }
 
   function placeClouds() {
-    const numClouds = Math.floor(Math.random() * 100) + 1;                                  // Generate a random number of clouds between 1 and 100
+    const numClouds = Math.floor(Math.random() * 100) + 1; // Generate a random number of clouds between 1 and 100
     for (let i = 0; i < numClouds; i++) {
-      const newCloud = $("<img>").addClass("cloud").attr("src", "/easterEgg/cloud6.png");   // Create a new cloud image element
-      newCloud.hide();                                                                      // Hide the cloud initially
-      $("#clouds").append(newCloud);                                                        // Append the cloud to the "clouds" container element
+      const newCloud = $("<img>")
+        .addClass("cloud")
+        .attr("src", "/easterEgg/cloud6.png");            // Create a new cloud image element
+      $("#clouds").append(newCloud);                      // Append the cloud to the "clouds" container element
     }
     $(".cloud").each(function () {
-      const cloud = $(this);                                                                // Get the current cloud element
-      const cloudX = Math.random() * ($("#sky").width() - cloud.width());                   // Generate a random X position within the sky container
-      const cloudY = Math.random() * ($("#sky").height() - cloud.height());                 // Generate a random Y position within the sky container
-      cloud.css({ left: cloudX, top: cloudY });                                             // Set the cloud's position
-      if (cloudX > screenWidth) {
-        cloud.hide();                                                                       // Hide the cloud if it's initially positioned outside the screen
+      const cloud = $(this);                                                // Get the current cloud element
+      const cloudX = Math.random() * ($("#sky").width() - cloud.width());   // Generate a random X position within the sky container
+      const cloudY = Math.random() * ($("#sky").height() - cloud.height()); // Generate a random Y position within the sky container
+      cloud.css({ left: cloudX, top: cloudY });                             // Set the cloud's position
+      if (cloudX > $(window).width()) {
+        cloud.hide();                                                       // Hide the cloud if it's initially positioned outside the screen
       }
     });
   }
 
-  let planeInterval;                                // Variable to store the interval ID for the plane movement
-  let clickCount = 0;                               // Counter to keep track of the number of clicks
+  let planeInterval;
+  const sound = new Audio("/easterEgg/plane.wav"); // Create a new Audio object for the plane sound
 
-  $("#hello_plane").click(function () {
-    clickCount++;                                   // Increment the click count
-    console.log(clickCount);
-    if (clickCount === 3) {                         // When a user clicks the button third times.
-      placeClouds();                                // Place the clouds on the third click
-      plane.show();                                 // Show the plane
-      $(".cloud").show();                           // Show all the clouds
-      sound.play();                                 // Play the plane sound
-      planeInterval = setInterval(movePlane, 50);   // Start the interval for plane movement
-    } else if (clickCount === 4) {                  // When a user clicks the button fourth times.
-      plane.hide();                                 // Hide the plane on the fourth click
-      $(".cloud").hide();                           // Hide all the clouds
-      clearInterval(planeInterval);                 // Stop the plane movement interval
-      sound.pause();
-      removeEasterEgg();                            // Pause the plane sound
-      clickCount = 0;
-    }
-    return false;                                   // Prevent the default click behavior
-  });
+  function startPlaneMovement() {
+    const plane = $("#plane");                    // Get the plane element
+    const screenWidth = $(window).width();        // Get the screen width
+    const planeWidth = plane.width();             // Get the width of the plane image
+    let planeX = -planeWidth;                     // Set the initial position of the plane to the left of the screen
 
-  // Function to remove the created HTML structure
-  function removeEasterEgg() {
-    var skyDiv = document.getElementById('sky');
-    if (skyDiv) {
-      skyDiv.parentNode.removeChild(skyDiv);
+    planeInterval = setInterval(movePlane, 60);
+
+    function movePlane() {
+      planeX += 2.5;                              // Increment the plane's X position to move it to the right
+      if (planeX + planeWidth >= screenWidth) {
+        stopPlaneMovement();                      // Stop the plane movement
+        removeSky();                              // Remove the sky container
+      }
+      plane.css("left", planeX);                  // Update the plane's position
     }
   }
 
-  function createEasterEgg() {
-  // Create the necessary elements
-  var skyDiv = document.createElement('div');
-  skyDiv.id = 'sky';
-
-  var cloudsDiv = document.createElement('div');
-  cloudsDiv.id = 'clouds';
-
-  var planeImg = document.createElement('img');
-  planeImg.id = 'plane';
-  planeImg.src = '/easterEgg/plane.png';
-
-  var cloudImgs = [];
-  var cloudSrcs = [
-    '/easterEgg/cloud1.png',
-    '/easterEgg/cloud2.png',
-    '/easterEgg/cloud3.png',
-    '/easterEgg/cloud4.png',
-    '/easterEgg/cloud5.png',
-    '/easterEgg/cloud6.png'
-  ];
-  
-  for (var i = 0; i < cloudSrcs.length; i++) {
-    var cloudImg = document.createElement('img');
-    cloudImg.classList.add('cloud');
-    cloudImg.src = cloudSrcs[i];
-    cloudImgs.push(cloudImg);
+  function stopPlaneMovement() {
+    clearInterval(planeInterval); // Stop the plane movement interval
+    sound.pause();                // Pause the plane sound
   }
 
-  // Append elements to the document
-  cloudsDiv.append(...cloudImgs);
-  skyDiv.append(cloudsDiv, planeImg);
-  document.body.appendChild(skyDiv);
-}
+  function planeHide() {// Hide the plane and all the clouds
+    $("#plane").hide(); // Hide the plane
+    $(".cloud").hide(); // Hide all the clouds
+  }
 });
