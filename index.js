@@ -160,6 +160,19 @@ app.get("/main", sessionValidation, async (req, res) => {
       username: req.session.username,
     });
 
+    const userCourses = user.myCourses || [];
+
+    let myCoursesData = [];
+
+for (const courseId of userCourses) {
+  const course = await coursesCollection.findOne({ _id: new ObjectId(courseId) });
+  if (course) {
+    myCoursesData.push(course);
+  }
+}
+console.log('myCoursesData', myCoursesData);
+
+
     // Retrieve user's interests from db
     const userInterests = user.interests || [];
 
@@ -178,6 +191,7 @@ app.get("/main", sessionValidation, async (req, res) => {
       authenticated: req.session.authenticated,
       username: req.session.username,
       recommendedCourses: randomCourses,
+      myCourses: myCoursesData,
     });
   } catch (error) {
     console.error("Error retrieving course recommendation:", error);
@@ -891,19 +905,22 @@ app.get("/courseDetail/:courseId", (req, res) => {
 // Add a course to my courses
 app.post("/saveCourse", sessionValidation, async (req, res) => {
   try {
-    const username = req.session.username;                    // Get the username from the session
-    const courseId = req.body.courseId;                       // Get the courseId from the request body
-    //console.log('req.session:', JSON.stringify(req.session)); // Log the session object as a string
+    const username = req.session.username;
+    const courseId = req.body.courseId;
 
-    // Add the course to the user's myCourses field
-    await userCollection.updateOne(
-      { username: username },                                 // Find the user by username
-      { $set: { myCourses: courseId } }                       // Set the myCourses field to the courseId
+    const result = await userCollection.updateOne(
+      { username },
+      { $push: { myCourses: courseId} }
     );
-    res.sendStatus(200);                                      // Send a success status code
+
+    if (result.modifiedCount === 0) {
+      return res.status(400).send("Course already saved");
+    }
+
+    res.sendStatus(200);
   } catch (error) {
-    //console.error(error);                                   // Log any errors that occur
-    res.status(500).send('Error saving a course into data');  // Send an error status code and message
+    console.error(error);
+    res.status(500).send("Error saving a course to my courses");
   }
 });
 /* Course Detail Section end */

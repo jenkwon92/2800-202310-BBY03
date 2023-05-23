@@ -19,7 +19,7 @@
             <% }) %>
         </ul>
         <% } %>
-          <button ata="<%= course._id %>" class="btn btn-primary" onclick="saveCourse()">Save</button>
+          <button data="<%= course._id %>" class="btn btn-primary" onclick="saveCourse()">Save</button>
         <!-- <a class="btn btn-primary" href="saveCourse" id="<%= course._id %>">
           Save</a> -->
           <a class="btn btn-success" href="<%=course.link %>" target="_blank">
@@ -38,7 +38,7 @@
       xhr.onload = function () {                                // Define the onload event handler for the request
         if (xhr.status === 200) {                               // Check if the response status is 200 (success)
           console.log('The course saved successfully');         // Log a success message
-          window.location.href = '/myCourses';                  // Redirect to the 'myCourses' page
+          //window.location.href = '/myCourses';                  // Redirect to the 'myCourses' page
         } else {
           console.error('Error saving a course');               // Log an error message
         }

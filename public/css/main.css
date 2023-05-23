@@ -167,7 +167,7 @@ html body .bg-light-2 {
   background: #ffffff;
   border-radius: 0.4rem;
   overflow: hidden;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
   position: relative;
   transition: all ease 0.4s;
   border: 1px solid #e8ebf1;
@@ -213,6 +213,12 @@ html body .bg-light-2 {
   margin-bottom: 10px;
 }
 
+.bl-title a{
+  color: #303740;
+  text-decoration: none;
+  font-weight: 500;
+}
+
 .my_courses_block_body p {
   font-size: 14px;
   margin-bottom: 0;
@@ -223,24 +229,25 @@ html body .bg-light-2 {
 }
 
 /*-------------- My Courses Elements: Courses Author & Websites Section ----------------*/
-.my_courses_block_author,
+.my_courses_block_description,
 .my_courses_block_website {
   flex: 1;
   display: flex;
   align-items: center;
 }
 
-.my_courses_block_author h5,
+.my_courses_block_description h5,
 .my_courses_block_website h5 {
   margin: 0;
   font-size: 12px;
-  font-weight: 600;
+  /* font-weight: 600; */
   opacity: 1;
 }
 
-.my_courses_block_author h5 a,
+.my_courses_block_description h5 a,
 .my_courses_block_website h5 a {
   color: #4a5874;
+  text-decoration: none;
 }
 
 /*-------------- My Courses Elements: Courses Footer Section ----------------*/
@@ -266,14 +273,122 @@ html body .bg-light-2 {
   font-size: 13px;
 }
 
-.my_courses {
+/* .my_courses {
   height: 400px;
-}
+} */
 
 /*----------- Style 3 -------------*/
 .my_courses_block_grid.style_3 .my_courses_block_body {
   padding: 20px 20px 5px;
 }
+
+/*-------------- My Courses Elements: Courses Tag Lists ----------------*/
+.courses_tags {
+  position: relative;
+  width: 100%;
+  padding: 0 20px;
+  margin-top: 1rem;
+}
+
+ul.courses_tags_list {
+  margin: 0;
+  padding: 0;
+}
+
+ul.courses_tags_list li {
+  display: inline-block;
+  margin-right: 0.8rem;
+}
+
+ul.courses_tags_list li:last-child {
+  margin-right: 0rem;
+}
+
+ul.courses_tags_list li {
+  padding: 3px 8px;
+  font-size: 13px;
+  position: relative;
+  background: #f4f5f7;
+  border-radius: 0 2px 2px 0;
+}
+
+ul.courses_tags_list li.facts-1 {
+  background: rgba(33, 177, 124, 0.13);
+  color: #21b17c;
+}
+
+ul.courses_tags_list li.facts-2 {
+  background: rgba(255, 118, 0, 0.13);
+  color: #ff7600;
+}
+
+ul.courses_tags_list li.facts-3 {
+  background: rgba(197, 20, 59, 0.13);
+  color: #da0b4e;
+}
+
+ul.courses_tags_list li.facts-4 {
+  background: rgba(18, 163, 218, 0.13);
+  color: #12a3da;
+}
+
+ul.courses_tags_list li.facts-5 {
+  background: rgba(138, 101, 251, 0.13);
+  color: #8a65fb;
+}
+
+ul.courses_tags_list li:before {
+  border-top: 12px solid transparent;
+  border-left: 10px solid #eaedf3;
+  border-bottom: 13px solid transparent;
+  content: "";
+  height: 0;
+  position: absolute;
+  top: 0;
+  right: -10px;
+  width: 0;
+}
+
+ul.courses_tags_list li.facts-1:before {
+  border-left-color: rgba(33, 177, 124, 0.13);
+}
+
+ul.courses_tags_list li.facts-2:before {
+  border-left-color: rgba(255, 118, 0, 0.13);
+}
+
+ul.courses_tags_list li.facts-3:before {
+  border-left-color: rgba(197, 20, 59, 0.13);
+}
+
+ul.courses_tags_list li.facts-4:before {
+  border-left-color: rgba(18, 163, 218, 0.13);
+}
+
+ul.courses_tags_list li.facts-5:before {
+  border-left-color: rgba(138, 101, 251, 0.13);
+}
+
+ul.courses_tags_list li:after {
+  background-color: #fff;
+  border-radius: 50%;
+  content: "";
+  height: 4px;
+  position: absolute;
+  top: 10px;
+  right: -5px;
+  width: 4px;
+}
+
+/* .my_courses_block_grid.style_3 .my_courses_block_thumb {
+            padding: 12px 12px 0;
+        }
+
+        
+
+        .my_courses_block_grid.style_3 .my_courses_block_thumb img {
+            border-radius: 6px;
+        } */
 
 .my_courses_block_grid:hover,
 .my_courses_block_grid:focus {
@@ -289,7 +404,7 @@ html body .bg-light-2 {
 
 .style_3 {
   display: block;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
 }
 
 /*===================================================
