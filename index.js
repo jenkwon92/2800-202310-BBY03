@@ -200,9 +200,33 @@ console.log('myCoursesData', myCoursesData);
 });
 
 // Renders the my courses page
-app.get("/myCourses", (req, res) => {
-  res.render("myCourses");
+app.get("/myCourses", sessionValidation, async (req, res) => {
+  try {
+    // Retrieve user information from the database
+    const user = await userCollection.findOne({
+      username: req.session.username,
+    });
+
+    const userCourses = user.myCourses || [];
+    
+    // Retrieve user's interests from the database
+    let myCoursesData = [];
+
+    for (const courseId of userCourses) {
+      const course = await coursesCollection.findOne({ _id: new ObjectId(courseId) });
+      if (course) {
+        myCoursesData.push(course);
+      }
+    }
+    console.log('myCoursesData', myCoursesData);
+
+    res.render("myCourses", { myCourses: myCoursesData , username: req.session.username });
+  } catch (error) {
+    console.error("Error retrieving course recommendation:", error);
+    res.status(500).send("Error retrieving course recommendation");
+  }
 });
+
 
 // Renders the course detail page
 app.get("/courseDetail", (req, res) => {
@@ -292,6 +316,7 @@ app.get("/generateMore", sessionValidation, async (req, res) => {
 });
 
 /* Recommendation Section end */
+
 
 /* Profile Section */
 

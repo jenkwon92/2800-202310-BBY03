@@ -27,40 +27,44 @@
       <div class="container">
         <div class="row">
           <div class="col-xl-12 col-lg-12 col-12">
-            <div class="box mb-15 my_courses_grid">
-              <div class="my_courses_body">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="d-flex align-items-center">
-                    <div class="d-flex flex-column fw-500">
-                      <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a>
-                      </h4>
-                      <span class="text-fade">Instructor name</span>
+            <% if (!myCourses) { %>
+              <div class="col-12">
+                <p>No my courses found.</p>
+              </div>
+              <% } else { %>
+                <% myCourses.forEach((course)=> { %>
+                  <div class="box mb-15 my_courses_grid">
+                    <div class="my_courses_body">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                          <div class="d-flex flex-column fw-500">
+                            <h4 class="bl-title"><a href="/courseDetail">
+                                <%= course.title %>
+                              </a>
+                            </h4>
+                            <span class="text-fade">
+                              <%= course.description %>
+                            </span>
+                          </div>
+                        </div>
+                        <a href="course.html">
+                          <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span
+                            class="path2"></span></span>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                  <a href="course.html">
-                    <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span class="path2"></span></span>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="box mb-15 my_courses_grid">
-              <div class="my_courses_body">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="d-flex align-items-center">
-                    <div class="d-flex flex-column fw-500">
-                      <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a>
-                      </h4>
-                      <span class="text-fade">Instructor name</span>
-                    </div>
-                  </div>
-                  <a href="course.html">
-                    <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span class="path2"></span></span>
-                  </a>
-                </div>
-              </div>
-            </div>
+                  <% }) %>
+                    <% } %>
           </div>
         </div>
+        <!-- <% if (myCourses && myCourses.length> 3) { %>
+          <div class="row justify-content-center">
+            <div class="col-12 text-center">
+              <button class="btn btn-primary" id="generateMore">Generate More</button>
+            </div>
+          </div>
+          <% } %> -->
       </div>
     </section>
   </main>
