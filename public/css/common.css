@@ -50,7 +50,9 @@ h6 {
 
 
 .light-2 {
-  background: #fbf5f4;
+  background: #b8ceea61;
+  /* background: #F0F4EF; */
+  /* background: #fbf5f4; */
 }
 
 /*-------------- My Courses Elements: Courses Tag Lists ----------------*/
@@ -178,3 +180,4 @@ ul.courses_tags_list li:after {
   font-weight: 500;
   border-radius: 10px;
 }
+

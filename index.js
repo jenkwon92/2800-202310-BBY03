@@ -518,7 +518,6 @@ app.post("/submitProfile", upload.single("image"), async (req, res) => {
   }
 });
 
-//update the user's skill
 app.post("/saveSkills", sessionValidation, async (req, res) => {
   try {
     const { skills } = req.body;
@@ -528,11 +527,20 @@ app.post("/saveSkills", sessionValidation, async (req, res) => {
       throw new Error("Skills data is missing");
     }
 
+    const existingUser = await userCollection.findOne({ username: username });
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    const existingSkills = existingUser.skills || [];
     const skillList = skills.split(",").map((skill) => skill.trim());
+    const updatedSkills = [...existingSkills, ...skillList];
+
     const updateResult = await userCollection.updateOne(
       { username: username },
-      { $set: { skills: skillList } }
+      { $set: { skills: updatedSkills } }
     );
+
     if (updateResult.modifiedCount === 1) {
       res.sendStatus(200); // Skills saved successfully
     } else {
@@ -541,6 +549,40 @@ app.post("/saveSkills", sessionValidation, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Error saving skills"); // Error saving skills
+  }
+});
+
+//Remove skills from the user's skill field
+app.post("/deleteSkill", sessionValidation, async (req, res) => {
+  try {
+    const { skill } = req.body;
+    const username = req.session.username;
+
+    if (!skill) {
+      throw new Error("Skill data is missing");
+    }
+
+    const existingUser = await userCollection.findOne({ username: username });
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    const existingSkills = existingUser.skills || [];
+    const updatedSkills = existingSkills.filter((s) => s !== skill);
+
+    const updateResult = await userCollection.updateOne(
+      { username: username },
+      { $set: { skills: updatedSkills } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      res.sendStatus(200); // Skill deleted successfully
+    } else {
+      throw new Error("Failed to delete skill");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error deleting skill"); // Error deleting skill
   }
 });
 
