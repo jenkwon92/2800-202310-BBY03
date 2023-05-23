@@ -19,10 +19,30 @@
             <% }) %>
         </ul>
         <% } %>
-          <button id="saveCourse" class="btn btn-primary" onclick="saveCourse('<%= course._id %>')">Save</button>
+          <button ata="<%= course._id %>" class="btn btn-primary" onclick="saveCourse()">Save</button>
+        <!-- <a class="btn btn-primary" href="saveCourse" id="<%= course._id %>">
+          Save</a> -->
           <a class="btn btn-success" href="<%=course.link %>" target="_blank">
             Start Learning</a>
     </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <%- include("templates/footer") %>
+
+  <script>
+    function saveCourse() {
+      const courseId = '<%= course._id %>';                     // Get the courseId from the server-side template
+      const xhr = new XMLHttpRequest();                         // Create a new XMLHttpRequest object
+      xhr.open('POST', '/saveCourse');                          // Set up the POST request to the '/saveCourse' endpoint
+      xhr.setRequestHeader('Content-Type', 'application/json'); // Set the request header for JSON content
+      xhr.onload = function () {                                // Define the onload event handler for the request
+        if (xhr.status === 200) {                               // Check if the response status is 200 (success)
+          console.log('The course saved successfully');         // Log a success message
+          window.location.href = '/myCourses';                  // Redirect to the 'myCourses' page
+        } else {
+          console.error('Error saving a course');               // Log an error message
+        }
+      };
+      xhr.send(JSON.stringify({ courseId: courseId }));         // Send the courseId as JSON data in the request body
+    }
+  </script>

@@ -888,6 +888,24 @@ app.get("/courseDetail/:courseId", (req, res) => {
     });
 });
 
+// Add a course to my courses
+app.post("/saveCourse", sessionValidation, async (req, res) => {
+  try {
+    const username = req.session.username;                    // Get the username from the session
+    const courseId = req.body.courseId;                       // Get the courseId from the request body
+    //console.log('req.session:', JSON.stringify(req.session)); // Log the session object as a string
+
+    // Add the course to the user's myCourses field
+    await userCollection.updateOne(
+      { username: username },                                 // Find the user by username
+      { $set: { myCourses: courseId } }                       // Set the myCourses field to the courseId
+    );
+    res.sendStatus(200);                                      // Send a success status code
+  } catch (error) {
+    //console.error(error);                                   // Log any errors that occur
+    res.status(500).send('Error saving a course into data');  // Send an error status code and message
+  }
+});
 /* Course Detail Section end */
 
 // Renders the custom 404 error page to users instead of displaying a generic error message or a stack trace.
