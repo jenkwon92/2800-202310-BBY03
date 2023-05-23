@@ -116,16 +116,20 @@
   </main>
   <!-- Function section -->
   <script>
+    
+    //Link to the editProfile page when click the edit icon
     const editIcon = document.querySelector("#edit-icon");
     editIcon.addEventListener("click", () => {
       window.location.href = "/editProfile";
     });
 
+    //Link to the editSkill page when click the laptop icon
     const goSkill = document.querySelector("#go-skill");
     goSkill.addEventListener("click", () => {
       window.location.href = "/editSkill";
     });
 
+    //Link to the editInterest page when click the book icon
     const goInterest = document.querySelector("#go-interest");
     goInterest.addEventListener("click", () => {
       window.location.href = "/editInterest";
