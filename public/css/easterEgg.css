@@ -1,0 +1,26 @@
+.cloud {
+  position: absolute;
+  left: -120px;
+  top: 50px;
+  max-width: 50px;
+  width: 50px;
+  height: auto;
+}
+
+#plane {
+  position: absolute;
+  bottom: 50%;
+  transform: translateX(-0%);
+  left: -20%;
+  width: 80px;
+  height: auto;
+}
+
+#sky {
+  position: fixed;
+  width: 100%;
+  top: 20%;
+  height: 70%;
+  /* background-color: #cde4f9; */
+  overflow: hidden;
+}

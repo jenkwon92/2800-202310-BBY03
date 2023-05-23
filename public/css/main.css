@@ -167,7 +167,7 @@ html body .bg-light-2 {
   background: #ffffff;
   border-radius: 0.4rem;
   overflow: hidden;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
   position: relative;
   transition: all ease 0.4s;
   border: 1px solid #e8ebf1;
@@ -213,6 +213,12 @@ html body .bg-light-2 {
   margin-bottom: 10px;
 }
 
+.bl-title a{
+  color: #303740;
+  text-decoration: none;
+  font-weight: 500;
+}
+
 .my_courses_block_body p {
   font-size: 14px;
   margin-bottom: 0;
@@ -223,24 +229,25 @@ html body .bg-light-2 {
 }
 
 /*-------------- My Courses Elements: Courses Author & Websites Section ----------------*/
-.my_courses_block_author,
+.my_courses_block_description,
 .my_courses_block_website {
   flex: 1;
   display: flex;
   align-items: center;
 }
 
-.my_courses_block_author h5,
+.my_courses_block_description h5,
 .my_courses_block_website h5 {
   margin: 0;
   font-size: 12px;
-  font-weight: 600;
+  /* font-weight: 600; */
   opacity: 1;
 }
 
-.my_courses_block_author h5 a,
+.my_courses_block_description h5 a,
 .my_courses_block_website h5 a {
   color: #4a5874;
+  text-decoration: none;
 }
 
 /*-------------- My Courses Elements: Courses Footer Section ----------------*/
@@ -266,9 +273,9 @@ html body .bg-light-2 {
   font-size: 13px;
 }
 
-.my_courses {
+/* .my_courses {
   height: 400px;
-}
+} */
 
 /*----------- Style 3 -------------*/
 .my_courses_block_grid.style_3 .my_courses_block_body {
@@ -397,7 +404,7 @@ ul.courses_tags_list li:after {
 
 .style_3 {
   display: block;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
 }
 
 /*===================================================

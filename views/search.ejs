@@ -1,57 +1,82 @@
+<link rel="stylesheet" href="/css/common.css">
 <%- include("templates/header") %>
-    <div class="search-wrapper d-flex flex-column gap-2 mb-2">
+<main role="main">
+  <section>
+    <div class="container">
+      <div class="search-wrapper d-flex flex-column gap-2 mb-2">
         <form id="search-form" action="/search" method="GET">
-            <label for="search"></label>
-            <input type="search" id="search" name="search" class="form-control" placeholder="Search..."
-                value="<%= searchQuery %>">
+          <label for="search"></label>
+          <input type="search" id="search" name="search" class="form-control" placeholder="Search..."
+            value="<%= searchQuery %>">
         </form>
-    </div>
+      </div>
 
-    <!-- Popular Tags -->
-    <div class="popular-tags mb-2">
-        <h3>What's Popular</h3>
+      <!-- Popular Tags -->
+      <div class="popular-tags popular ">
+        <h3 class="mb-3">What's Popular</h3>
         <div class="tag-list">
-            <button class="btn btn-secondary bg-transparent text-dark mb-2"
-                onclick="populateSearch('Java')">Java</button>
-            <button class="btn btn-secondary bg-transparent text-dark mb-2"
-                onclick="populateSearch('Python')">Python</button>
-            <button class="btn btn-secondary bg-transparent text-dark mb-2"
-                onclick="populateSearch('JavaScript')">JavaScript</button>
-            <button class="btn btn-secondary bg-transparent text-dark mb-2" onclick="populateSearch('C++')">C++</button>
+          <button class="btn btn-secondary bg-transparent text-dark" onclick="populateSearch('AI')">AI</button>
+          <button class="btn btn-secondary bg-transparent text-dark" onclick="populateSearch('Python')">Python</button>
+          <button class="btn btn-secondary bg-transparent text-dark" onclick="populateSearch('Data Science')">Data
+            Science</button>
+          <button class="btn btn-secondary bg-transparent text-dark" onclick="populateSearch('R')">R</button>
         </div>
+      </div>
+
+      
     </div>
-
-    <!-- Display search results -->
-    <% courses.forEach((course)=> { %>
-        <a href="<%= course.link %>" target="_blank">
-            <div class="search-results">
-                <div class="card mb-3">
-                    <div class="row g-0">
-                        <div class="col-2 col-md-1">
-                            <img src="GeeksForGeeksLogo.png" alt="placeholder image" class="rounded img-fluid">
-                        </div>
-                        <div class="col-10 col-md-11">
-                            <div class="card-body">
-                                <h6 class="card-title">
-                                    <%= course.title %>
-                                </h6>
-                                <p class="card-text">
-                                    <%= course.details %>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  </section>
+  <section class="light-2">
+    <div class="container">
+  <!-- Display search results -->
+  <% courses.forEach((course)=> {
+    const url = new URL(course.link);
+    const domain = url.origin;
+    %>
+    <a href="/courseDetail/<%= course._id %>" class="text-decoration-none">
+      <div class="search-results">
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-2 col-md-1">
+              <% if (domain=="https://www.datacamp.com" ) { %>
+                <img src="/images/datacamp.png" alt="placeholder image" class="rounded img-fluid">
+                <% } else if (domain=="https://www.udemy.com" ) { %>
+                  <img src="/images/udemy.png" alt="placeholder image" class="rounded img-fluid">
+                  <% } else { %>
+                    <img src="/images/default_logo.png" alt="placeholder image" class="rounded img-fluid">
+                    <% } %>
             </div>
-        </a>
-        <% }); %>
-            <%- include("templates/footer") %>
+            <div class="col-10 col-md-11">
+              <div class="card-body">
+                <h6 class="card-title">
+                  <%= course.title %>
+                </h6>
+                <% if (course.tags) { const tags=course.tags.split(","); %>
+                  <ul class="list-inline">
+                    <% tags.forEach((tag)=> { %>
+                      <li class="list-inline-item btn btn-primary bg-transparent text-dark mb-2">
+                        <%= tag.trim() %>
+                      </li>
+                      <% }) %>
+                  </ul>
+                  <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <% }); %>
+      </div>
+</section>
+</main>
+      <%- include("templates/footer") %>
 
-                <script>
-                    function populateSearch(tag) {
-                        const searchInput = document.getElementById('search');
-                        searchInput.value = tag;
-                        const searchForm = document.getElementById('search-form');
-                        searchForm.submit();
-                    }
-                </script>
+        <script>
+          function populateSearch(tag) {
+            const searchInput = document.getElementById('search');
+            searchInput.value = tag;
+            const searchForm = document.getElementById('search-form');
+            searchForm.submit();
+          }
+        </script>

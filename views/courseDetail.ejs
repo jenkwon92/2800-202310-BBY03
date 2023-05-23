@@ -1,53 +1,54 @@
 <%- include("templates/header") %>
-<link href="/css/courseDetail.css" rel="stylesheet" type="text/css">
-<section>
-    <div class="ed_detail_head lg bg-light">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-6">
-                    
-                    <div class="property_video lg">
-                        <div class="thumb">
-                            <img class="pro_img img-fluid w100" src="cat1.jpg" alt="cat.jpg">
-                        </div>
-                    </div>
-                    
-                </div>
-                
-                <div class="col-lg-6 col-md-6">
-                    <div class="ed_detail_wrap">
-                        <ul class="list_ed_detail2">
-                            <li class="tag-2"><i class="ti-calendar"></i><strong>Duration:</strong>10 - 25 Weeks</li>
-                            <li class="tag-1"><i class="ti-user"></i><strong>Enrolled:</strong>712 Students</li>
-                            <li class="tag-3"><i class="ti-book"></i><strong>Lectures:</strong>602 Lectures</li>
-                            <li class="tag-4"><i class="ti-video-camera"></i><strong>Videos:</strong>402 Videos</li>
-                            <li class="tag-5"><i class="ti-tag"></i><strong>Level:</strong>Advance</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container">
+  <main role="main">
+    <section>
+      <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-md-8">
-                <!-- Overview -->
-                <div class="edu_wraper border">
-                    <h4 class="edu_title">Course Overview</h4>
-                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>		
-                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-                    <h6>Requirements</h6>
-                    <ul class="lists-3">
-                        <li>At vero eos et accusamus et iusto odio dignissimos ducimus</li>
-                        <li>At vero eos et accusamus et iusto odio dignissimos ducimus</li>
-                        <li>At vero eos et accusamus et iusto odio dignissimos ducimus</li>
-                        <li>At vero eos et accusamus et iusto odio dignissimos ducimus</li>
-                        <li>At vero eos et accusamus et iusto odio dignissimos ducimus</li>
-                    </ul>
-                </div>
-            </div>
+          <div class="col-12">
+            <h1 class="mt-4">
+              <%= course.title %>
+            </h1>
+            <img src="/images/course1.jpg" class="img-fluid" alt="Course Image">
+            <h2 class="mt-4">Course Overview</h2>
+            <p>
+              <%= course.description %>
+            </p>
+            <h3>Tags</h3>
+            <% if (course.tags) { const tags=course.tags.split(","); %>
+              <ul class="list-inline">
+                <% tags.forEach((tag)=> { %>
+                  <li class="list-inline-item btn btn-primary bg-transparent text-dark mb-2">
+                    <%= tag.trim() %>
+                  </li>
+                  <% }) %>
+              </ul>
+              <% } %>
+                <button data="<%= course._id %>" class="btn btn-primary" onclick="saveCourse()">Save</button>
+                <!-- <a class="btn btn-primary" href="saveCourse" id="<%= course._id %>">
+          Save</a> -->
+                <a class="btn btn-success" href="<%=course.link %>" target="_blank">
+                  Start Learning</a>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
+  </main>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <%- include("templates/footer") %>
 
-    <%- include("templates/footer") %>
+    <script>
+      function saveCourse() {
+        const courseId = '<%= course._id %>';                     // Get the courseId from the server-side template
+        const xhr = new XMLHttpRequest();                         // Create a new XMLHttpRequest object
+        xhr.open('POST', '/saveCourse');                          // Set up the POST request to the '/saveCourse' endpoint
+        xhr.setRequestHeader('Content-Type', 'application/json'); // Set the request header for JSON content
+        xhr.onload = function () {                                // Define the onload event handler for the request
+          if (xhr.status === 200) {                               // Check if the response status is 200 (success)
+            console.log('The course saved successfully');         // Log a success message
+            //window.location.href = '/myCourses';                // Redirect to the 'myCourses' page
+          } else {
+            console.error('Error saving a course');               // Log an error message
+          }
+        };
+        xhr.send(JSON.stringify({ courseId: courseId }));         // Send the courseId as JSON data in the request body
+      }
+    </script>
