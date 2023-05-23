@@ -21,7 +21,26 @@
   </div>
 </footer>
 
+<style>
+  .icons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+  }
 
+  .icons-container a {
+    flex-grow: 1;
+    flex-basis: 0;
+    text-align: center;
+  }
+
+  @media (max-width: 991px) {
+    .icons-container {
+      justify-content: center;
+    }
+  }
+</style>
 <!-- Bootstrap JS -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
