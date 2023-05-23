@@ -1,24 +1,33 @@
+<link rel="stylesheet" href="/css/common.css">
 <%- include("templates/header") %>
-  <div class="search-wrapper d-flex flex-column gap-2 mb-2">
-    <form id="search-form" action="/search" method="GET">
-      <label for="search"></label>
-      <input type="search" id="search" name="search" class="form-control" placeholder="Search..."
-        value="<%= searchQuery %>">
-    </form>
-  </div>
+<main role="main">
+  <section>
+    <div class="container">
+      <div class="search-wrapper d-flex flex-column gap-2 mb-2">
+        <form id="search-form" action="/search" method="GET">
+          <label for="search"></label>
+          <input type="search" id="search" name="search" class="form-control" placeholder="Search..."
+            value="<%= searchQuery %>">
+        </form>
+      </div>
 
-  <!-- Popular Tags -->
-  <div class="popular-tags mb-2">
-    <h3>What's Popular</h3>
-    <div class="tag-list">
-      <button class="btn btn-secondary bg-transparent text-dark mb-2" onclick="populateSearch('AI')">AI</button>
-      <button class="btn btn-secondary bg-transparent text-dark mb-2" onclick="populateSearch('Python')">Python</button>
-      <button class="btn btn-secondary bg-transparent text-dark mb-2" onclick="populateSearch('Data Science')">Data
-        Science</button>
-      <button class="btn btn-secondary bg-transparent text-dark mb-2" onclick="populateSearch('R')">R</button>
+      <!-- Popular Tags -->
+      <div class="popular-tags popular ">
+        <h3 class="mb-3">What's Popular</h3>
+        <div class="tag-list">
+          <button class="btn btn-secondary bg-transparent text-dark" onclick="populateSearch('AI')">AI</button>
+          <button class="btn btn-secondary bg-transparent text-dark" onclick="populateSearch('Python')">Python</button>
+          <button class="btn btn-secondary bg-transparent text-dark" onclick="populateSearch('Data Science')">Data
+            Science</button>
+          <button class="btn btn-secondary bg-transparent text-dark" onclick="populateSearch('R')">R</button>
+        </div>
+      </div>
+
+      
     </div>
-  </div>
-
+  </section>
+  <section class="light-2">
+    <div class="container">
   <!-- Display search results -->
   <% courses.forEach((course)=> {
     const url = new URL(course.link);
@@ -58,6 +67,9 @@
       </div>
     </a>
     <% }); %>
+      </div>
+</section>
+</main>
       <%- include("templates/footer") %>
 
         <script>
