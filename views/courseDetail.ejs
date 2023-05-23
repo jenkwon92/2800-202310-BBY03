@@ -1,48 +1,54 @@
 <%- include("templates/header") %>
-  <div class="row">
-    <div class="col-12">
-      <h1 class="mt-4">
-        <%= course.title %>
-      </h1>
-      <img src="/images/course1.jpg" class="img-fluid" alt="Course Image">
-      <h2 class="mt-4">Course Overview</h2>
-      <p>
-        <%= course.description %>
-      </p>
-      <h3>Tags</h3>
-      <% if (course.tags) { const tags=course.tags.split(","); %>
-        <ul class="list-inline">
-          <% tags.forEach((tag)=> { %>
-            <li class="list-inline-item btn btn-primary bg-transparent text-dark mb-2">
-              <%= tag.trim() %>
-            </li>
-            <% }) %>
-        </ul>
-        <% } %>
-          <button data="<%= course._id %>" class="btn btn-primary" onclick="saveCourse()">Save</button>
-        <!-- <a class="btn btn-primary" href="saveCourse" id="<%= course._id %>">
+  <main role="main">
+    <section>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h1 class="mt-4">
+              <%= course.title %>
+            </h1>
+            <img src="/images/course1.jpg" class="img-fluid" alt="Course Image">
+            <h2 class="mt-4">Course Overview</h2>
+            <p>
+              <%= course.description %>
+            </p>
+            <h3>Tags</h3>
+            <% if (course.tags) { const tags=course.tags.split(","); %>
+              <ul class="list-inline">
+                <% tags.forEach((tag)=> { %>
+                  <li class="list-inline-item btn btn-primary bg-transparent text-dark mb-2">
+                    <%= tag.trim() %>
+                  </li>
+                  <% }) %>
+              </ul>
+              <% } %>
+                <button data="<%= course._id %>" class="btn btn-primary" onclick="saveCourse()">Save</button>
+                <!-- <a class="btn btn-primary" href="saveCourse" id="<%= course._id %>">
           Save</a> -->
-          <a class="btn btn-success" href="<%=course.link %>" target="_blank">
-            Start Learning</a>
-    </div>
-  </div>
+                <a class="btn btn-success" href="<%=course.link %>" target="_blank">
+                  Start Learning</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <%- include("templates/footer") %>
 
-  <script>
-    function saveCourse() {
-      const courseId = '<%= course._id %>';                     // Get the courseId from the server-side template
-      const xhr = new XMLHttpRequest();                         // Create a new XMLHttpRequest object
-      xhr.open('POST', '/saveCourse');                          // Set up the POST request to the '/saveCourse' endpoint
-      xhr.setRequestHeader('Content-Type', 'application/json'); // Set the request header for JSON content
-      xhr.onload = function () {                                // Define the onload event handler for the request
-        if (xhr.status === 200) {                               // Check if the response status is 200 (success)
-          console.log('The course saved successfully');         // Log a success message
-          //window.location.href = '/myCourses';                  // Redirect to the 'myCourses' page
-        } else {
-          console.error('Error saving a course');               // Log an error message
-        }
-      };
-      xhr.send(JSON.stringify({ courseId: courseId }));         // Send the courseId as JSON data in the request body
-    }
-  </script>
+    <script>
+      function saveCourse() {
+        const courseId = '<%= course._id %>';                     // Get the courseId from the server-side template
+        const xhr = new XMLHttpRequest();                         // Create a new XMLHttpRequest object
+        xhr.open('POST', '/saveCourse');                          // Set up the POST request to the '/saveCourse' endpoint
+        xhr.setRequestHeader('Content-Type', 'application/json'); // Set the request header for JSON content
+        xhr.onload = function () {                                // Define the onload event handler for the request
+          if (xhr.status === 200) {                               // Check if the response status is 200 (success)
+            console.log('The course saved successfully');         // Log a success message
+            //window.location.href = '/myCourses';                // Redirect to the 'myCourses' page
+          } else {
+            console.error('Error saving a course');               // Log an error message
+          }
+        };
+        xhr.send(JSON.stringify({ courseId: courseId }));         // Send the courseId as JSON data in the request body
+      }
+    </script>
