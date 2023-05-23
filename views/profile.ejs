@@ -67,7 +67,7 @@
 <div class="d-flex justify-content-center align-items-center mb-4">
   <div class="col-md-4 offset-md-2 col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
     style="border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
-    <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
+    <span id="go-skill" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
       class="material-icons">
       computer
     </span>
@@ -75,7 +75,7 @@
   </div>
   <div class="col-md-4 col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
     style="border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
-    <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
+    <span id="go-interest" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
       class="material-icons">
       menu_book
     </span>
@@ -99,16 +99,20 @@
 
   <!-- Function section -->
   <script>
+    
+    //Link to the editProfile page when click the edit icon
     const editIcon = document.querySelector("#edit-icon");
     editIcon.addEventListener("click", () => {
       window.location.href = "/editProfile";
     });
 
+    //Link to the editSkill page when click the laptop icon
     const goSkill = document.querySelector("#go-skill");
     goSkill.addEventListener("click", () => {
       window.location.href = "/editSkill";
     });
 
+    //Link to the editInterest page when click the book icon
     const goInterest = document.querySelector("#go-interest");
     goInterest.addEventListener("click", () => {
       window.location.href = "/editInterest";
