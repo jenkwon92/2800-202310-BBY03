@@ -1,0 +1,22 @@
+.profile_grid {
+    -webkit-transition: all 0.25s ease;
+    -o-transition: all 0.25s ease;
+    -moz-transition: all 0.25s ease;
+    transition: all 0.25s ease;
+    position: relative;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    border-radius: 5px;
+    padding: 0px;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
+  .profile_grid .bl-title {
+    font-size: 17px;
+    margin-bottom: 10px;
+  }
