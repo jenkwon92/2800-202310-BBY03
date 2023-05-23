@@ -1,12 +1,13 @@
 <%- include("templates/header") %>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
 
+  <!-- Style section -->
   <style>
     .selected-skill {
       display: inline-block;
       margin: 0 5px 5px 0;
       padding: 5px 10px;
-      background-color: #e9ecef;
+      background-color: #1879da;
       border-radius: 5px;
     }
 
@@ -15,23 +16,37 @@
       cursor: pointer;
     }
 
+
     .multiselect-container.dropdown-menu {
       display: none !important;
       max-height: 200px;
       overflow-y: auto;
     }
+
+    .border-box {
+      border: 1px solid #6D9DC5;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .selected-skill .skill-button {
+      color: white;
+    }
   </style>
 
+  <!-- HTML -->
   <div class="container">
     <div class="row">
       <div class="col" style="margin-top: 30px;">
-        <h4>Skills</h4>
+
         <div class="row">
           <div class="col">
             <div class="dropdown" style="margin-bottom:40px">
-              <button style="width:80%;" class="btn btn-secondary dropdown-toggle" type="button" id="multiSelectButton"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Select your skills
+              <button
+                style="width:100%; height: 50px; font-size: larger; background-color: #6D9DC5; color: white; font-weight: 600; margin-top: 30px;"
+                class="btn" type="button" id="multiSelectButton" data-bs-toggle="dropdown">
+                Skills <i class="material-icons"
+                  style="vertical-align: middle; margin-left: 220px;">keyboard_arrow_down</i>
               </button>
               <div class="dropdown-menu" aria-labelledby="multiSelectButton" style="width:100%;">
                 <select id="multiSelect" multiple style="width:100%;">
@@ -49,17 +64,18 @@
                 </select>
               </div>
             </div>
-            <div id="skillSet1" class="border p-3 mt-3">
+            <div class="border-box">
               <div id="selectedSkills">
                 <% if (skills && skills.length> 0) { %>
                   <% skills.forEach(function(skill) { %>
-                    <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
+                    <button type="button" class="btn btn-secondary btn-rounded skill-button selected-skill"
+                      style="margin-bottom: 8px;">
                       <%= skill %>
+                        <span class="close" data-skill="<%= skill %>">&times;</span>
                     </button>
-
                     <% }); %>
                       <% } else { %>
-                        <p>No skills available</p>
+                        
                         <% } %>
               </div>
             </div>
@@ -73,88 +89,99 @@
 
   <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const select = new Choices('#multiSelect', {
-        placeholder: true,
-        placeholderValue: 'Select your skills',
-        removeItemButton: true,
-        maxItemCount: -1,
-        allowHTML: true
-      });
+  <!-- Function section -->
 
-      const selectedSkills = document.querySelector('#selectedSkills');
-      const skillSet1 = document.querySelector('#skillSet1');
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const select = new Choices('#multiSelect', {
+      placeholder: true,
+      placeholderValue: 'Select your skills',
+      removeItemButton: true,
+      maxItemCount: -1,
+      allowHTML: true
+    });
 
-      select.passedElement.element.addEventListener('change', function () {
-        selectedSkills.innerHTML = '';
-        const selectedOptions = Array.from(this.selectedOptions);
-        selectedOptions.forEach(option => {
-          const skillContainer = document.createElement('div');
-          skillContainer.className = 'selected-skill';
-          const skillText = document.createElement('span');
-          skillText.textContent = option.text;
+    const selectedSkills = document.querySelector('#selectedSkills');
+
+    select.passedElement.element.addEventListener('change', function () {
+      const selectedOptions = Array.from(this.selectedOptions);
+      selectedOptions.forEach(option => {
+        const skillValue = option.value;
+        if (!selectedSkills.querySelector(`[data-skill="${skillValue}"]`)) {
+          const skillButton = document.createElement('button');
+          skillButton.type = 'button';
+          skillButton.className = 'btn btn-secondary btn-rounded skill-button selected-skill';
+          skillButton.textContent = option.text;
 
           const closeButton = document.createElement('span');
           closeButton.className = 'close';
           closeButton.innerHTML = '&times;';
+          closeButton.dataset.skill = skillValue;
+
+          skillButton.appendChild(closeButton);
+          selectedSkills.appendChild(skillButton);
+
           closeButton.addEventListener('click', function () {
-            skillContainer.remove();
-            select.removeActiveItemsByValue(option.value);
-            saveSkills(); // Call saveSkills() after removing the skill
+            skillButton.remove();
+            select.removeActiveItemsByValue(skillValue);
+            deleteSkill(skillValue); // Call deleteSkill() after removing the skill
+            saveSkills(); // Trigger the saveSkills() function after removing the skill
           });
-
-          skillContainer.appendChild(skillText);
-          skillContainer.appendChild(closeButton);
-
-          selectedSkills.appendChild(skillContainer);
-        });
-
-        // Show or hide the skillSet1 div based on the selected skills
-        if (selectedOptions.length > 0) {
-          skillSet1.style.display = 'block';
-        } else {
-          skillSet1.style.display = 'none';
         }
       });
 
-      // Remove skill when close button is clicked
-      selectedSkills.addEventListener('click', function (event) {
-        if (event.target.classList.contains('close')) {
-          const skill = event.target.dataset.skill;
-          const skillContainer = event.target.parentNode;
-          skillContainer.remove();
-          select.removeActiveItemsByValue(skill);
-          saveSkills(); // Call saveSkills() after removing the skill
-        }
-      });
-
-      const saveButton = document.querySelector('#save-button');
-      saveButton.addEventListener('click', saveSkills);
-
-      function saveSkills() {
-        const selectedOptions = Array.from(select.getValue(false));
-        const skills = selectedOptions.map(option => option.value).join(',');
-
-        if (skills.trim() === '') {
-          console.error('Skills data is missing');
-          return;
-        }
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/saveSkills');
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = function () {
-          if (xhr.status === 200) {
-            console.log('Skills saved successfully');
-            window.location.href = '/profile'; // redirect to the profile page
-          } else {
-            console.error('Error saving skills');
-          }
-        };
-        xhr.send(JSON.stringify({ skills: skills })); // Send skills data as JSON object
+      // Show or hide the selectedSkills div based on the selected skills
+      if (selectedSkills.children.length > 0) {
+        selectedSkills.style.display = 'block';
+      } else {
+        selectedSkills.style.display = 'none';
       }
     });
-  </script>
+
+    const saveButton = document.querySelector('#save-button');
+    saveButton.addEventListener('click', function (event) {
+      event.preventDefault(); // Prevent the default form submission behavior
+      saveSkills();
+    });
+
+    function saveSkills() {
+      const selectedOptions = Array.from(select.getValue(false));
+      const skills = selectedOptions.map(option => option.value).join(',');
+
+      if (skills.trim() === '') {
+        console.error('Skills data is missing');
+        return;
+      }
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/saveSkills');
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          console.log('Skills saved successfully');
+          window.location.href = '/profile'; // Redirect to the profile page
+        } else {
+          console.error('Error saving skills');
+        }
+      };
+      xhr.send(JSON.stringify({ skills: skills })); // Send skills data as JSON object
+    }
+
+    function deleteSkill(skill) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/deleteSkill');
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          console.log('Skill deleted successfully');
+        } else {
+          console.error('Error deleting skill');
+        }
+      };
+      xhr.send(JSON.stringify({ skill: skill })); // Send skill data as JSON object
+    }
+  });
+</script>
+
 
   <%- include("templates/footer") %>

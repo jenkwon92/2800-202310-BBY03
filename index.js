@@ -475,7 +475,6 @@ app.post("/submitProfile", upload.single("image"), async (req, res) => {
   }
 });
 
-//update the user's skill
 app.post("/saveSkills", sessionValidation, async (req, res) => {
   try {
     const { skills } = req.body;
@@ -485,11 +484,20 @@ app.post("/saveSkills", sessionValidation, async (req, res) => {
       throw new Error("Skills data is missing");
     }
 
+    const existingUser = await userCollection.findOne({ username: username });
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    const existingSkills = existingUser.skills || [];
     const skillList = skills.split(",").map((skill) => skill.trim());
+    const updatedSkills = [...existingSkills, ...skillList];
+
     const updateResult = await userCollection.updateOne(
       { username: username },
-      { $set: { skills: skillList } }
+      { $set: { skills: updatedSkills } }
     );
+
     if (updateResult.modifiedCount === 1) {
       res.sendStatus(200); // Skills saved successfully
     } else {
@@ -498,6 +506,40 @@ app.post("/saveSkills", sessionValidation, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Error saving skills"); // Error saving skills
+  }
+});
+
+//Remove skills from the user's skill field
+app.post("/deleteSkill", sessionValidation, async (req, res) => {
+  try {
+    const { skill } = req.body;
+    const username = req.session.username;
+
+    if (!skill) {
+      throw new Error("Skill data is missing");
+    }
+
+    const existingUser = await userCollection.findOne({ username: username });
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    const existingSkills = existingUser.skills || [];
+    const updatedSkills = existingSkills.filter((s) => s !== skill);
+
+    const updateResult = await userCollection.updateOne(
+      { username: username },
+      { $set: { skills: updatedSkills } }
+    );
+
+    if (updateResult.modifiedCount === 1) {
+      res.sendStatus(200); // Skill deleted successfully
+    } else {
+      throw new Error("Failed to delete skill");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error deleting skill"); // Error deleting skill
   }
 });
 
@@ -888,24 +930,6 @@ app.get("/courseDetail/:courseId", (req, res) => {
     });
 });
 
-// Add a course to my courses
-app.post("/saveCourse", sessionValidation, async (req, res) => {
-  try {
-    const username = req.session.username;                    // Get the username from the session
-    const courseId = req.body.courseId;                       // Get the courseId from the request body
-    //console.log('req.session:', JSON.stringify(req.session)); // Log the session object as a string
-
-    // Add the course to the user's myCourses field
-    await userCollection.updateOne(
-      { username: username },                                 // Find the user by username
-      { $set: { myCourses: courseId } }                       // Set the myCourses field to the courseId
-    );
-    res.sendStatus(200);                                      // Send a success status code
-  } catch (error) {
-    //console.error(error);                                   // Log any errors that occur
-    res.status(500).send('Error saving a course into data');  // Send an error status code and message
-  }
-});
 /* Course Detail Section end */
 
 // Renders the custom 404 error page to users instead of displaying a generic error message or a stack trace.
