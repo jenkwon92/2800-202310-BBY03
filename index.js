@@ -14,6 +14,7 @@ const jwt = require("jsonwebtoken");            // Import jsonwebtoken
 const nodemailer = require("nodemailer");       // Import nodemailer
 const saltRounds = 12;                          // Set the number of salt rounds for bcrypt
 const bodyParser = require("body-parser");      // Middleware for parsing request bodies
+const { Configuration, OpenAIApi } = require("openai"); // Import ObjectId from openai
 
 // Our website URL
 const WebsiteURL = "http://wjxdvnhtuk.eu09.qoddiapp.com";
@@ -29,6 +30,9 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET;
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 // End Secret Information Section
 
 // Session Section
