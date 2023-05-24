@@ -13,30 +13,31 @@
         </div>
       </div>
       <div class="container">
-          <!-- Basic profile -->
-          <div class="d-flex flex-row">
-            <div class="mt-auto mb-auto d-flex flex-column" style="width: 35%;">
-              <img src="<%= image || '/images/profile/default.png' %>" alt="Profile Image"
-                class="img-fluid img-thumbnail" style="width: 130px; z-index: 1;">
-            </div>
-            <div class="mt-auto mb-auto d-flex flex-column" style="font-size: small; margin-top: auto; margin-bottom: auto; width: 60%; padding: 10px;">
-              <h5 style="margin-bottom: 10px; font-weight: 700;">
-                <%= username %>
-              </h5>
-              <h6 style="margin-bottom: 5px; font-weight: 400;">Name: <%= firstName %>
-                  <%= lastName %>
-              </h6>
-              <h6 style="margin-bottom: 5px; font-weight: 400;">Job: <%= job %>
-              </h6>
-              <h6 style="margin-bottom: 0; font-weight: 400; text-transform: none;">Email: <%= email %>
-              </h6>
-            </div>
-            <div class="mt-auto d-flex flex-column">
-              <p id="edit-icon" style="font-size: 20px; color: #B4CDED;"
-              class="material-icons-outlined">edit</p>
-            </div>
+        <!-- Basic profile -->
+        <div class="d-flex flex-row">
+          <div class="mt-auto mb-auto d-flex flex-column" style="width: 35%;">
+            <img src="<%= image || '/images/profile/default.png' %>" alt="Profile Image" class="img-fluid img-thumbnail"
+              style="width: 130px; z-index: 1;">
           </div>
-          <!-- Basic profile end -->
+          <div class="mt-auto mb-auto d-flex flex-column"
+            style="font-size: small; margin-top: auto; margin-bottom: auto; width: 60%; padding: 10px;">
+            <h5 style="margin-bottom: 10px; font-weight: 700;">
+              <%= username %>
+            </h5>
+            <h6 style="margin-bottom: 5px; font-weight: 400;">Name: <%= firstName %>
+                <%= lastName %>
+            </h6>
+            <h6 style="margin-bottom: 5px; font-weight: 400;">Job: <%= job %>
+            </h6>
+            <h6 style="margin-bottom: 0; font-weight: 400; text-transform: none;">Email: <%= email %>
+            </h6>
+          </div>
+          <div class="mt-auto d-flex flex-column">
+            <p id="edit-icon" style="font-size: 20px; color: #B4CDED;" class="material-icons-outlined">edit</p>
+          </div>
+        </div>
+        <!-- Basic profile end -->
+      </div>
     </section>
     <section class="light-2">
       <!-- Skills&interests -->
@@ -48,70 +49,75 @@
               <div class="profile_body">
                 <h3 class="lead fw-normal mb-1" style="font-weight: 400;">Skills</h3>
                 <div class="p-4" style="background-color: #ffffff; border-radius: 10px;">
-                    <ul class="courses_tags_list">
-                      <% if (skills && skills.length> 0) { %>
-                        <% skills.forEach(function(skill) { %>
-                          <li class="facts-2 mt-1">
-                            <%= skill %>
-                          </li>
+                  <ul class="courses_tags_list">
+                    <% if (skills && skills.length> 0) { %>
+                      <% skills.forEach(function(skill) { %>
+                        <li class="facts-2 mt-1">
+                          <%= skill %>
+                        </li>
 
-                          <% }); %>
-                            <% } else { %>
-                              <p class="text-muted" style="text-align: center; font-weight:normal; margin: 0;">Update your skills!</p>
-                              <% } %>
-                    </ul>
+                        <% }); %>
+                          <% } else { %>
+                            <p class="text-muted" style="text-align: center; font-weight:normal; margin: 0;">Update your
+                              skills!</p>
+                            <% } %>
+                  </ul>
                 </div>
               </div>
-          </div>
-          <!-- Skills section end -->
+            </div>
+            <!-- Skills section end -->
 
-          <!-- Interests section -->
-          <div class="col-xl-12 col-lg-12 col-12">
-            <div class="box mb-15 profile_grid">
-              <h3 class="lead fw-normal mb-1" style="font-weight: 400;">Interests</h3>
-              <div class="p-4" style="background-color: #ffffff; border-radius: 10px;">
-                <% if (interests && interests.length> 0) { %>
-                  <ul class="courses_tags_list">
-                  <% interests.forEach(function(interest) { %>
-                    <li class="facts-3 mt-1">
-                      <%= interest %>
-                    </li>
-                    <% }); %>
-                  </ul>
-                      <% } else { %>
-                        <p class="text-muted" style="text-align: center; font-weight:normal;margin: 0;">Update your interests!</p>
-                        <% } %>
+            <!-- Interests section -->
+            <div class="col-xl-12 col-lg-12 col-12">
+              <div class="box mb-15 profile_grid">
+                <h3 class="lead fw-normal mb-1" style="font-weight: 400;">Interests</h3>
+                <div class="p-4" style="background-color: #ffffff; border-radius: 10px;">
+                  <% if (interests && interests.length> 0) { %>
+                    <ul class="courses_tags_list">
+                      <% interests.forEach(function(interest) { %>
+                        <li class="facts-3 mt-1">
+                          <%= interest %>
+                        </li>
+                        <% }); %>
+                    </ul>
+                    <% } else { %>
+                      <p class="text-muted" style="text-align: center; font-weight:normal;margin: 0;">Update your
+                        interests!</p>
+                      <% } %>
+                </div>
               </div>
             </div>
+
+            <!-- Edit skills&interests -->
+            <div class="d-flex justify-content-center align-items-center mb-4">
+              <div class="col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
+                style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; background-color: #ffffff;">
+                <span id="go-skill"
+                  style="font-size: 40px; float: right; line-height:20px; margin: 20px; color: #B4CDED"
+                  class="material-icons-outlined">
+                  computer
+                </span>
+                <p style="font-size:1rem" class="text-center mt-2">Skills</p>
+              </div>
+              <div class="col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
+                style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; background-color: #ffffff;">
+                <span id="go-interest"
+                  style="font-size: 40px; float: right; line-height:20px; margin: 20px; color: #B4CDED;"
+                  class="material-icons-outlined">
+                  menu_book
+                </span>
+                <p style="font-size:1rem" class="text-center mt-2">Interests</p>
+              </div>
+            </div>
+            <!-- Edit skills&interests end -->
+
+            <!-- Log out -->
+            <div class="btn_log_out" onclick="window.location.href='/logout'"><i
+                class="ti-control-skip-forward mr-2"></i>Log
+              out
+            </div>
+            <!-- Log out end -->
           </div>
-
-          <!-- Edit skills&interests -->
-      <div class="d-flex justify-content-center align-items-center mb-4">
-        <div class="col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
-          style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; background-color: #ffffff;">
-          <span id="go-skill" style="font-size: 40px; float: right; line-height:20px; margin: 20px; color: #B4CDED"
-            class="material-icons-outlined">
-            computer
-          </span>
-          <p style="font-size:1rem" class="text-center mt-2">Skills</p>
-        </div>
-        <div class="col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
-          style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; background-color: #ffffff;">
-          <span id="go-interest" style="font-size: 40px; float: right; line-height:20px; margin: 20px; color: #B4CDED;"
-            class="material-icons-outlined">
-            menu_book
-          </span>
-          <p style="font-size:1rem" class="text-center mt-2">Interests</p>
-        </div>
-      </div>
-      <!-- Edit skills&interests end -->
-
-      <!-- Log out -->
-       <div class="btn_log_out" onclick="window.location.href='/logout'"><i class="ti-control-skip-forward mr-2"></i>Log
-        out
-       </div>
-      <!-- Log out end -->
-      </div>
 
         </div>
         <!-- Interests section end -->
@@ -121,7 +127,7 @@
   </main>
   <!-- Function section -->
   <script>
-    
+
     //Link to the editProfile page when click the edit icon
     const editIcon = document.querySelector("#edit-icon");
     editIcon.addEventListener("click", () => {
