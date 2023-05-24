@@ -34,9 +34,9 @@
           %>
           <a href="/courseDetail/<%= course._id %>" class="text-decoration-none">
             <div class="search-results">
-              <div class="card mb-3">
+              <div class="card mb-2 mb-md-3">
                 <div class="row g-0">
-                  <div class="col-sm-1 col-3">
+                  <div class="col-sm-2 col-md-2 col-lg-1 col-3">
                     <% if (domain=="https://www.datacamp.com" ) { %>
                       <img src="/images/datacamp.png" alt="DataCamp logo" class="rounded img-fluid">
                       <% } else if (domain=="https://www.udemy.com" ) { %>
@@ -45,14 +45,15 @@
                           <img src="/images/default_search_logo.png" alt="Default logo" class="rounded img-fluid">
                           <% } %>
                   </div>
-                  <div class="col-sm-11 col-9">
-                    <div class="card-body">
+                  <div class="col-sm-10 col-md-10 col-lg-11 col-9">
+                    <div class="card-body pb-1 pt-3">
                       <h6 class="card-title">
                         <%= course.title %>
                       </h6>
-                      <% if (course.tags) { const tags=course.tags.split(","); let factsCounter=1; %>
+                      <% if (course.tags) { const tags=course.tags.split(","); let factsCounter=1; const
+                        displayedTags=tags.slice(0, 2); // Limiting to two tags %>
                         <ul class="courses_tags_list">
-                          <% tags.forEach((tag)=> { %>
+                          <% displayedTags.forEach((tag)=> { %>
                             <li class="facts-<%= factsCounter %>">
                               <%= tag.trim() %>
                             </li>
