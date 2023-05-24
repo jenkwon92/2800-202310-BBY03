@@ -326,7 +326,6 @@ app.get("/generateMore", sessionValidation, async (req, res) => {
 
 /* Recommendation Section end */
 
-
 /* Profile Section */
 
 app.get("/profile", async (req, res) => {
