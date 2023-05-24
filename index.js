@@ -917,12 +917,12 @@ app.get("/search", (req, res) => {
 
   // Count the total number of matching documents
   const totalCountPromise = coursesCollection.countDocuments({
-    $or: [{ title: searchRegex }, { details: searchRegex }],
+    $or: [{ title: searchRegex }, { tags: searchRegex }, { details: searchRegex }],
   });
 
   // Search for courses that match the search query with pagination
   const searchPromise = coursesCollection
-    .find({ $or: [{ title: searchRegex }, { details: searchRegex }] })
+    .find({ $or: [{ title: searchRegex }, { tags: searchRegex }, { details: searchRegex }] })
     .skip((page - 1) * itemsPerPage)
     .limit(itemsPerPage)
     .toArray();
