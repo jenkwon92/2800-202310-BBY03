@@ -1,9 +1,17 @@
-<link rel="stylesheet" href="/css/common.css">
 <link rel="stylesheet" href="/css/profile.css">
 <%- include("templates/header") %>
   <main role="main">
     <!-- All profiles -->
     <section>
+      <div class="container">
+        <div class="col-lg-12 col-md-12 mb-3">
+          <div>
+            <div class="sec-left">
+              <h3>Profile</h3>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="container">
           <!-- Basic profile -->
           <div class="d-flex flex-row">
@@ -49,7 +57,7 @@
 
                           <% }); %>
                             <% } else { %>
-                              <p style="text-align: center; font-weight:normal; color: #da0b4e; margin: 0;">Update your skills!</p>
+                              <p class="text-muted" style="text-align: center; font-weight:normal; margin: 0;">Update your skills!</p>
                               <% } %>
                     </ul>
                 </div>
@@ -71,7 +79,7 @@
                     <% }); %>
                   </ul>
                       <% } else { %>
-                        <p style="text-align: center; font-weight:normal; color: #da0b4e; margin: 0;">Update your interests!</p>
+                        <p class="text-muted" style="text-align: center; font-weight:normal;margin: 0;">Update your interests!</p>
                         <% } %>
               </div>
             </div>

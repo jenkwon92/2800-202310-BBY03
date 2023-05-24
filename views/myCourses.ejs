@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="/css/common.css">
 <link rel="stylesheet" href="/css/myCourses.css">
 <%- include("templates/header") %>
   <main role="main">
@@ -9,16 +8,6 @@
             <div class="sec-left mb-3">
               <h3>My Courses</h3>
             </div>
-            <div class="col-xl-12 col-lg-12 col-12 text-center mt-3 mt-md-0">
-              <form role="search">
-                <div class="input-group banner-form" style="border: 1px solid #ced4da; border-radius: 0.25rem;">
-                  <input class="index-banner-search form-control py-sm-3 py-2 px-sm-4 px-3 border-0"
-                    placeholder="Search your course" name="srch-term" type="text">
-                  <button class="btn btn-primary" type="submit"><img src="/images/cat1.jpg" alt="Image Description"
-                      style="width:10px;"></button>
-                </div>
-              </form>
-            </div>
           </div>
         </div>
       </div>
@@ -28,11 +17,7 @@
       <div class="container">
         <div class="row">
           <div class="col-xl-12 col-lg-12 col-12">
-            <% if (!myCourses) { %>
-              <div class="col-12">
-                <p>No my courses found.</p>
-              </div>
-              <% } else { %>
+              <% if (myCourses && myCourses.length> 0) { %>
                 <% myCourses.forEach((course)=> { %>
                   <div class="box mb-15 my_courses_grid">
                     <div class="my_courses_body">
@@ -55,8 +40,12 @@
                       </div>
                     </div>
                   </div>
-                  <% }) %>
-                    <% } %>
+                  <% }); %>
+                  <% } else { %>
+                  <div class="col-12">
+                    <p class="text-muted" style="text-align: center; font-weight:normal;">No courses found</p>
+                  </div>
+                  <% } %>
           </div>
         </div>
         <!-- <% if (myCourses && myCourses.length> 3) { %>

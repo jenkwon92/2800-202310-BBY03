@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="/css/main.css">
-<link rel="stylesheet" href="/css/common.css">
 <%- include("templates/header") %>
   <link rel="stylesheet" href="/css/easterEgg.css">
   <div style="margin-bottom: 10px;">
@@ -15,7 +14,7 @@
   </div>
   <main role="main">
     <section class="light-2">
-      <div class="container"  style="height:40vh;">
+      <div class="container" style="height:40vh;">
         <div class="col-lg-12 col-md-12 mb-3">
           <div class="sec-heading2">
             <div class="sec-left">
@@ -26,86 +25,89 @@
             </div>
           </div>
         </div>
-
-        <div class="row" >
-          
-          <div class="col-lg-12 col-md-12 col-sm-12">
-            <div class="my_courses" style="margin-bottom:0;">
-              <% if (!myCourses) { %>
-                <div class="col-12">
-                    <p>No recommended courses found.</p>
-                </div>
-              <% } else { %>
-              <% myCourses.forEach((course) => { %>
-              <div class="my_courses_block_grid style_3 m-1">
-                <!-- <div class="my_courses_block_thumb n-shadow">
-                  <a href="/courseDetail"><img src="/images/cat1.jpg" class="my_courses_course_image"
-                      alt=""></a>
-                </div> -->
-                <div class="my_courses_block_body">
-                  <h4 class="bl-title"><a href="/courseDetail/<%= course._id %>"><%= course.title %></a></h4>
-                  <div class="my_courses_block_description">
-                    <h5><a href="/courseDetail/<%= course._id %>"><%= course.description %></a></h5>
-                  </div>
-                </div>
-                <div class="courses_tags">
-                  <ul class="courses_tags_list">
-                    <li class="facts-1"><%= course.tags %></li>
-                  </ul>
-                </div>
-                <div class="my_courses_block_footer">
-                  <div class="btn_start_learning" onclick="openNewWindow('<%= course.link %>')"><i class="ti-control-skip-forward mr-2"></i>Start
-                    learning
-                  </div>
-                </div>
+        <% if (myCourses && myCourses.length> 0) { %>
+          <% myCourses.forEach((course)=> { %>
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="my_courses" style="margin-bottom:0;">
+                  <div class="my_courses_block_grid style_3 m-1">
+                    <div class="my_courses_block_body">
+                      <h4 class="bl-title"><a href="/courseDetail/<%= course._id %>">
+                          <%= course.title %>
+                        </a></h4>
+                      <div class="my_courses_block_description">
+                        <h5><a href="/courseDetail/<%= course._id %>">
+                            <%= course.description %>
+                          </a></h5>
+                      </div>
+                    </div>
+                    <div class="courses_tags">
+                      <ul class="courses_tags_list">
+                        <li class="facts-1">
+                          <%= course.tags %>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="my_courses_block_footer">
+                      <div class="btn_start_learning" onclick="openNewWindow('<%= course.link %>')"><i
+                          class="ti-control-skip-forward mr-2"></i>Start
+                        learning
+                      </div>
+                    </div>
               </div>
-                        <% }) %>
-          <% } %>
-            
+            </div>
+            <% }); %>
+            <% } else { %>
+            <p class="text-muted" style="text-align: center; font-weight:normal;">No courses found</p>
+            <% } %>
       </div>
     </section>
 
     <section class="light-2">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 mb-3">
-                    <div class="sec-heading2">
-                        <div class="sec-left">
-                            <h3>Recommendations</h3>
-                        </div>
-                        <div class="sec-right">
-                            <a href="/recommendation" class="btn-br-more">See All</a>
-                        </div>
-                    </div>
-                </div>
-                <% if (!recommendedCourses) { %>
-                    <div class="col-12">
-                        <p>No recommended courses found.</p>
-                    </div>
-                <% } else { %>
-                    <% recommendedCourses.slice(0, 2).forEach((course) => { %>
-                        <div class="col-xl-6 col-lg-6 col-12">
-                            <div class="box mb-15 recommendations_course_grid">
-                                <div class="recommendations_course_body">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <div class="d-flex flex-column fw-500">
-                                                <h4 class="bl-title"><a href="/courseDetail/<%= course._id %>"><%= course.title %></a></h4>
-                                            </div>
-                                        </div>
-                                        <a href="<%= course.link %>">
-                                            <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span
-                                                class="path2"></span></span>
-                                        </a>
-                                    </div>
-                                    <p style="font-size: smaller;"><%= course.description %></p>
-                                </div>
-                            </div>
-                        </div>
-                    <% }) %>
-                <% } %>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 mb-3">
+            <div class="sec-heading2">
+              <div class="sec-left">
+                <h3>Recommendations</h3>
+              </div>
+              <div class="sec-right">
+                <a href="/recommendation" class="btn-br-more">See All</a>
+              </div>
             </div>
+          </div>
+          <% if (!recommendedCourses) { %>
+            <div class="col-12">
+              <p>No recommended courses found.</p>
+            </div>
+            <% } else { %>
+              <% recommendedCourses.slice(0, 2).forEach((course)=> { %>
+                <div class="col-xl-6 col-lg-6 col-12">
+                  <div class="box mb-15 recommendations_course_grid">
+                    <div class="recommendations_course_body">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                          <div class="d-flex flex-column fw-500">
+                            <h4 class="bl-title"><a href="/courseDetail/<%= course._id %>">
+                                <%= course.title %>
+                              </a></h4>
+                          </div>
+                        </div>
+                        <a href="<%= course.link %>">
+                          <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span
+                            class="path2"></span></span>
+                        </a>
+                      </div>
+                      <p style="font-size: smaller;">
+                        <%= course.description %>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <% }) %>
+                  <% } %>
         </div>
+      </div>
     </section>
   </main>
 
