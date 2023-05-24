@@ -17,7 +17,7 @@
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
                                             <div class="d-flex flex-column fw-500">
-                                                <h4 class="bl-title"><a href="/courseDetail"><%= course.title %></a></h4>
+                                              <h4 class="bl-title"><a href="/courseDetail/<%= course.courseId %>"><%= course.title %></a></h4>
                                                 <span class="text-fade"><%= course.instructor %></span>
                                             </div>
                                         </div>
@@ -98,7 +98,7 @@
                       <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                           <div class="d-flex flex-column fw-500">
-                            <h4 class="bl-title"><a href="/courseDetail">${course.title}</a></h4>
+                            <h4 class="bl-title"><a href="/courseDetail/${course.courseId}">${course.title}</a></h4>
                             <p style="font-size: smaller;">${course.description}</p>
                           </div>
                         </div>
