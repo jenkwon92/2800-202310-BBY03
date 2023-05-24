@@ -228,11 +228,6 @@ app.get("/myCourses", sessionValidation, async (req, res) => {
 });
 
 
-// Renders the course detail page
-app.get("/courseDetail", (req, res) => {
-  res.render("courseDetail");
-});
-
 /* Recommendation Section */
 
 const recommendedCourseLimit = 100; // Limit the number of initially recommended courses
@@ -251,7 +246,7 @@ app.get("/recommendation", sessionValidation, async (req, res) => {
     // Retrieve courses matching the user's interests (case-insensitive)
     let recommendedCourses = await coursesCollection
       .find({ tags: interestsPattern })
-      .limit(recommendedCourseLimit)
+      .limit(5)
       .toArray();
 
     // If no matching courses found, retrieve random courses from the course collection
@@ -265,6 +260,11 @@ app.get("/recommendation", sessionValidation, async (req, res) => {
     if (recommendedCourses.length === 0) {
       throw new Error("No recommended courses found");
     }
+
+    // Add courseId to each recommended course
+    recommendedCourses = recommendedCourses.map(course => {
+      return { ...course, courseId: course._id }; // Assuming the courseId is stored in the _id field
+    });
 
     res.render("recommendation", { recommendedCourses, username: req.session.username });
   } catch (error) {
@@ -281,7 +281,7 @@ app.get("/generateMore", sessionValidation, async (req, res) => {
       username: req.session.username,
     });
 
-    // Retrieve user's interests from db
+    // Retrieve user's interests from the database
     const userInterests = user.interests || [];
     const interestsPattern = new RegExp(userInterests.map(interest => `\\b${interest}\\b`).join("|"), "i");
 
@@ -303,7 +303,16 @@ app.get("/generateMore", sessionValidation, async (req, res) => {
     const endIndex = startIndex + additionalCourseLimit;
 
     // Retrieve the additional recommended courses based on the index range
-    const additionalRecommendedCourses = allRecommendedCourses.slice(startIndex, endIndex);
+    let additionalRecommendedCourses = [];
+
+    if (startIndex < allRecommendedCourses.length) {
+      additionalRecommendedCourses = allRecommendedCourses.slice(startIndex, endIndex);
+    } else {
+      // If there are no more recommended courses, generate random courses from the course collection
+      additionalRecommendedCourses = await coursesCollection.aggregate([
+        { $sample: { size: additionalCourseLimit } }
+      ]).toArray();
+    }
 
     // Update the generated courses count in the session
     req.session.generatedCoursesCount += additionalRecommendedCourses.length;
@@ -316,7 +325,6 @@ app.get("/generateMore", sessionValidation, async (req, res) => {
 });
 
 /* Recommendation Section end */
-
 
 /* Profile Section */
 
