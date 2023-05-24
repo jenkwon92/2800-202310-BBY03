@@ -24,8 +24,8 @@
               </h6>
             </div>
             <div class="mt-auto d-flex flex-column">
-              <p id="edit-icon" style="font-size: 20px;"
-              class="material-icons">edit</p>
+              <p id="edit-icon" style="font-size: 20px; color: #B4CDED;"
+              class="material-icons-outlined">edit</p>
             </div>
           </div>
           <!-- Basic profile end -->
@@ -43,7 +43,7 @@
                     <ul class="courses_tags_list">
                       <% if (skills && skills.length> 0) { %>
                         <% skills.forEach(function(skill) { %>
-                          <li class="facts-default">
+                          <li class="facts-2 mt-1">
                             <%= skill %>
                           </li>
 
@@ -65,7 +65,7 @@
                 <% if (interests && interests.length> 0) { %>
                   <ul class="courses_tags_list">
                   <% interests.forEach(function(interest) { %>
-                    <li class="facts-default">
+                    <li class="facts-3 mt-1">
                       <%= interest %>
                     </li>
                     <% }); %>
@@ -81,16 +81,16 @@
       <div class="d-flex justify-content-center align-items-center mb-4">
         <div class="col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
           style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; background-color: #ffffff;">
-          <span id="go-skill" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
-            class="material-icons">
+          <span id="go-skill" style="font-size: 40px; float: right; line-height:20px; margin: 20px; color: #B4CDED"
+            class="material-icons-outlined">
             computer
           </span>
           <p style="font-size:1rem" class="text-center mt-2">Skills</p>
         </div>
         <div class="col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
           style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; background-color: #ffffff;">
-          <span id="go-interest" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
-            class="material-icons">
+          <span id="go-interest" style="font-size: 40px; float: right; line-height:20px; margin: 20px; color: #B4CDED;"
+            class="material-icons-outlined">
             menu_book
           </span>
           <p style="font-size:1rem" class="text-center mt-2">Interests</p>
@@ -101,10 +101,7 @@
       <!-- Log out -->
        <div class="btn_log_out" onclick="window.location.href='/logout'"><i class="ti-control-skip-forward mr-2"></i>Log
         out
-                  </div>
-      <!-- <button onclick="window.location.href='/logout'" class="btn btn-sm btn-dark profile-button" type="button"
-        style="border-radius: 10px; align-items: center; width: 100%; margin-bottom: 100px;">Log
-        out</button> -->
+       </div>
       <!-- Log out end -->
       </div>
 
