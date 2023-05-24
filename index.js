@@ -152,7 +152,6 @@ function getRandomCourses(courses, count) {
   return shuffled.slice(0, count);
 }
 
-// Renders the main page
 app.get("/main", sessionValidation, async (req, res) => {
   try {
     // Retrieve user information from the database
@@ -161,23 +160,20 @@ app.get("/main", sessionValidation, async (req, res) => {
     });
 
     const userCourses = user.myCourses || [];
-
     let myCoursesData = [];
 
-for (const courseId of userCourses) {
-  const course = await coursesCollection.findOne({ _id: new ObjectId(courseId) });
-  if (course) {
-    myCoursesData.push(course);
-  }
-}
-console.log('myCoursesData', myCoursesData);
-
+    for (const courseId of userCourses) {
+      const course = await coursesCollection.findOne({ _id: new ObjectId(courseId) });
+      if (course) {
+        myCoursesData.push(course);
+      }
+    }
 
     // Retrieve user's interests from db
     const userInterests = user.interests || [];
 
     // Create a case-insensitive regular expression pattern for matching interests
-    const interestsPattern = new RegExp(userInterests.map(interest => `\\b${interest}\\b`).join("|"), "i");
+const interestsPattern = new RegExp(`\\b(${userInterests.join("|")})\\b`, "i");
 
     // Retrieve courses matching the user's interests (case-insensitive)
     const recommendedCourses = await coursesCollection
@@ -187,11 +183,15 @@ console.log('myCoursesData', myCoursesData);
     // Select a random subset of 2 courses from the recommended courses
     const randomCourses = getRandomCourses(recommendedCourses, 2);
 
+    // Retrieve the user's image path from the user object
+    const userImage = user.image; 
+
     res.render("main", {
       authenticated: req.session.authenticated,
       username: req.session.username,
       recommendedCourses: randomCourses,
       myCourses: myCoursesData,
+      userImage: userImage,
     });
   } catch (error) {
     console.error("Error retrieving course recommendation:", error);
@@ -418,22 +418,16 @@ app.get("/editSkill", async (req, res) => {
 });
 
 // edit interest Section
-app.get("/editInterest", async (req, res) => {
+app.get("/editInterest", sessionValidation, async (req, res) => {
   try {
-    // Retrieve user information from the user database
-    const user = await userCollection.findOne({
-      username: req.session.username,
-    });
-
+    const username = req.session.username;
+    const user = await userCollection.findOne({ username: username });
     if (user) {
-      // Get the 'interests' field from the user db
       const interests = user.interests || [];
 
-      res.render("editInterest", {
-        interests: interests,
-      });
+      res.render("editInterest", { interests: interests });
     } else {
-      res.status(404).send("User not found");
+      res.redirect("/"); // Redirect to the appropriate route if the user is not found
     }
   } catch (error) {
     console.error(error);
@@ -442,18 +436,17 @@ app.get("/editInterest", async (req, res) => {
 });
 
 
-// Update the user profile
 const path = require("path");
 
 // Set up multer for handling file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // Update the destination path to use an absolute path
     cb(null, path.join(__dirname, "public/images/profile"));
   },
   filename: function (req, file, cb) {
-    const extension = file.originalname.split(".").pop();
-    cb(null, `${req.session.username}.${extension}`);
+    const fileExtension = file.originalname.split(".").pop();
+    const filename = `${req.session.username}.${fileExtension}`;
+    cb(null, filename);
   },
 });
 
@@ -467,7 +460,16 @@ app.post("/submitProfile", upload.single("image"), async (req, res) => {
   if (req.file) {
     // Generate a new image path with the user's username and file extension
     const fileExtension = req.file.filename.split(".").pop();
-    image = `/images/profile/${req.session.username}.${fileExtension}`;
+    const newFilename = `${req.session.username}.${fileExtension}`;
+    const newFilePath = `/images/profile/${newFilename}`;
+
+    // Move the uploaded file to the desired location
+    const currentFilePath = req.file.path;
+    const destinationPath = path.join(__dirname, "public", newFilePath);
+
+    fs.renameSync(currentFilePath, destinationPath);
+
+    image = newFilePath;
     req.session.image = image; // Update session image
   } else if (req.session.image) {
     image = req.session.image;
@@ -478,15 +480,18 @@ app.post("/submitProfile", upload.single("image"), async (req, res) => {
 
   try {
     // Update the user's profile in the database
-    const updateFields = { job, email, skills, firstName, lastName };
+    const updateFields = {
+      job,
+      email,
+      skills,
+      firstName,
+      lastName,
+      image: `${image}?t=${Date.now()}`, // Add cache-busting parameter
+    };
 
     // Exclude 'name' from updateFields if it is not provided
     if (name) {
       updateFields.name = name;
-    }
-
-    if (image) {
-      updateFields.image = `${image}?t=${Date.now()}`; // Add cache-busting parameter
     }
 
     const updateResult = await userCollection.updateOne(
@@ -520,8 +525,10 @@ app.post("/saveSkills", sessionValidation, async (req, res) => {
     const username = req.session.username;
 
     if (!skills) {
-      throw new Error("Skills data is missing");
+      throw new Error("skills data is missing");
     }
+
+    const skillList = Array.isArray(skills) ? interests.map((skill) => skill.trim()) : [];
 
     const existingUser = await userCollection.findOne({ username: username });
     if (!existingUser) {
@@ -529,33 +536,39 @@ app.post("/saveSkills", sessionValidation, async (req, res) => {
     }
 
     const existingSkills = existingUser.skills || [];
-    const skillList = skills.split(",").map((skill) => skill.trim());
-    const updatedSkills = [...existingSkills, ...skillList];
+    const updatedSkills = [...new Set([...existingSkills, ...skillList])];
+
+    if (JSON.stringify(existingSkills) === JSON.stringify(updatedSkills)) {
+      // Interests are the same, no need to update
+      res.json({ success: true }); // Interests saved successfully
+      return;
+    }
 
     const updateResult = await userCollection.updateOne(
       { username: username },
       { $set: { skills: updatedSkills } }
     );
 
-    if (updateResult.modifiedCount === 1) {
-      res.sendStatus(200); // Skills saved successfully
+    if (updateResult && updateResult.modifiedCount === 1) {
+      req.session.skills = updatedSkills; // Update session interests
+      res.json({ success: true }); // Interests saved successfully
     } else {
       throw new Error("Failed to save skills");
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error saving skills"); // Error saving skills
+    res.status(500).send("Error saving skills"); // Error saving interests
   }
 });
 
 //Remove skills from the user's skill field
-app.post("/deleteSkill", sessionValidation, async (req, res) => {
+app.post("/removeSkills", sessionValidation, async (req, res) => {
   try {
     const { skill } = req.body;
     const username = req.session.username;
 
     if (!skill) {
-      throw new Error("Skill data is missing");
+      throw new Error("skill data is missing");
     }
 
     const existingUser = await userCollection.findOne({ username: username });
@@ -564,25 +577,25 @@ app.post("/deleteSkill", sessionValidation, async (req, res) => {
     }
 
     const existingSkills = existingUser.skills || [];
-    const updatedSkills = existingSkills.filter((s) => s !== skill);
+    const updatedSkills = existingSkills.filter(i => i !== skill);
 
     const updateResult = await userCollection.updateOne(
       { username: username },
       { $set: { skills: updatedSkills } }
     );
 
-    if (updateResult.modifiedCount === 1) {
-      res.sendStatus(200); // Skill deleted successfully
+    if (updateResult.modifiedCount >= 1) {
+      console.log('skill deleted successfully'); 
+      res.sendStatus(200); // Interest deleted successfully
     } else {
       throw new Error("Failed to delete skill");
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error deleting skill"); // Error deleting skill
+    res.status(500).send("Error deleting skill"); // Error deleting interest
   }
 });
 
-//update the user's interests
 app.post("/saveInterests", sessionValidation, async (req, res) => {
   try {
     const { interests } = req.body;
@@ -592,21 +605,71 @@ app.post("/saveInterests", sessionValidation, async (req, res) => {
       throw new Error("Interests data is missing");
     }
 
-    const interestList = interests
-      .split(",")
-      .map((interest) => interest.trim());
+    const interestList = Array.isArray(interests) ? interests.map((interest) => interest.trim()) : [];
+
+    const existingUser = await userCollection.findOne({ username: username });
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    const existingInterests = existingUser.interests || [];
+    const updatedInterests = [...new Set([...existingInterests, ...interestList])];
+
+    if (JSON.stringify(existingInterests) === JSON.stringify(updatedInterests)) {
+      // Interests are the same, no need to update
+      res.json({ success: true }); // Interests saved successfully
+      return;
+    }
+
     const updateResult = await userCollection.updateOne(
       { username: username },
-      { $set: { interests: interestList } }
+      { $set: { interests: updatedInterests } }
     );
-    if (updateResult.modifiedCount === 1) {
-      res.sendStatus(200); // Interests saved successfully
+
+    if (updateResult && updateResult.modifiedCount === 1) {
+      req.session.interests = updatedInterests; // Update session interests
+      res.json({ success: true }); // Interests saved successfully
     } else {
       throw new Error("Failed to save interests");
     }
   } catch (error) {
     console.error(error);
     res.status(500).send("Error saving interests"); // Error saving interests
+  }
+});
+
+//remove the user's interest
+app.post("/removeInterest", sessionValidation, async (req, res) => {
+  try {
+    const { interest } = req.body;
+    const username = req.session.username;
+
+    if (!interest) {
+      throw new Error("Interest data is missing");
+    }
+
+    const existingUser = await userCollection.findOne({ username: username });
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    const existingInterests = existingUser.interests || [];
+    const updatedInterests = existingInterests.filter(i => i !== interest);
+
+    const updateResult = await userCollection.updateOne(
+      { username: username },
+      { $set: { interests: updatedInterests } }
+    );
+
+    if (updateResult.modifiedCount >= 1) {
+      console.log('Interest deleted successfully'); 
+      res.sendStatus(200); // Interest deleted successfully
+    } else {
+      throw new Error("Failed to delete interest");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error deleting interest"); // Error deleting interest
   }
 });
 /* Profile Section end */
