@@ -67,6 +67,18 @@
             </div>
           </a>
           <% }); %>
+            <% if (page> 1 || page < totalPages) { %>
+                <div class="text-center">
+                  <div class="btn-group" role="group">
+                    <% if (page> 1) { %>
+                      <button class="btn btn-primary" onclick="goToPage(<%= page - 1 %>)">Previous Page</button>
+                      <% } %>
+                        <% if (page < totalPages) { %>
+                          <button class="btn btn-primary" onclick="goToPage(<%= page + 1 %>)">Next Page</button>
+                          <% } %>
+                  </div>
+                </div>
+                <% } %>
       </div>
     </section>
   </main>
