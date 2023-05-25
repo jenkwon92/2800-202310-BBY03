@@ -39,16 +39,17 @@
                                     <h3 class="fw-normal" style="font-size: calc(1.3rem + .6vw);">Overview</h3>
                                   </div>
                                   <div class="sec-right">
-                                      <% if (isSaved) { %>
-                                      <span class="material-icons" id="course_id" data="<%= course._id %>" onclick="removeCourse()">
+                                    <% if (isSaved) { %>
+                                      <span class="material-icons" id="course_id" data="<%= course._id %>"
+                                        onclick="removeCourse()">
                                         bookmark
                                       </span>
                                       <% } else { %>
-                                      <span class="material-icons" id="course_id" data="<%= course._id %>" onclick="saveCourse()">
-                                        bookmark_border
-                                      </span>
-                                      <% } %>
-                                    
+                                        <span class="material-icons" id="course_id" data="<%= course._id %>"
+                                          onclick="saveCourse()">
+                                          bookmark_border
+                                        </span>
+                                        <% } %>
                                   </div>
                                 </div>
                                 <p>
@@ -66,9 +67,8 @@
                                   </ul>
                                   <% } %>
                                     <div class="mt-2" style="text-align:center">
-                                      <!-- <button id="course_id" data="<%= course._id %>" class="btn btn_start_learning"
-                                        onclick="saveCourse()">Save</button> -->
-                                      <a class="btn_start_learning" style="background-color: #fff;" href="<%=course.link %>" target="_blank">
+                                      <a class="btn_start_learning" style="background-color: #fff;"
+                                        href="<%=course.link %>" target="_blank">
                                         Start Learning</a>
                                     </div>
           </div>

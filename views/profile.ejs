@@ -14,29 +14,30 @@
         </div>
       </div>
       <div class="container">
-          <!-- Basic profile -->
-          <div class="d-flex flex-row">
-            <div class="mt-auto mb-auto d-flex flex-column" style="width: 35%;">
-              <img src="<%= image || '/images/profile/default.png' %>" alt="Profile Image" class="img-fluid img-thumbnail" style="width: 130px; z-index: 1;">
-            </div>
-            <div class="mt-auto mb-auto d-flex flex-column" style="font-size: small; margin-top: auto; margin-bottom: auto; width: 60%; padding: 10px;">
-              <h5 style="margin-bottom: 10px; font-weight: 700;">
-                <%= username %>
-              </h5>
-              <h6 style="margin-bottom: 5px; font-weight: 400;">Name: <%= firstName %>
-                  <%= lastName %>
-              </h6>
-              <h6 style="margin-bottom: 5px; font-weight: 400;">Job: <%= job %>
-              </h6>
-              <h6 style="margin-bottom: 0; font-weight: 400; text-transform: none;">Email: <%= email %>
-              </h6>
-            </div>
-            <div class="mt-auto d-flex flex-column">
-              <p id="edit-icon" style="font-size: 20px; color: #B4CDED;"
-              class="material-icons-outlined">edit</p>
-            </div>
-        <!-- Basic profile end -->
-      </div>
+        <!-- Basic profile -->
+        <div class="d-flex flex-row">
+          <div class="mt-auto mb-auto d-flex flex-column" style="width: 35%;">
+            <img src="<%= image || '/images/profile/default.png' %>" alt="Profile Image" class="img-fluid img-thumbnail"
+              style="width: 130px; z-index: 1;">
+          </div>
+          <div class="mt-auto mb-auto d-flex flex-column"
+            style="font-size: small; margin-top: auto; margin-bottom: auto; width: 60%; padding: 10px;">
+            <h5 style="margin-bottom: 10px; font-weight: 700;">
+              <%= username %>
+            </h5>
+            <h6 style="margin-bottom: 5px; font-weight: 400;">Name: <%= firstName %>
+                <%= lastName %>
+            </h6>
+            <h6 style="margin-bottom: 5px; font-weight: 400;">Job: <%= job %>
+            </h6>
+            <h6 style="margin-bottom: 0; font-weight: 400; text-transform: none;">Email: <%= email %>
+            </h6>
+          </div>
+          <div class="mt-auto d-flex flex-column">
+            <p id="edit-icon" style="font-size: 20px; color: #B4CDED;" class="material-icons-outlined">edit</p>
+          </div>
+          <!-- Basic profile end -->
+        </div>
     </section>
     <section class="light-2">
       <!-- Skills&interests -->

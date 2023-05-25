@@ -40,9 +40,9 @@ const mongoStore = MongoStore.create({
 });
 
 // Database Section
-const { database } = require("./databaseConnection"); // Import the database connection
-const userCollection = database.db(mongodb_database).collection("users"); // Specify the collection to store users
-const coursesCollection = database.db(mongodb_database).collection("courses"); // Specify the collection to store courses
+const { database } = require("./databaseConnection");                           // Import the database connection
+const userCollection = database.db(mongodb_database).collection("users");       // Specify the collection to store users
+const coursesCollection = database.db(mongodb_database).collection("courses");  // Specify the collection to store courses
 
 // Set the ejs view engine
 app.set("view engine", "ejs");
