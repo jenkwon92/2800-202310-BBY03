@@ -7,8 +7,10 @@
                 <div class="col-lg-12 col-md-12 mb-3">
                     <div>
                         <div class="sec-left">
-                            <span class="material-icons-outlined" style="vertical-align: middle;" onclick="goBack()">arrow_back</span>
-                            <h3 style="display: inline-block; margin-left: 5px; vertical-align: middle;">Edit Profile</h3>
+                            <span class="material-icons-outlined" style="vertical-align: middle;"
+                                onclick="goBack()">arrow_back</span>
+                            <h3 style="display: inline-block; margin-left: 5px; vertical-align: middle;">Edit Profile
+                            </h3>
                         </div>
                     </div>
                 </div>
@@ -28,28 +30,25 @@
                     <div class="mt-auto mb-auto d-flex flex-column"
                         style="font-size: small; margin-top: auto; margin-bottom: auto; width: 60%; padding: 10px;">
                         <label class="labels" for="name-input">ID</label>
-                        <input class="form-control form-control-sm" id="name-input" name="name"
-                            type="text" class="form-control" value="<%=username%>">
+                        <input class="form-control form-control-sm" id="name-input" name="name" type="text"
+                            class="form-control" value="<%=username%>">
                         <label class="labels" for="name-input">First Name</label>
-                        <input class="form-control form-control-sm" id="firstName-input"
-                            name="firstName" type="text" class="form-control" value="<%=firstName%>">
+                        <input class="form-control form-control-sm" id="firstName-input" name="firstName" type="text"
+                            class="form-control" value="<%=firstName%>">
                         <label class="labels" for="name-input">Last Name</label>
-                        <input class="form-control form-control-sm" id="lastName-input"
-                            name="lastName" type="text" class="form-control" value="<%=lastName%>">
+                        <input class="form-control form-control-sm" id="lastName-input" name="lastName" type="text"
+                            class="form-control" value="<%=lastName%>">
                         <label class="labels" for="job-input">Job</label>
-                        <input class="form-control form-control-sm" id="job-input" name="job"
-                            type="text" class="form-control" placeholder="enter your job" value="<%=job%>">
+                        <input class="form-control form-control-sm" id="job-input" name="job" type="text"
+                            class="form-control" placeholder="enter your job" value="<%=job%>">
                         <label class="labels" for="job-input">Email</label>
-                        <input class="form-control form-control-sm" id="email-input" name="email"
-                            type="text" class="form-control" value="<%=email%>">
+                        <input class="form-control form-control-sm" id="email-input" name="email" type="text"
+                            class="form-control" value="<%=email%>">
                     </div>
                     <div class="mt-auto d-flex flex-column">
                         <p id="save-button" style="font-size: 20px; color: #B4CDED;" class="material-icons-outlined"
                             onclick="window.location.href='/profile'" type="submit">save
                         </p>
-                        <!-- <button onclick="window.location.href='/profile'" id="save-button"
-                    class="btn btn-sm btn-dark profile-button" type="submit"
-                    style="font-size: 15px; float: right; top:310px; right: 10px;">Save</button> -->
                     </div>
                 </div>
                 <!-- Basic profile end -->
@@ -137,8 +136,8 @@
             <!-- Skills&interests end -->
         </section>
     </main>
+
     <!-- Function section -->
-    <!-- script -->
     <script>
 
         //Funtion that updates the displayed image when a new file is selected.
@@ -164,23 +163,24 @@
             event.preventDefault();
 
             // Get values from form inputs
-            const name = form.name.value;
-            const job = form.job.value;
-            const email = form.email.value;
-            const firstName = form.firstName.value;
-            const lastName = form.lastName.value;
-            const imageInput = form.image.files[0];
+            const name = form.name.value;               // Retrieve the value of 'name' input
+            const job = form.job.value;                 // Retrieve the value of 'job' input
+            const email = form.email.value;             // Retrieve the value of 'email' input
+            const firstName = form.firstName.value;     // Retrieve the value of 'firstName' input
+            const lastName = form.lastName.value;       // Retrieve the value of 'lastName' input
+            const imageInput = form.image.files[0];     // Retrieve the selected image file
 
             // Create a FormData object to send the form data including the image
             const formData = new FormData();
-            formData.append('name', name);
-            formData.append('job', job);
-            formData.append('email', email);
-            formData.append('firstName', firstName);
-            formData.append('lastName', lastName);
-            formData.append('image', imageInput);
+            formData.append('name', name);               // Append 'name' value to the FormData object
+            formData.append('job', job);                 // Append 'job' value to the FormData object
+            formData.append('email', email);             // Append 'email' value to the FormData object
+            formData.append('firstName', firstName);     // Append 'firstName' value to the FormData object
+            formData.append('lastName', lastName);       // Append 'lastName' value to the FormData object
+            formData.append('image', imageInput);        // Append the selected image file to the FormData object
 
-            // Send a POST request with the form data
+
+            // Send a POST request to submitProfile with the form data
             fetch('/submitProfile', {
                 method: 'POST',
                 body: formData
