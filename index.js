@@ -976,6 +976,15 @@ app.post("/chatbotMessages", async (req, res) => {
   const output = completion.data.choices[0].text;     // Extract the generated completion text
   res.json({ output: output });                       // Send the output response as JSON
 });
+
+app.get("/fineTuning", (req, res) => {
+  res.render("fineTuning");                              // Render the "chatbot" view when the "/chatbot" route is accessed
+});
+
+app.post("/fineTuningProcess", (req, res) => {
+  res.render("fineTuning");                              // Render the "chatbot" view when the "/chatbot" route is accessed
+});
+
 /* Chatbot Section end */
 
 /* Search Section */

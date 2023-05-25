@@ -1,0 +1,230 @@
+<%- include("templates/header") %>
+  <style>
+    #tuning-container input {
+      display: block;
+      width: 100%;
+      background-color: var(--bs-body-bg);
+      background-clip: padding-box;
+      border: var(--bs-border-width) solid var(--bs-border-color);
+      border-radius: var(--bs-border-radius);
+      padding: 1rem;
+    }
+  </style>
+  <script>
+    let apiKey;
+    let messageHistory = [];
+    //let fineTunedModel;
+
+    function setApiKey() {
+      apiKey = document.getElementById('apiKeyInput').value;
+    }
+
+    async function uploadFile() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      const formData = new FormData();
+      formData.append('purpose', 'fine-tune');
+      formData.append('file', file);
+
+      const response = await fetch('https://api.openai.com/v1/files', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+      document.getElementById('uploadResult').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function fineTune() {
+      const trainingFile = document.getElementById('trainingFileId').value;
+      const model = "davinci";
+      const response = await fetch('https://api.openai.com/v1/fine-tunes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          training_file: trainingFile,
+          model: model
+        }),
+      });
+
+      const data = await response.json();
+      document.getElementById('fineTuneResult').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function getFineTuneList() {
+
+      const response = await fetch('https://api.openai.com/v1/fine-tunes', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+        },
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+
+      const fineTuneResult = document.getElementById('fineTuneResult').textContent;
+      const parsedFineTuneResult = JSON.parse(fineTuneResult);
+      const trainingFile = parsedFineTuneResult.training_files[0].id;
+
+      const filteredData = data.data.filter(fineTune => {
+        return fineTune.training_files.some(file => file.id === trainingFile);
+      });
+
+      document.getElementById('fineTuneListResult').textContent = JSON.stringify(filteredData, null, 2);
+
+      // Save the fine_tuned_model value
+      //fineTunedModel = filteredData[0].fine_tuned_model;
+
+    }
+
+
+
+    async function sendMessage() {
+      const messageInput = document.getElementById('messageInput');
+      const message = messageInput.value;
+
+      addToHistory(message, ''); // Store user message before sending the request
+
+      try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            //model: fineTunedModel || 'gpt-3.5-turbo',
+            model: 'gpt-3.5-turbo',
+            messages: messageHistory,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`API request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        const aiResponse = data.choices[0].message.content;
+        addToHistory('', aiResponse); // Store AI response after receiving it
+        document.getElementById('chatResponse').textContent = JSON.stringify(aiResponse, null, 2);
+      } catch (error) {
+        console.error(error);
+        alert('Error: ' + error.message);
+      }
+    }
+
+
+    function addToHistory(userMessage, aiMessage) {
+      const chatHistoryElement = document.getElementById('historyContainer');
+
+      // Add user message to history
+      if (userMessage) {
+        messageHistory.push({ role: 'user', content: userMessage });
+        const userMessageElement = document.createElement('div');
+        userMessageElement.className = 'userMessage';
+        userMessageElement.textContent = 'User: ' + userMessage;
+        chatHistoryElement.appendChild(userMessageElement);
+      }
+
+      // Add AI response to history
+      if (aiMessage) {
+        messageHistory.push({ role: 'assistant', content: aiMessage });
+        const aiMessageElement = document.createElement('div');
+        aiMessageElement.className = 'aiMessage';
+        aiMessageElement.textContent = 'AI: ' + aiMessage;
+        chatHistoryElement.appendChild(aiMessageElement);
+      }
+
+      // Keep only the last 5 messages (10 items: 5 user messages and 5 AI responses)
+      if (messageHistory.length > 10) {
+        messageHistory.shift();
+        messageHistory.shift();
+        chatHistoryElement.removeChild(chatHistoryElement.firstChild);
+        chatHistoryElement.removeChild(chatHistoryElement.firstChild);
+      }
+    }
+
+  </script>
+  <main role="main">
+    <section>
+      <div class="container">
+        <div class="col-lg-12 col-md-12 mb-3">
+          <div>
+            <div class="sec-left mb-3">
+              <span class="material-icons-outlined" style="vertical-align: middle;" onclick="goBack()">arrow_back</span>
+              <h3 style="display: inline-block; margin-left: 5px; vertical-align: middle;">Fine-Tuning using openAI API
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="light-2">
+      <div class="container" id="tuning-container">
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-12">
+            <div class="form-floating my-3">
+              <input name='apiKeyInput' type="password" id="apiKeyInput" placeholder="API Key" />
+              <button class="w-100 btn btn-lg btn-default mb-3" onclick="setApiKey()">Set API Key</button>
+            </div>
+            <div class="form-floating my-3">
+              <div class="sec-left">
+                <h3 class="fw-normal mb-3">Upload File</h3>
+              </div>
+              <input type="file" id="fileInput">
+              <button class="w-100 btn btn-lg btn-default mb-3" onclick="uploadFile()">Upload File</button>
+              <pre id="uploadResult"></pre>
+            </div>
+            <div class="my-3">
+              <div class="sec-left">
+                <h3 class="fw-normal mb-3">Fine-tune Model</h3>
+              </div>
+              <label for="model">Model:</label>
+              <select id="model">
+                <option value="ada">ada</option>
+                <option value="babbage">babbage</option>
+                <option value="curie">curie</option>
+                <option value="davinci" selected>davinci</option>
+              </select>
+              <input type="text" id="trainingFileId" placeholder="Training File ID" />
+              <button class="w-100 btn btn-lg btn-default mb-3" onclick="fineTune()">Start Fine-tuning</button>
+              <pre id="fineTuneResult"></pre>
+            </div>
+            <div class="form-floating my-3">
+              <div class="sec-left">
+                <h3 class="fw-normal mb-3">Get Fine-tune List</h3>
+              </div>
+              <button class="w-100 btn btn-lg btn-default mb-3" onclick="getFineTuneList()">Get Fine-tune List</button>
+              <pre id="fineTuneListResult"></pre>
+            </div>
+            <div class="form-floating my-3">
+              <div class="sec-left">
+                <h3 class="fw-normal mb-3">Chat History</h3>
+                <div id="historyContainer"></div>
+              </div>
+            </div>
+            <div class="form-floating my-3">
+              <div class="sec-left">
+                <h3 class="fw-normal mb-3">Chat with Model</h3>
+                <div id="historyContainer"></div>
+              </div>
+              <input type="text" id="messageInput" placeholder="Message" />
+              <button class="w-100 btn btn-lg btn-default mb-3"  onclick="sendMessage()">Send Message</button>
+              <pre id="chatResponse"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <%- include("templates/footer") %>
