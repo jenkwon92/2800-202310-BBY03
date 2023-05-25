@@ -138,7 +138,7 @@
     recommendationHeading.hide();
   } else {
     // Check if there are 5 or fewer courses initially
-    if ($('.row').find('.col-xl-4').length <= 5) {
+    if ($('.row').find('.col-xl-4').length < 5) {
       // Hide the 'generateMore' button.
       generateMoreButton.hide();
     }

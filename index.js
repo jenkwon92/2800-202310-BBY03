@@ -235,7 +235,8 @@ app.get("/courseDetail", (req, res) => {
 
 /* Recommendation Section */
 
-const recommendedCourseLimit = 100; // Limit the number of initially recommended courses
+// Limit the number of initially recommended courses
+const recommendedCourseLimit = 5; 
 
 app.get("/recommendation", sessionValidation, async (req, res) => {
   try {
