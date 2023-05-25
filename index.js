@@ -499,6 +499,7 @@ const storage = multer.diskStorage({
 
 // Initialize multer middleware for file upload with the specified storage configuration
 const upload = multer({ storage: storage });
+const fs = require("fs");
 
 app.post("/submitProfile", upload.single("image"), async (req, res) => {
   const { name, job, email, skills, firstName, lastName } = req.body;
@@ -526,7 +527,18 @@ app.post("/submitProfile", upload.single("image"), async (req, res) => {
     );
 
     if (updateResult.modifiedCount !== 1) {
-      throw new Error("Failed to update user profile image");
+      // Update the session with the new profile information
+      req.session.name = name;
+      req.session.job = job;
+      req.session.email = email;
+      req.session.firstName = firstName;
+      req.session.lastName = lastName;
+
+      // Update the user's image in the session
+      req.session.image = updateFields.image;
+
+      // Redirect to the profile page on successful update
+      res.redirect("/profile");
     }
   } else if (req.session.image) {
     image = req.session.image;
@@ -1045,12 +1057,22 @@ app.get("/search", (req, res) => {
 
   // Count the total number of matching documents
   const totalCountPromise = coursesCollection.countDocuments({
-    $or: [{ title: searchRegex }, { tags: searchRegex }, { details: searchRegex }],
+    $or: [
+      { title: searchRegex },
+      { tags: searchRegex },
+      { details: searchRegex },
+    ],
   });
 
   // Search for courses that match the search query with pagination
   const searchPromise = coursesCollection
-    .find({ $or: [{ title: searchRegex }, { tags: searchRegex }, { details: searchRegex }] })
+    .find({
+      $or: [
+        { title: searchRegex },
+        { tags: searchRegex },
+        { details: searchRegex },
+      ],
+    })
     .skip((page - 1) * itemsPerPage)
     .limit(itemsPerPage)
     .toArray();
