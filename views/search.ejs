@@ -7,7 +7,8 @@
         <div class="col-lg-12 col-md-12 mb-3">
           <div>
             <div class="sec-left">
-              <h3>Search</h3>
+              <span class="material-icons-outlined" style="vertical-align: middle;" onclick="goBack()">arrow_back</span>
+              <h3 style="display: inline-block; margin-left: 5px; vertical-align: middle;">Search</h3>
             </div>
             <div class="search-wrapper d-flex flex-column gap-2 mb-2">
               <form id="search-form" action="/search" method="GET">
@@ -49,17 +50,17 @@
                   <div class="row g-0">
 
                     <!-- Image for course website -->
-                    <div class="col-sm-2 col-md-2 col-lg-1 col-3">
+                    <div class="col-sm-2 col-md-2 col-lg-1 col-3" style="display: flex; justify-content: center; align-items: center;">
                       <% if (domain=="https://www.datacamp.com" ) { %>
-                        <img src="/images/datacamp.png" alt="DataCamp logo" class="rounded img-fluid">
+                        <img src="/images/datacamp.png" alt="DataCamp logo" class="rounded img-fluid" style="max-width: 80%;">
                         <% } else if (domain=="https://www.udemy.com" ) { %>
-                          <img src="/images/udemy.png" alt="Udemy logo" class="rounded img-fluid">
+                          <img src="/images/udemy.png" alt="Udemy logo" class="rounded img-fluid" style="max-width: 80%;">
                           <% } else { %>
-                            <img src="/images/default_search_logo.png" alt="Default logo" class="rounded img-fluid">
+                            <img src="/images/default_search_logo.png" alt="Default logo" class="rounded img-fluid" style="max-width: 80%;">
                             <% } %>
                     </div>
                     <div class="col-sm-10 col-md-10 col-lg-11 col-9">
-                      <div class="card-body pb-1 pt-3">
+                      <div class="card-body pb-3 pt-3" style="padding-left: 0%;">
                         <h6 class="card-title">
                           <%= course.title %>
                         </h6>

@@ -1,5 +1,7 @@
 function saveCourse() {
-  const courseId = '<%= course._id %>';                     // Get the courseId from the server-side template
+  var button = document.getElementById('course_id');     // Get the courseId from the server-side template
+  console.log(button);
+  const courseId = button.getAttribute('data');
   const xhr = new XMLHttpRequest();                         // Create a new XMLHttpRequest object
   xhr.open('POST', '/saveCourse');                          // Set up the POST request to the '/saveCourse' endpoint
   xhr.setRequestHeader('Content-Type', 'application/json'); // Set the request header for JSON content

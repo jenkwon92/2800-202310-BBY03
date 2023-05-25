@@ -134,7 +134,19 @@ html body .bg-light-2 {
   margin-bottom: 0px;
 }
 
+/*-------------- GLobal Settings: Section Headings ----------------*/
+.sec-heading2 {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
 
+.sec-right a {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.7;
+}
 /*------------ GLobal Settings: Header -------------*/
 header {
   height: 60px;
