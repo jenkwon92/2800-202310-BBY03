@@ -2,18 +2,18 @@
 require("./utils.js");
 require("dotenv").config();
 
-const express = require("express"); // Import express
-const session = require("express-session"); // Import express-session
-const MongoStore = require("connect-mongo"); // Import connect-mongo
-const bcrypt = require("bcrypt"); // Import bcrypt
-const { ObjectId } = require("mongodb"); // Import ObjectId from mongodb
-const port = process.env.PORT || 3000; // Set the port to 3000 or the port specified in the environment
-const app = express(); // Create an express application
-const Joi = require("joi"); // Import Joi
-const jwt = require("jsonwebtoken"); // Import jsonwebtoken
-const nodemailer = require("nodemailer"); // Import nodemailer
-const saltRounds = 12; // Set the number of salt rounds for bcrypt
-const bodyParser = require("body-parser"); // Middleware for parsing request bodies
+const express = require("express");             // Import express
+const session = require("express-session");     // Import express-session
+const MongoStore = require("connect-mongo");    // Import connect-mongo
+const bcrypt = require("bcrypt");               // Import bcrypt
+const { ObjectId } = require("mongodb");        // Import ObjectId from mongodb
+const port = process.env.PORT || 3000;          // Set the port to 3000 or the port specified in the environment
+const app = express();                          // Create an express application
+const Joi = require("joi");                     // Import Joi
+const jwt = require("jsonwebtoken");            // Import jsonwebtoken
+const nodemailer = require("nodemailer");       // Import nodemailer
+const saltRounds = 12;                          // Set the number of salt rounds for bcrypt
+const bodyParser = require("body-parser");      // Middleware for parsing request bodies
 
 // Our website URL
 const WebsiteURL = "http://wjxdvnhtuk.eu09.qoddiapp.com";
@@ -98,11 +98,12 @@ function sessionValidation(req, res, next) {
 const mycollection = "mycollection";
 
 // Renders the index page
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   if (!req.session.authenticated) {
     res.render("index");
-  } else {
-    res.redirect("/main");
+  }
+  else {
+    res.redirect('/main');
   }
 });
 
@@ -162,9 +163,7 @@ app.get("/main", sessionValidation, async (req, res) => {
     let myCoursesData = [];
 
     for (const courseId of userCourses) {
-      const course = await coursesCollection.findOne({
-        _id: new ObjectId(courseId),
-      });
+      const course = await coursesCollection.findOne({ _id: new ObjectId(courseId) });
       if (course) {
         myCoursesData.push(course);
       }
@@ -174,36 +173,18 @@ app.get("/main", sessionValidation, async (req, res) => {
     const userInterests = user.interests || [];
 
     // Create a case-insensitive regular expression pattern for matching interests
-    const escapedInterests = userInterests.map((interest) =>
-      escapeRegExp(interest)
-    );
-    const interestsPattern = new RegExp(
-      `\\b(${escapedInterests.join("|")})\\b`,
-      "i"
-    );
-
-    function escapeRegExp(string) {
-      return string.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
-    }
+    const interestsPattern = new RegExp(`\\b(${userInterests.join("|")})\\b`, "i");
 
     // Retrieve courses matching the user's interests (case-insensitive)
     const recommendedCourses = await coursesCollection
       .find({ tags: interestsPattern })
       .toArray();
 
-    let randomCourses = [];
-
-    if (recommendedCourses.length === 0) {
-      // If no matching courses found based on interests, retrieve all courses
-      const allCourses = await coursesCollection.find().toArray();
-      randomCourses = getRandomCourses(allCourses, 2);
-    } else {
-      // Select a random subset of 2 courses from the recommended courses
-      randomCourses = getRandomCourses(recommendedCourses, 2);
-    }
+    // Select a random subset of 2 courses from the recommended courses
+    const randomCourses = getRandomCourses(recommendedCourses, 2);
 
     // Retrieve the user's image path from the user object
-    const userImage = user.image;
+    const userImage = user.image || "/images/profile/default.jpg";
 
     res.render("main", {
       authenticated: req.session.authenticated,
@@ -227,28 +208,29 @@ app.get("/myCourses", sessionValidation, async (req, res) => {
     });
 
     const userCourses = user.myCourses || [];
-
+    
     // Retrieve user's interests from the database
     let myCoursesData = [];
 
     for (const courseId of userCourses) {
-      const course = await coursesCollection.findOne({
-        _id: new ObjectId(courseId),
-      });
+      const course = await coursesCollection.findOne({ _id: new ObjectId(courseId) });
       if (course) {
         myCoursesData.push(course);
       }
     }
-    console.log("myCoursesData", myCoursesData);
+    console.log('myCoursesData', myCoursesData);
 
-    res.render("myCourses", {
-      myCourses: myCoursesData,
-      username: req.session.username,
-    });
+    res.render("myCourses", { myCourses: myCoursesData , username: req.session.username });
   } catch (error) {
     console.error("Error retrieving course recommendation:", error);
     res.status(500).send("Error retrieving course recommendation");
   }
+});
+
+
+// Renders the course detail page
+app.get("/courseDetail", (req, res) => {
+  res.render("courseDetail");
 });
 
 /* Recommendation Section */
@@ -264,23 +246,19 @@ app.get("/recommendation", sessionValidation, async (req, res) => {
 
     // Retrieve user's interests from the database
     const userInterests = user.interests || [];
-    const escapedInterests = userInterests.map(escapeRegExp);
-    const interestsPattern = new RegExp(
-      escapedInterests.map((interest) => `\\b${interest}\\b`).join("|"),
-      "i"
-    );
+    const interestsPattern = new RegExp(userInterests.map(interest => `\\b${interest}\\b`).join("|"), "i");
 
     // Retrieve courses matching the user's interests (case-insensitive)
     let recommendedCourses = await coursesCollection
       .find({ tags: interestsPattern })
-      .limit(5)
+      .limit(recommendedCourseLimit)
       .toArray();
 
     // If no matching courses found, retrieve random courses from the course collection
     if (recommendedCourses.length === 0) {
-      recommendedCourses = await coursesCollection
-        .aggregate([{ $sample: { size: recommendedCourseLimit } }])
-        .toArray();
+      recommendedCourses = await coursesCollection.aggregate([
+        { $sample: { size: recommendedCourseLimit } }
+      ]).toArray();
     }
 
     console.log(recommendedCourses);
@@ -288,24 +266,12 @@ app.get("/recommendation", sessionValidation, async (req, res) => {
       throw new Error("No recommended courses found");
     }
 
-    // Add courseId to each recommended course
-    recommendedCourses = recommendedCourses.map((course) => {
-      return { ...course, courseId: course._id }; // Assuming the courseId is stored in the _id field
-    });
-
-    res.render("recommendation", {
-      recommendedCourses,
-      username: req.session.username,
-    });
+    res.render("recommendation", { recommendedCourses, username: req.session.username });
   } catch (error) {
     console.error("Error retrieving course recommendation:", error);
     res.status(500).send("Error retrieving course recommendation");
   }
 });
-
-function escapeRegExp(string) {
-  return string.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
-}
 
 // Generate more button click event
 app.get("/generateMore", sessionValidation, async (req, res) => {
@@ -315,12 +281,9 @@ app.get("/generateMore", sessionValidation, async (req, res) => {
       username: req.session.username,
     });
 
-    // Retrieve user's interests from the database
+    // Retrieve user's interests from db
     const userInterests = user.interests || [];
-    const interestsPattern = new RegExp(
-      userInterests.map((interest) => `\\b${interest}\\b`).join("|"),
-      "i"
-    );
+    const interestsPattern = new RegExp(userInterests.map(interest => `\\b${interest}\\b`).join("|"), "i");
 
     // Retrieve all recommended courses for the user
     const allRecommendedCourses = await coursesCollection
@@ -334,26 +297,13 @@ app.get("/generateMore", sessionValidation, async (req, res) => {
     const additionalCourseLimit = 5;
 
     // Determine the starting index for additional courses
-    const startIndex =
-      recommendedCourseLimit + req.session.generatedCoursesCount;
+    const startIndex = recommendedCourseLimit + req.session.generatedCoursesCount;
 
     // Calculate the ending index for additional courses
     const endIndex = startIndex + additionalCourseLimit;
 
     // Retrieve the additional recommended courses based on the index range
-    let additionalRecommendedCourses = [];
-
-    if (startIndex < allRecommendedCourses.length) {
-      additionalRecommendedCourses = allRecommendedCourses.slice(
-        startIndex,
-        endIndex
-      );
-    } else {
-      // If there are no more recommended courses, generate random courses from the course collection
-      additionalRecommendedCourses = await coursesCollection
-        .aggregate([{ $sample: { size: additionalCourseLimit } }])
-        .toArray();
-    }
+    const additionalRecommendedCourses = allRecommendedCourses.slice(startIndex, endIndex);
 
     // Update the generated courses count in the session
     req.session.generatedCoursesCount += additionalRecommendedCourses.length;
@@ -366,6 +316,7 @@ app.get("/generateMore", sessionValidation, async (req, res) => {
 });
 
 /* Recommendation Section end */
+
 
 /* Profile Section */
 
@@ -432,7 +383,7 @@ app.get("/editProfile", async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         job: user.job,
-        image: user.image,
+        image: image,
         skills: user.skills || [], // Use the user's skills field directly
         interests: user.interests || [], // Use the user's interests field directly
       });
@@ -484,8 +435,10 @@ app.get("/editInterest", sessionValidation, async (req, res) => {
   }
 });
 
-// Set up multer for handling file uploads
+
 const path = require("path");
+
+// Set up multer for handling file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname, "public/images/profile"));
@@ -499,7 +452,6 @@ const storage = multer.diskStorage({
 
 // Initialize multer middleware for file upload with the specified storage configuration
 const upload = multer({ storage: storage });
-const fs = require("fs");
 
 app.post("/submitProfile", upload.single("image"), async (req, res) => {
   const { name, job, email, skills, firstName, lastName } = req.body;
@@ -519,27 +471,6 @@ app.post("/submitProfile", upload.single("image"), async (req, res) => {
 
     image = newFilePath;
     req.session.image = image; // Update session image
-
-    // Update the user's profile image in the database
-    const updateResult = await userCollection.updateOne(
-      { username: req.session.username },
-      { $set: { image } }
-    );
-
-    if (updateResult.modifiedCount !== 1) {
-      // Update the session with the new profile information
-      req.session.name = name;
-      req.session.job = job;
-      req.session.email = email;
-      req.session.firstName = firstName;
-      req.session.lastName = lastName;
-
-      // Update the user's image in the session
-      req.session.image = updateFields.image;
-
-      // Redirect to the profile page on successful update
-      res.redirect("/profile");
-    }
   } else if (req.session.image) {
     image = req.session.image;
   } else {
@@ -597,9 +528,7 @@ app.post("/saveSkills", sessionValidation, async (req, res) => {
       throw new Error("skills data is missing");
     }
 
-    const skillList = Array.isArray(skills)
-      ? interests.map((skill) => skill.trim())
-      : [];
+    const skillList = Array.isArray(skills) ? interests.map((skill) => skill.trim()) : [];
 
     const existingUser = await userCollection.findOne({ username: username });
     if (!existingUser) {
@@ -648,7 +577,7 @@ app.post("/removeSkills", sessionValidation, async (req, res) => {
     }
 
     const existingSkills = existingUser.skills || [];
-    const updatedSkills = existingSkills.filter((i) => i !== skill);
+    const updatedSkills = existingSkills.filter(i => i !== skill);
 
     const updateResult = await userCollection.updateOne(
       { username: username },
@@ -656,7 +585,7 @@ app.post("/removeSkills", sessionValidation, async (req, res) => {
     );
 
     if (updateResult.modifiedCount >= 1) {
-      console.log("skill deleted successfully");
+      console.log('skill deleted successfully'); 
       res.sendStatus(200); // Interest deleted successfully
     } else {
       throw new Error("Failed to delete skill");
@@ -676,9 +605,7 @@ app.post("/saveInterests", sessionValidation, async (req, res) => {
       throw new Error("Interests data is missing");
     }
 
-    const interestList = Array.isArray(interests)
-      ? interests.map((interest) => interest.trim())
-      : [];
+    const interestList = Array.isArray(interests) ? interests.map((interest) => interest.trim()) : [];
 
     const existingUser = await userCollection.findOne({ username: username });
     if (!existingUser) {
@@ -686,13 +613,9 @@ app.post("/saveInterests", sessionValidation, async (req, res) => {
     }
 
     const existingInterests = existingUser.interests || [];
-    const updatedInterests = [
-      ...new Set([...existingInterests, ...interestList]),
-    ];
+    const updatedInterests = [...new Set([...existingInterests, ...interestList])];
 
-    if (
-      JSON.stringify(existingInterests) === JSON.stringify(updatedInterests)
-    ) {
+    if (JSON.stringify(existingInterests) === JSON.stringify(updatedInterests)) {
       // Interests are the same, no need to update
       res.json({ success: true }); // Interests saved successfully
       return;
@@ -731,7 +654,7 @@ app.post("/removeInterest", sessionValidation, async (req, res) => {
     }
 
     const existingInterests = existingUser.interests || [];
-    const updatedInterests = existingInterests.filter((i) => i !== interest);
+    const updatedInterests = existingInterests.filter(i => i !== interest);
 
     const updateResult = await userCollection.updateOne(
       { username: username },
@@ -739,7 +662,7 @@ app.post("/removeInterest", sessionValidation, async (req, res) => {
     );
 
     if (updateResult.modifiedCount >= 1) {
-      console.log("Interest deleted successfully");
+      console.log('Interest deleted successfully');
       res.sendStatus(200); // Interest deleted successfully
     } else {
       throw new Error("Failed to delete interest");
@@ -1057,22 +980,12 @@ app.get("/search", (req, res) => {
 
   // Count the total number of matching documents
   const totalCountPromise = coursesCollection.countDocuments({
-    $or: [
-      { title: searchRegex },
-      { tags: searchRegex },
-      { details: searchRegex },
-    ],
+    $or: [{ title: searchRegex }, { details: searchRegex }],
   });
 
   // Search for courses that match the search query with pagination
   const searchPromise = coursesCollection
-    .find({
-      $or: [
-        { title: searchRegex },
-        { tags: searchRegex },
-        { details: searchRegex },
-      ],
-    })
+    .find({ $or: [{ title: searchRegex }, { details: searchRegex }] })
     .skip((page - 1) * itemsPerPage)
     .limit(itemsPerPage)
     .toArray();
@@ -1102,8 +1015,7 @@ app.get("/courseDetail/:courseId", (req, res) => {
   const courseId = req.params.courseId; // Get the courseId from the URL parameters
 
   // Find the course with the given courseId
-  coursesCollection
-    .findOne({ _id: new ObjectId(courseId) })
+  coursesCollection.findOne({ _id: new ObjectId(courseId) })
     .then((course) => {
       if (!course) {
         // If the course is not found, render an error page or a not-found page
@@ -1128,7 +1040,7 @@ app.post("/saveCourse", sessionValidation, async (req, res) => {
 
     const result = await userCollection.updateOne(
       { username },
-      { $push: { myCourses: courseId } }
+      { $push: { myCourses: courseId} }
     );
 
     if (result.modifiedCount === 0) {
