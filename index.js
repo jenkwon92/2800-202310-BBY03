@@ -235,8 +235,10 @@ app.get("/courseDetail", (req, res) => {
 
 /* Recommendation Section */
 
-const recommendedCourseLimit = 100; // Limit the number of initially recommended courses
+// Limit the number of initially recommended courses
+const recommendedCourseLimit = 5; 
 
+// Renders the recommendation page
 app.get("/recommendation", sessionValidation, async (req, res) => {
   try {
     // Retrieve user information from the database
@@ -261,14 +263,13 @@ app.get("/recommendation", sessionValidation, async (req, res) => {
       ]).toArray();
     }
 
-    console.log(recommendedCourses);
+    // If matching courses are empty, retrieve random courses from the course collection
     if (recommendedCourses.length === 0) {
       throw new Error("No recommended courses found");
     }
 
     res.render("recommendation", { recommendedCourses, username: req.session.username });
   } catch (error) {
-    console.error("Error retrieving course recommendation:", error);
     res.status(500).send("Error retrieving course recommendation");
   }
 });
@@ -310,7 +311,6 @@ app.get("/generateMore", sessionValidation, async (req, res) => {
 
     res.json({ additionalRecommendedCourses });
   } catch (error) {
-    console.error("Error retrieving additional recommended courses:", error);
     res.status(500).send("Error retrieving additional recommended courses");
   }
 });
@@ -320,76 +320,76 @@ app.get("/generateMore", sessionValidation, async (req, res) => {
 
 /* Profile Section */
 
+// Renders the profile page
 app.get("/profile", async (req, res) => {
-  var isAuthenticated = req.session.authenticated || false;
+  var isAuthenticated = req.session.authenticated || false;  // Check if the user is authenticated
 
-  if (!isAuthenticated) {
+  // If not authenticated, redirect to the login page
+  if (!isAuthenticated) {  
     res.redirect("/login");
   } else {
     try {
-      const user = await userCollection.findOne({
+      const user = await userCollection.findOne({            // Retrieve user data from the database
         username: req.session.username,
       });
 
-      if (!user) {
+      if (!user) {  // If user not found, throw an error
         throw new Error("User not found");
       }
 
       // Set the default image URL if the image is not available or has an unknown path
       const image = user.image || "/images/profile/default.jpg";
 
-      res.render("profile", {
-        authenticated: req.session.authenticated,
-        username: req.session.username,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        job: user.job,
-        image: image,
-        skills: user.skills || [], // Add the 'skills' variable here with a default value of an empty array
-        interests: user.interests || [], // Add the 'interests' variable here with a default value of an empty array
+      res.render("profile", {                                // Render the 'profile' template with the user data
+        authenticated: req.session.authenticated,            // Pass the authentication status
+        username: req.session.username,                      // Pass the username
+        email: user.email,                                   // Pass the user's email
+        firstName: user.firstName,                           // Pass the user's first name
+        lastName: user.lastName,                             // Pass the user's last name
+        job: user.job,                                       // Pass the user's job
+        image: image,                                        // Pass the user's profile image URL
+        skills: user.skills || [],                           // Add the 'skills' variable here with a default value of an empty array
+        interests: user.interests || [],                     // Add the 'interests' variable here with a default value of an empty array
       });
     } catch (error) {
-      console.error(error);
-      res.status(500).send("Error retrieving user profile");
+      res.status(500).send("Error retrieving user profile"); // Send an error response if there is an error
     }
   }
 });
 
+// Renders the editProfile page
 app.get("/editProfile", async (req, res) => {
-  var isAuthenticated = req.session.authenticated || false;
+  var isAuthenticated = req.session.authenticated || false;  // Check if the user is authenticated
 
-  // When the user is not logged in - login page
-  // When the user is logged in - profile page
-  if (!isAuthenticated) {
+  // If not authenticated, redirect to the login page
+  if (!isAuthenticated) {  
     res.redirect("/login");
   } else {
     try {
-      const user = await userCollection.findOne({
+      const user = await userCollection.findOne({            // Retrieve user data from the database
         username: req.session.username,
       });
 
-      if (!user) {
+      if (!user) {  // If user not found, throw an error
         throw new Error("User not found");
       }
 
       // Set the default image URL if the image is not available or has an unknown path
       const image = user.image || "/images/profile/default.jpg";
 
-      res.render("editProfile", {
-        authenticated: req.session.authenticated,
-        username: req.session.username,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        job: user.job,
-        image: image,
-        skills: user.skills || [], // Use the user's skills field directly
-        interests: user.interests || [], // Use the user's interests field directly
+      res.render("editProfile", {  
+        authenticated: req.session.authenticated,            // Pass the authentication status
+        username: req.session.username,                      // Pass the username
+        email: user.email,                                   // Pass the user's email
+        firstName: user.firstName,                           // Pass the user's first name
+        lastName: user.lastName,                             // Pass the user's last name
+        job: user.job,                                       // Pass the user's job
+        image: image,                                        // Pass the user's profile image URL
+        skills: user.skills || [],                           // Use the user's skills field directly
+        interests: user.interests || [],                     // Use the user's interests field directly
       });
     } catch (error) {
-      console.error(error);
-      res.status(500).send("Error retrieving user profile");
+      res.status(500).send("Error retrieving user profile"); // Send an error response if there is an error
     }
   }
 });

@@ -66,59 +66,84 @@
 
 <script>
   $(document).ready(function () {
-    var generateMoreButton = $('#generateMore');
-    var recommendationHeading = $('#recommendationHeading');
-    var courseList = $('#courseList');
 
-    $(document).on('click', '#generateMore', function () {
-      var generateMoreButton = $(this);
+  // Get references to the relevant elements
+  var generateMoreButton = $('#generateMore');
+  var recommendationHeading = $('#recommendationHeading');
+  var courseList = $('#courseList');
 
-      $.get('/generateMore', function (data) {
-        if (data.additionalRecommendedCourses && data.additionalRecommendedCourses.length > 0) {
-          var coursesToAdd = data.additionalRecommendedCourses.slice(0, 5);
+  // Event listener for the 'generateMore' button click
+  $(document).on('click', '#generateMore', function () {
 
-          coursesToAdd.forEach(function (course, index) {
-            var courseHtml = `
-              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" style="margin-top: 10px;">
-                <div class="box mb-15 my_courses_grid">
-                  <div class="my_courses_body">
-                    <div class="d-flex align-items-center justify-content-between">
-                      <div class="d-flex align-items-center">
-                        <div class="d-flex flex-column fw-500">
-                          <h4 class="bl-title"><a href="/courseDetail/${course.courseId}">${course.title}</a></h4>
-                          <p style="font-size: smaller;">${course.description}</p>
-                        </div>
+  
+    // Store a reference to the 'generateMore' button
+    var generateMoreButton = $(this);
+
+    // Send a GET request to the '/generateMore' endpoint
+    $.get('/generateMore', function (data) {
+
+      // Check if additional recommended courses are returned
+      if (data.additionalRecommendedCourses && data.additionalRecommendedCourses.length > 0) {
+
+        // Get the first 5 courses to add
+        var coursesToAdd = data.additionalRecommendedCourses.slice(0, 5);
+
+        // Iterate over the courses to add
+        coursesToAdd.forEach(function (course, index) {
+
+          // Generate HTML for the course item
+          var courseHtml = `
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" style="margin-top: 10px;">
+              <div class="box mb-15 my_courses_grid">
+                <div class="my_courses_body">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                      <div class="d-flex flex-column fw-500">
+                        <h4 class="bl-title"><a href="/courseDetail/${course.courseId}">${course.title}</a></h4>
+                        <p style="font-size: smaller;">${course.description}</p>
                       </div>
-                      <a href="${course.link}">
-                        <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span class="path2"></span>
-                      </a>
                     </div>
+                    <a href="${course.link}">
+                      <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span class="path2"></span>
+                    </a>
                   </div>
                 </div>
               </div>
-            `;
+            </div>
+          `;
 
-            courseList.append(courseHtml);
-          });
+          // Append the course HTML to the course list
+          courseList.append(courseHtml);
+        });
 
-          if (coursesToAdd.length < 5) {
-            generateMoreButton.remove();
-            recommendationHeading.hide();
-          }
-        } else {
-          console.log("No additional recommended courses found.");
+        // Check if there are fewer than 5 courses to add
+        if (coursesToAdd.length < 5) {
+          // Remove the 'generateMore' button and hide the recommendation heading
           generateMoreButton.remove();
           recommendationHeading.hide();
         }
-      });
-      
+      } else {
+        // Log a message if no additional recommended courses are found
+        console.log("No additional recommended courses found.");
+        generateMoreButton.remove();
+        recommendationHeading.hide();
+      }
     });
-
-    if (!$('.row').find('.col-xl-4').length) {
-      generateMoreButton.hide();
-      recommendationHeading.hide();
-    }
   });
+
+  // Check if there are no '.col-xl-4' elements within '.row'
+  if (!$('.row').find('.col-xl-4').length) {
+    // Hide the 'generateMore' button and recommendation heading
+    generateMoreButton.hide();
+    recommendationHeading.hide();
+  } else {
+    // Check if there are 5 or fewer courses initially
+    if ($('.row').find('.col-xl-4').length < 5) {
+      // Hide the 'generateMore' button.
+      generateMoreButton.hide();
+    }
+  }
+});
 </script>
 
 <%- include("templates/footer") %>
