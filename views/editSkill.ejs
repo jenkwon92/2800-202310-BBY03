@@ -229,9 +229,9 @@
         const skill = event.currentTarget.dataset.skill;
         console.log('Removing skill:', skill);
 
-        const skillContainer = event.currentTarget.closest('.skill-container');
-        if (skillContainer !== null) {
-          skillContainer.remove();
+        const singleSkill = event.currentTarget.closest('.singleSkill');
+        if (singleSkill !== null) {
+          singleSkill.remove();
 
           fetch('/removeSkill', {
             method: 'POST',
