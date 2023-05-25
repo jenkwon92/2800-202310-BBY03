@@ -21,24 +21,22 @@
               <% if (myCourses && myCourses.length> 0) { %>
                 <% myCourses.forEach((course)=> { %>
                   <div class="box mb-15 my_courses_grid">
-                    <div class="my_courses_body">
+                    <div class="my_courses_body"><a href="/courseDetail/<%= course._id %>">
                       <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                           <div class="d-flex flex-column fw-500">
-                            <h4 class="bl-title"><a href="/courseDetail">
+                            <h4 class="bl-title">
                                 <%= course.title %>
-                              </a>
                             </h4>
                             <span class="text-fade">
                               <%= course.description %>
                             </span>
                           </div>
                         </div>
-                        <a href="course.html">
                           <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span
                             class="path2"></span></span>
-                        </a>
                       </div>
+                    </a>
                     </div>
                   </div>
                   <% }); %>
