@@ -1,13 +1,17 @@
 /*===================================================
             Fonts
-        ==================================================*/
+ ==================================================*/
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap");
 
 /*===================================================
                     GLobal Settings
-                ==================================================*/
+==================================================*/
 * {
   outline: none;
+}
+
+.modal-open {
+  overflow: hidden !important;
 }
 
 body {
@@ -25,9 +29,57 @@ html {
   min-height: 100%;
 }
 
+a {
+  color: #303740;
+  text-decoration: none;
+  background-color: transparent;
+  -webkit-text-decoration-skip: objects;
+}
+
+a:hover,
+a:focus {
+  text-decoration: none;
+}
+
+a.link {
+  color: #da0b4e;
+}
+
+a.link:hover,
+a.link:focus,
+a:hover,
+a:focus {
+  color: #da0b4e;
+}
+
 section {
   padding: 30px 0 15px;
   position: relative;
+}
+
+
+
+.text-muted {
+  color: #8d97ad !important;
+}
+
+.lead {
+  font-size: 20px !important;
+}
+
+p {
+  line-height: 1.8;
+}
+
+p,
+ul,
+ol,
+dl,
+dt,
+dd,
+blockquote,
+address {
+  margin: 0 0 10px;
 }
 
 /*------------ GLobal Settings: Heading-------------*/
@@ -43,16 +95,122 @@ h6 {
   font-family: "Outfit", sans-serif;
 }
 
+h1 {
+  line-height: 40px;
+  font-size: 36px;
+}
+
 .popular h3 {
   font-size: 20px;
   margin-bottom: 0px;
 }
 
+/*-------------- GLobal Settings: Background Colors ----------------*/
+html body .bg-light {
+  background-color: #f4f8fa !important;
+}
+
+html body .bg-light-2 {
+  background: #fdedf2;
+}
 
 .light-2 {
   background: #b8ceea61;
   /* background: #F0F4EF; */
   /* background: #fbf5f4; */
+}
+
+.sec-heading {
+  margin-bottom: 1rem;
+}
+
+/*-------------- GLobal Settings: Section Headings ----------------*/
+.sec-left {
+  flex: 1;
+}
+
+.sec-left h3 {
+  font-size: 20px;
+  margin-bottom: 0px;
+}
+
+/*-------------- GLobal Settings: Section Headings ----------------*/
+.sec-heading2 {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.sec-right a {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.7;
+}
+/*------------ GLobal Settings: Header -------------*/
+header {
+  height: 60px;
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  z-index: 100;
+}
+
+/*------------ GLobal Settings: Body container: wrap -------------*/
+#wrap {
+  min-height: calc(100vh - 60px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-top: 60px;
+  /* Add top padding to account for the fixed header */
+  padding-bottom: 60px;
+  /* Add bottom padding to account for the fixed footer */
+}
+
+/*------------ GLobal Settings: Footer -------------*/
+footer {
+  height: 60px;
+  background-color: #e9eaed;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+/*------------ Common Elements: Buttons -------------*/
+.btn-default {
+  /* background-color: #B4CDED; */
+  color: #4a5874;
+  padding: 6px 15px;
+  font-size: 13px;
+  border: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+.btn-default:hover {
+  background-color: var(--bs-border-color);
+  color: #4a5874;
+  padding: 6px 15px;
+  /* color: #fff; */
+  border: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+.btn_start_learning {
+  border:1px solid #B4CDED;
+  color: #4a5874;
+  padding: 6px 15px;
+  font-size: 13px;
+}
+
+.btn_start_learning:hover {
+  background: #f4f8fa;
+  color: #4a5874;
+  padding: 6px 15px;
+  font-size: 13px;
 }
 
 /*-------------- My Courses Elements: Courses Tag Lists ----------------*/
@@ -162,6 +320,7 @@ ul.courses_tags_list li:after {
   width: 4px;
 }
 
+/*-------------- Profile Elements: Buttons ----------------*/
 .btn_log_out {
   text-align: center;
   background: #ffffff;
@@ -180,4 +339,5 @@ ul.courses_tags_list li:after {
   font-weight: 500;
   border-radius: 10px;
 }
+
 

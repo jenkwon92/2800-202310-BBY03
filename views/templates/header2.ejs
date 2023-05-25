@@ -26,7 +26,6 @@
 
     <!-- Google Icons (Material Design)-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 
     <!-- Links for slick carousel -->
     <link rel="stylesheet" type="text/css"
@@ -36,39 +35,68 @@
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/album/" />
 
-    <link rel="canonical" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.css" />
-
     <!-- Links for favicon -->
-    <link rel="icon" href="/images/logo.png" type="image/x-icon" />
+    <link rel="icon" href="logo.png" type="image/x-icon" />
 
     <!--Style -->
-    <link rel="stylesheet" href="/css/common.css">
+    <style>
+        html,
+        body {
+            height: 100%;
+            padding: 0px;
+            margin: 0px;
+        }
+
+        header {
+            height: 60px;
+            background-color: #e9eaed;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            z-index: 100;
+        }
+
+        #wrap {
+            min-height: calc(100vh - 60px);       
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-top: 60px; /* Add top padding to account for the fixed header */
+            padding-bottom: 60px; /* Add bottom padding to account for the fixed footer */
+        }
+
+
+        footer {
+            height: 60px;
+            background-color: #e9eaed;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        #plane {
+            position: absolute;
+            bottom: 50%;
+            transform: translateX(-0%);
+            left: -10%;
+            width: 50px;
+            height: auto;
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
         <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-            <div id="header_main" style="display:show;">
-                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"
-                    id="url_name">
-                    <img src="/images/logo.png" alt="Logo" width="30" height="30" class="ms-2"
-                        style="margin-right: 10px;">
-                    CoursePilot
-                </a>
-            </div>
-            <div id="header_sub" style="display:none;">
-                <!-- <div >
-                    <button class="btn text-center">
-                        <span><i class="fa fa-arrow-left"></i></span>
-                    </button>
-                </div> -->
-                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"
-                    id="url_name">
-                    <img src="/images/logo.png" alt="Logo" width="30" height="30" class="ms-2"
-                        style="margin-right: 10px;">
-                    CoursePilot
-                </a>
-            </div>
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+                <img src="logo.png" alt="Logo" width="30" height="30" class="ms-2" style="margin-right: 10px;">
+                CoursePilot
+            </a>
         </header>
     </div>
-    <div id="wrap">
+    <div class="container" id="wrap">
