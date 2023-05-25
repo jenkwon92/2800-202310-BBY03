@@ -528,7 +528,7 @@ app.post("/saveSkills", sessionValidation, async (req, res) => {
       throw new Error("skills data is missing");
     }
 
-    const skillList = Array.isArray(skills) ? interests.map((skill) => skill.trim()) : [];
+    const skillList = Array.isArray(skills) ? skills.map((skill) => skill.trim()) : [];
 
     const existingUser = await userCollection.findOne({ username: username });
     if (!existingUser) {
@@ -550,19 +550,19 @@ app.post("/saveSkills", sessionValidation, async (req, res) => {
     );
 
     if (updateResult && updateResult.modifiedCount === 1) {
-      req.session.skills = updatedSkills; // Update session interests
-      res.json({ success: true }); // Interests saved successfully
+      req.session.skills = updatedSkills; // Update session skills
+      res.json({ success: true }); // Skills saved successfully
     } else {
       throw new Error("Failed to save skills");
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error saving skills"); // Error saving interests
+    res.status(500).send("Error saving skills"); // Error saving skills
   }
 });
 
-//Remove skills from the user's skill field
-app.post("/removeSkills", sessionValidation, async (req, res) => {
+//remove the user's skill
+app.post("/removeSkill", sessionValidation, async (req, res) => {
   try {
     const { skill } = req.body;
     const username = req.session.username;
@@ -585,14 +585,14 @@ app.post("/removeSkills", sessionValidation, async (req, res) => {
     );
 
     if (updateResult.modifiedCount >= 1) {
-      console.log('skill deleted successfully'); 
-      res.sendStatus(200); // Interest deleted successfully
+      console.log('Skill deleted successfully');
+      res.sendStatus(200); 
     } else {
-      throw new Error("Failed to delete skill");
+      throw new Error("Failed to delete Skill");
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error deleting skill"); // Error deleting interest
+    res.status(500).send("Error deleting interest"); 
   }
 });
 
