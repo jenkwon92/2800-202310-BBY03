@@ -127,6 +127,7 @@
         }
       });
 
+      const selectedSkillsContainer = document.querySelector('#selectedSkills');
       const selectedSkills = document.querySelector('#selectedSkills');
       let skillsSet = new Set(); // Create a Set to store the selected skills
 
@@ -136,7 +137,8 @@
 
         if (skillsSet.size > 0) {
           skillsSet.forEach(skill => {
-            const skillContainer = document.createElement('div'); // 새로운 컨테이너 요소 생성
+            
+            const skillContainer = document.createElement('div');
             skillContainer.className = 'skill-container';
 
             const savedButtonContainer = document.createElement('div'); // savedbtn을 감싸는 컨테이너 요소
@@ -228,11 +230,11 @@
         const skill = event.currentTarget.dataset.skill;
         console.log('Removing skill:', skill);
 
-        const skilltContainer = event.currentTarget.closest('.skill-container');
+        const skillContainer = event.currentTarget.closest('.skill-container');
         if (skillContainer !== null) {
           skillContainer.remove();
 
-          fetch('/removeSkills', {
+          fetch('/removeSkill', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
