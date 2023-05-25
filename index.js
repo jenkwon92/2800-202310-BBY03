@@ -208,7 +208,7 @@ app.get("/myCourses", sessionValidation, async (req, res) => {
     });
 
     const userCourses = user.myCourses || [];
-    
+
     // Retrieve user's interests from the database
     let myCoursesData = [];
 
@@ -220,7 +220,7 @@ app.get("/myCourses", sessionValidation, async (req, res) => {
     }
     console.log('myCoursesData', myCoursesData);
 
-    res.render("myCourses", { myCourses: myCoursesData , username: req.session.username });
+    res.render("myCourses", { myCourses: myCoursesData, username: req.session.username });
   } catch (error) {
     console.error("Error retrieving course recommendation:", error);
     res.status(500).send("Error retrieving course recommendation");
@@ -585,7 +585,7 @@ app.post("/removeSkills", sessionValidation, async (req, res) => {
     );
 
     if (updateResult.modifiedCount >= 1) {
-      console.log('skill deleted successfully'); 
+      console.log('skill deleted successfully');
       res.sendStatus(200); // Interest deleted successfully
     } else {
       throw new Error("Failed to delete skill");
@@ -703,22 +703,27 @@ app.post("/submitUser", async (req, res) => {
   }
 
   const schema = Joi.object({
-    email: Joi.string()
-      .email()
-      .required()
-      .messages({ "string.empty": "Email is required" }),
-    username: Joi.string()
-      .alphanum()
-      .max(20)
-      .required()
-      .messages({ "string.empty": "Username is required" }),
-    firstName: Joi.string()
-      .required()
-      .messages({ "string.empty": "First name is required" }),
-    password: Joi.string()
-      .max(20)
-      .required()
-      .messages({ "string.empty": "Password is required" }),
+    email: Joi.string().email().required().messages({
+      "string.empty": "Email is required",
+      "string.email": "Please provide a valid email address",
+      "any.required": "Email is required",
+    }),
+    username: Joi.string().alphanum().max(20).required().messages({
+      "string.empty": "Username is required",
+      "string.alphanum": "Username must only contain alphanumeric characters",
+      "string.max": "Username must not exceed 20 characters",
+      "any.required": "Username is required",
+    }),
+    firstName: Joi.string().required().messages({
+      "string.empty": "First name is required",
+      "any.required": "First name is required",
+    }),
+    lastName: Joi.string().allow("").optional(),
+    password: Joi.string().max(30).required().messages({
+      "string.empty": "Password is required",
+      "string.max": "Password must not exceed 30 characters",
+      "any.required": "Password is required",
+    }),
   });
 
   const validationResult = schema.validate({
@@ -781,42 +786,47 @@ app.get("/logout", (req, res) => {
 });
 
 app.post("/submitLogin", async (req, res) => {
-  var email = req.body.email;
-  var password = req.body.password;
+  const { email, password } = req.body;
 
-  const schema = Joi.string().required();
-  const validationResult = schema.validate(email);
+  const schema = Joi.object({
+    email: Joi.string()
+      .email({ tlds: { allow: false } })
+      .required()
+      .messages({
+        "string.empty": "Email is required",
+        "string.email": "Please provide a valid email address",
+        "any.required": "Email is required",
+      }),
+    password: Joi.string().required().messages({
+      "string.empty": "Password is required",
+      "any.required": "Password is required",
+    }),
+  });
 
-  // If email is invalid, return error message
-  if (validationResult.error != null) {
-    console.log(validationResult.error);
-    res.render("login", { msg: "Invalid Email!" });
-    return;
+  const validationResult = schema.validate({ email, password });
+
+  if (validationResult.error) {
+    const errorMessage = validationResult.error.details[0].message;
+    return res.render("login", { msg: errorMessage });
   }
 
   const user = await userCollection.findOne({ email: email });
 
-  // If email does not exist, return error message
   if (!user) {
     console.log("Email not found");
-    res.render("login", { msg: "User with this email does not exist." });
-    return;
+    return res.render("login", { msg: "User with this email does not exist." });
   }
 
-  // Checks if the password matches using bcrypt compare
   const passwordMatch = await bcrypt.compare(password, user.password);
 
-  // If password does not match, return error message
   if (passwordMatch) {
-    // Set session variables
     req.session.authenticated = true;
     req.session.username = user.username;
     req.session.email = email;
     req.session.cookie.maxAge = expireTime;
   } else {
     console.log("Incorrect password");
-    res.render("login", { msg: "Password is incorrect." });
-    return;
+    return res.render("login", { msg: "Password is incorrect." });
   }
 
   res.redirect("/main");
@@ -912,39 +922,42 @@ app.get("/resetPassword/:id/:token", async (req, res, next) => {
   }
 });
 
-// Resets the user's password
 app.post("/resetPassword/:id/:token", async (req, res, next) => {
-  // Get user id and token from url
   const { id, token } = req.params;
-
-  // Get new password from form
   const { newPassword } = req.body;
 
-  // Find user in database
+  const schema = Joi.object({
+    newPassword: Joi.string().required().messages({
+      "string.empty": "New password is required",
+      "any.required": "New password is required",
+    }),
+  });
+
+  const validationResult = schema.validate({ newPassword });
+
+  if (validationResult.error) {
+    const errorMessage = validationResult.error.details[0].message;
+    return res.render("error", { errorMessage: "Validation error!" });
+  }
+
   const user = await userCollection.findOne({ _id: new ObjectId(id) });
 
-  // If user does not exist, return error message
   if (!user) {
     return res.render("error", { errorMessage: "ID not found!" });
   }
 
-  // Create secret for JWT
   const secret = JWT_SECRET + user.password;
-  try {
-    // Verify the token
-    const payload = jwt.verify(token, secret);
 
-    // Hash the new password
+  try {
+    const payload = jwt.verify(token, secret);
     user.password = await bcrypt.hash(newPassword, saltRounds);
 
-    // Update password in database
     await userCollection.updateOne(
       { _id: new ObjectId(id) },
       { $set: { password: user.password } }
     );
 
-    // Password successfully updated
-    res.render("passwordUpdated");
+    return res.render("passwordUpdated");
   } catch (error) {
     console.log(error);
     return res.render("error", { errorMessage: "Invalid token!" });
@@ -1003,7 +1016,7 @@ app.get("/search", (req, res) => {
     })
     .catch((error) => {
       console.error("Error finding documents:", error);
-      res.render("error"); // Render an error page if there's an error
+      res.render("404"); // Render an error page if there's an error
     });
 });
 /* Search Section end */
@@ -1019,7 +1032,7 @@ app.get("/courseDetail/:courseId", (req, res) => {
     .then((course) => {
       if (!course) {
         // If the course is not found, render an error page or a not-found page
-        res.render("error", { errorMessage: "Course not found" });
+        res.render("404");
         return;
       }
 
@@ -1028,7 +1041,7 @@ app.get("/courseDetail/:courseId", (req, res) => {
     })
     .catch((error) => {
       console.error("Error finding course:", error);
-      res.render("error", { errorMessage: error });
+      res.render("404");
     });
 });
 
@@ -1040,7 +1053,7 @@ app.post("/saveCourse", sessionValidation, async (req, res) => {
 
     const result = await userCollection.updateOne(
       { username },
-      { $push: { myCourses: courseId} }
+      { $push: { myCourses: courseId } }
     );
 
     if (result.modifiedCount === 0) {
