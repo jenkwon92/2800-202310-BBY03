@@ -33,6 +33,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
+const openai = new OpenAIApi(configuration);
 // End Secret Information Section
 
 // Session Section
@@ -957,10 +958,25 @@ app.post("/resetPassword/:id/:token", async (req, res, next) => {
 
 /* Password Recovery Section end */
 
+/* Chatbot Section start */
 // Renders the chatbot page
 app.get("/chatbot", (req, res) => {
-  res.render("chatbot");
+  res.render("chatbot");                              // Render the "chatbot" view when the "/chatbot" route is accessed
 });
+
+app.post("/chatbotMessages", async (req, res) => {
+  const input = req.body.input;                       // Retrieve the input message from the request body
+
+  const completion = await openai.createCompletion({
+    model: "text-davinci-003",                        // Specify the model to use for text completion
+    prompt: input,                                    // Set the input message as the prompt for the text completion
+    max_tokens: 20,                                   // Limit the response to 20 tokens
+  });
+
+  const output = completion.data.choices[0].text;     // Extract the generated completion text
+  res.json({ output: output });                       // Send the output response as JSON
+});
+/* Chatbot Section end */
 
 /* Search Section */
 // Renders the search page
