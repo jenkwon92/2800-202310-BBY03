@@ -679,7 +679,13 @@ app.post("/removeInterest", sessionValidation, async (req, res) => {
 app.get("/signup", (req, res) => {
   var msg = req.query.msg || "";
 
+  var isAuthenticated = req.session.authenticated || false;
+
+  if (isAuthenticated) {
+    return res.redirect("/main");
+  } else {
   res.render("signUp", { msg: msg });
+  }
 });
 
 // Creates a new user
@@ -771,7 +777,13 @@ app.get("/login", (req, res) => {
   // Show error message if there is one
   var msg = req.query.msg || "";
 
-  res.render("login", { msg: msg });
+  var isAuthenticated = req.session.authenticated || false;
+
+  if (isAuthenticated) {
+    return res.redirect("/main");
+  } else {
+    res.render("login", { msg: msg });
+  }
 });
 
 // logout
@@ -973,7 +985,7 @@ app.get("/chatbot", (req, res) => {
 
 /* Search Section */
 // Renders the search page
-app.get("/search", (req, res) => {
+app.get("/search", sessionValidation, (req, res) => {
   const searchQuery = req.query.search; // Get the search query from the URL query parameters
   const page = parseInt(req.query.page) || 1; // Get the page number from the URL query parameters, default to 1 if not provided
   const itemsPerPage = 10; // Set the number of items to display per page
