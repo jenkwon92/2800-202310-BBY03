@@ -44,8 +44,8 @@
             const domain = url.origin;
             %>
             <a href="/courseDetail/<%= course._id %>" class="text-decoration-none">
-              <div class="search-results">
-                <div class="card mb-2 mb-md-3">
+              <div class="search-results shadow-md">
+                <div class="card border-0 shadow-md mb-2 mb-md-3">
                   <div class="row g-0">
 
                     <!-- Image for course website -->
@@ -96,6 +96,8 @@
                             <% } %>
                     </div>
                   </div>
+                  <div class="text-center mt-2">
+                    <span class="page-number">Page <%= page %> of <%= totalPages %></span></div>
                   <% } %>
 
                     <!-- No results found -->
