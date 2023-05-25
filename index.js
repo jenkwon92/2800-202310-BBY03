@@ -391,7 +391,7 @@ app.get("/editProfile", async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         job: user.job,
-        image: image,
+        image: user.image,
         skills: user.skills || [], // Use the user's skills field directly
         interests: user.interests || [], // Use the user's interests field directly
       });
@@ -444,9 +444,8 @@ app.get("/editInterest", sessionValidation, async (req, res) => {
 });
 
 
-const path = require("path");
-
 // Set up multer for handling file uploads
+const path = require("path");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname, "public/images/profile"));
@@ -479,6 +478,17 @@ app.post("/submitProfile", upload.single("image"), async (req, res) => {
 
     image = newFilePath;
     req.session.image = image; // Update session image
+
+    // Update the user's profile image in the database
+    const updateResult = await userCollection.updateOne(
+      { username: req.session.username },
+      { $set: { image } }
+    );
+
+    if (updateResult.modifiedCount !== 1) {
+      throw new Error("Failed to update user profile image");
+    }
+
   } else if (req.session.image) {
     image = req.session.image;
   } else {
