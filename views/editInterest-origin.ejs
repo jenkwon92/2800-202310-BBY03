@@ -13,7 +13,7 @@
   
     .savedbtn {
       display: inline-block;
-      margin: 0px 5px 5px 0;
+      margin: 0 5px 5px 0;
       padding: 5px 10px;
       background-color: #b4cded;
       border-radius: 5px;
@@ -33,14 +33,14 @@
       overflow-y: auto;
     }
   
-    /* #selectedInterests {
+    #selectedInterests {
       display: flex;
       flex-wrap: wrap;
-    } */
+    }
   
-    /* .interest-container {
+    .interest-container {
       display: inline-block;
-    } */
+    }
   </style>
 
   <div class="container">
@@ -79,28 +79,23 @@
             </div>
             <div id="interestSet1" class="border p-3 mt-3">
               <div id="selectedInterests">
-                <ul class="courses_tags_list interest-container" style="display: inline-block;">
                 <% if (interests && interests.length> 0) { %>
                   <% interests.forEach(function(interest) { %>
-                    <div style="display: inline-block;" class="singleInterest">
-                      <li class="facts-1 savedbtn">
-                      <!-- <button type="button" class="btn btn-rounded savedbtn" style="margin-bottom: 8px;"> -->
+                    <div class="interest-container">
+                      <button type="button" class="btn btn-rounded savedbtn" style="margin-bottom: 8px;">
                         <%= interest %>
-                      <!-- </button> -->
-                    </li>
+                      </button>
                       <span class="close" data-interest="<%= interest %>">&times;</span>
                     </div>
-                      <% }); %>
+                    <% }); %>
                       <% } else { %>
                         <p>Update your interests</p>
                         <% } %>
-                      </ul>
               </div>
             </div>
-            <p id="save-button" style="font-size: 20px; color: #B4CDED; float: right; margin-top: 20px;" class="material-icons-outlined profile-button"
-              type="submit">save
-            </p>
-            </div>
+            <button id="save-button" class="btn btn-sm btn-dark profile-button" type="submit"
+              style="font-size: 15px; float: right; margin-top: 20px;">Save</button>
+          </div>
         </div>
       </div>
     </div>
@@ -120,30 +115,31 @@
         }
       });
 
-      const selectedInterestsContainer = document.querySelector('#selectedInterests');
-      const interestContainer = document.querySelector('.interest-container'); // 새로운 컨테이너 요소 생성
+      const selectedInterests = document.querySelector('#selectedInterests');
       let interestsSet = new Set(); // Create a Set to store the selected interests
 
       // Function to add or remove the selected interests container
       function updateSelectedInterests() {
+        const selectedInterestsContainer = document.querySelector('#selectedInterests');
 
         if (interestsSet.size > 0) {
           interestsSet.forEach(interest => {
-            
-            // interestContainer.className = 'interest-container';
+            const interestContainer = document.createElement('div'); // 새로운 컨테이너 요소 생성
+            interestContainer.className = 'interest-container';
 
-            const savedInterestsContainer = document.createElement('div'); // savedbtn을 감싸는 컨테이너 요소
-            savedInterestsContainer.style.display = 'inline-block'; // 가로 정렬을 위해 inline-block 스타일 적용
-            savedInterestsContainer.className = 'singleInterest';
+            const savedButtonContainer = document.createElement('div'); // savedbtn을 감싸는 컨테이너 요소
+            savedButtonContainer.style.display = 'inline-block'; // 가로 정렬을 위해 inline-block 스타일 적용
 
             const interestText = document.createTextNode(interest);
-            const savedInterests = document.createElement('li');
-            savedInterests.className = 'facts-1 savedbtn';
-            // savedButton.style.marginBottom = '8px';
-            savedInterests.textContent = interest;
+            const savedButton = document.createElement('button');
+            savedButton.type = 'button';
+            savedButton.className = 'btn btn-rounded savedbtn';
+            savedButton.style.marginBottom = '8px';
+            savedButton.style.marginTop = '8px';
+            savedButton.textContent = interest;
 
-            savedInterestsContainer.appendChild(savedInterests); // savedbtn을 컨테이너에 추가
-            // interestContainer.appendChild(savedButtonContainer); // 컨테이너를 interestContainer에 추가
+            savedButtonContainer.appendChild(savedButton); // savedbtn을 컨테이너에 추가
+            interestContainer.appendChild(savedButtonContainer); // 컨테이너를 interestContainer에 추가
 
             const closeButton = document.createElement('span');
             closeButton.className = 'close';
@@ -151,9 +147,9 @@
             closeButton.innerHTML = '&times;';
             closeButton.addEventListener('click', removeInterest);
 
-            savedInterestsContainer.appendChild(closeButton); // closeButton을 interestContainer에 추가
+            interestContainer.appendChild(closeButton); // closeButton을 interestContainer에 추가
 
-            interestContainer.appendChild(savedInterestsContainer);
+            selectedInterestsContainer.appendChild(interestContainer);
 
           });
         } else {
@@ -173,24 +169,17 @@
       }
 
       select.passedElement.element.addEventListener('change', function () {
-  const selectedOptions = Array.from(this.selectedOptions);
+        const selectedOptions = Array.from(this.selectedOptions);
 
-  selectedOptions.forEach(option => {
-    if (!interestsSet.has(option.value)) {
-      interestsSet.add(option.value);
-    }
-  });
+        // Clear the interestsSet
+        interestsSet.clear();
 
-  // Remove deselected options from interestsSet
-  const deselectedOptions = Array.from(interestsSet).filter(interest => {
-    return !selectedOptions.some(option => option.value === interest);
-  });
-  deselectedOptions.forEach(option => {
-    interestsSet.delete(option);
-  });
+        selectedOptions.forEach(option => {
+          interestsSet.add(option.value);
+        });
 
-  updateSelectedInterests();
-});
+        updateSelectedInterests();
+      });
 
       const saveButton = document.querySelector('#save-button');
       saveButton.addEventListener('click', saveInterests);
@@ -227,9 +216,9 @@
         const interest = event.currentTarget.dataset.interest;
         console.log('Removing interest:', interest);
 
-        const singleInterest = event.currentTarget.closest('.singleInterest');
-        if (singleInterest !== null) {
-          singleInterest.remove();
+        const interestContainer = event.currentTarget.closest('.interest-container');
+        if (interestContainer !== null) {
+          interestContainer.remove();
 
           fetch('/removeInterest', {
             method: 'POST',
