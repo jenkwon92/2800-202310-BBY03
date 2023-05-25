@@ -1011,20 +1011,30 @@ app.get("/search", (req, res) => {
 /* Course Detail Section */
 
 // Renders the course detail page
-app.get("/courseDetail/:courseId", (req, res) => {
+app.get("/courseDetail/:courseId", sessionValidation, async (req, res) => {
   const courseId = req.params.courseId; // Get the courseId from the URL parameters
+  const user = await userCollection.findOne({
+    username: req.session.username,
+  });
+
+  const userCourses = user.myCourses || [];
+  let isSaved = false; // Declare and assign initial value
+
+  // Check if the course is saved in user's courses
+  if (userCourses.includes(courseId)) {
+    isSaved = true;
+  }
 
   // Find the course with the given courseId
-  coursesCollection.findOne({ _id: new ObjectId(courseId) })
+  coursesCollection
+    .findOne({ _id: new ObjectId(courseId) })
     .then((course) => {
       if (!course) {
-        // If the course is not found, render an error page or a not-found page
         res.render("error", { errorMessage: "Course not found" });
         return;
       }
 
-      // Render the course detail page with the retrieved course
-      res.render("courseDetail", { course });
+      res.render("courseDetail", { course: course, isSaved: isSaved });
     })
     .catch((error) => {
       console.error("Error finding course:", error);
@@ -1038,21 +1048,56 @@ app.post("/saveCourse", sessionValidation, async (req, res) => {
     const username = req.session.username;
     const courseId = req.body.courseId;
 
-    const result = await userCollection.updateOne(
-      { username },
-      { $push: { myCourses: courseId} }
-    );
+    const user = await userCollection.findOne({ username });
 
-    if (result.modifiedCount === 0) {
-      return res.status(400).send("Course already saved");
+    if (user.myCourses.includes(courseId)) {
+      // Course already saved, remove it from myCourses
+      await userCollection.updateOne(
+        { username },
+        { $pull: { myCourses: courseId } }
+      );
+      res.sendStatus(200);
+    } else {
+      // Course not saved, add it to myCourses
+      const result = await userCollection.updateOne(
+        { username },
+        { $push: { myCourses: courseId } }
+      );
+      if (result.modifiedCount === 0) {
+        return res.status(400).send("Course already saved");
+      }
+      res.sendStatus(200);
     }
-
-    res.sendStatus(200);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error saving a course to my courses");
+    res.status(500).send("Error saving/removing a course from my courses");
   }
 });
+
+app.post("/removeCourse", sessionValidation, async (req, res) => {
+  try {
+    const username = req.session.username;
+    const courseId = req.body.courseId;
+
+    const user = await userCollection.findOne({ username });
+
+    if (user.myCourses.includes(courseId)) {
+      // Course is saved, remove it from myCourses
+      await userCollection.updateOne(
+        { username },
+        { $pull: { myCourses: courseId } }
+      );
+      res.sendStatus(200);
+    } else {
+      return res.status(400).send("Course is not saved");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error removing the course from my courses");
+  }
+});
+
+
 /* Course Detail Section end */
 
 // Renders the custom 404 error page to users instead of displaying a generic error message or a stack trace.

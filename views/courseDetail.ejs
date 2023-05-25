@@ -34,16 +34,23 @@
                             <% } else { %>
                               <img src="/images/course.jpg" class="img-fluid" alt="Course Image">
                               <% } %>
-                              <div class="sec-heading2 mt-3 mb-1">
-                                <div class="sec-left">
-                                  <h3 class="fw-normal" style="font-size: calc(1.3rem + .6vw);">Overview</h3>
+                                <div class="sec-heading2 mt-3 mb-1">
+                                  <div class="sec-left">
+                                    <h3 class="fw-normal" style="font-size: calc(1.3rem + .6vw);">Overview</h3>
+                                  </div>
+                                  <div class="sec-right">
+                                      <% if (isSaved) { %>
+                                      <span class="material-icons" id="course_id" data="<%= course._id %>" onclick="removeCourse()">
+                                        bookmark
+                                      </span>
+                                      <% } else { %>
+                                      <span class="material-icons" id="course_id" data="<%= course._id %>" onclick="saveCourse()">
+                                        bookmark_border
+                                      </span>
+                                      <% } %>
+                                    
+                                  </div>
                                 </div>
-                                <div class="sec-right">
-                                <span class="material-icons" >
-                                  bookmark
-                                  </span>
-                                </div>
-                              </div>
                                 <p>
                                   <%= course.description %>
                                 </p>
@@ -58,10 +65,11 @@
                                         <% }) %>
                                   </ul>
                                   <% } %>
-                                  <div class="mt-2">
-                                    <button id="course_id" data="<%= course._id %>" class="btn btn_start_learning" onclick="saveCourse()">Save</button>
-                                    <a class="btn btn_start_learning " href="<%=course.link %>" target="_blank">
-                                      Start Learning</a>
+                                    <div class="mt-2" style="text-align:center">
+                                      <!-- <button id="course_id" data="<%= course._id %>" class="btn btn_start_learning"
+                                        onclick="saveCourse()">Save</button> -->
+                                      <a class="btn_start_learning" style="background-color: #fff;" href="<%=course.link %>" target="_blank">
+                                        Start Learning</a>
                                     </div>
           </div>
         </div>
