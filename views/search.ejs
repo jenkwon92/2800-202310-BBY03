@@ -23,48 +23,50 @@
           <h3 class="mb-3">What's Popular</h3>
           <div>
             <ul class="courses_tags_list">
-              <li class="facts-3" onclick="populateSearch('AI')">AI</li>
-              <li class="facts-2" onclick="populateSearch('Python')">Python</li>
-              <li class="facts-1" onclick="populateSearch('Data Science')">Data Science</li>
-              <li class="facts-4" onclick="populateSearch('R')">R</li>
+              <li class="facts-3 mb-1" onclick="populateSearch('AI')">AI</li>
+              <li class="facts-2 mb-1" onclick="populateSearch('Python')">Python</li>
+              <li class="facts-1 mb-1" onclick="populateSearch('Data Science')">Data Science</li>
+              <li class="facts-4 mb-1" onclick="populateSearch('R')">R</li>
             </ul>
+          </div>
+
         </div>
-        
-      </div>
     </section>
-    <!-- Display search results -->
-    <section class="light-2">
-      <% if (courses && courses.length> 0) { %>
-      <% courses.forEach((course)=> {
-        const url = new URL(course.link);
-        const domain = url.origin;
-        %>
-        <div class="container">
+    <section id="search-section" class="light-2">
+      <div class="container">
+        <!-- Display search results -->
+        <% if (courses.length > 0) { %>
+        <% courses.forEach((course)=> {
+          const url = new URL(course.link);
+          const domain = url.origin;
+          %>
           <a href="/courseDetail/<%= course._id %>" class="text-decoration-none">
             <div class="search-results">
-              <div class="card mb-3">
+              <div class="card mb-2 mb-md-3">
                 <div class="row g-0">
-                  <div class="col-2 col-md-1">
+                  <div class="col-sm-2 col-md-2 col-lg-1 col-3">
                     <% if (domain=="https://www.datacamp.com" ) { %>
-                      <img src="/images/datacamp.png" alt="placeholder image" class="rounded img-fluid">
+                      <img src="/images/datacamp.png" alt="DataCamp logo" class="rounded img-fluid">
                       <% } else if (domain=="https://www.udemy.com" ) { %>
-                        <img src="/images/udemy.png" alt="placeholder image" class="rounded img-fluid">
+                        <img src="/images/udemy.png" alt="Udemy logo" class="rounded img-fluid">
                         <% } else { %>
-                          <img src="/images/default_logo.png" alt="placeholder image" class="rounded img-fluid">
+                          <img src="/images/default_search_logo.png" alt="Default logo" class="rounded img-fluid">
                           <% } %>
                   </div>
-                  <div class="col-10 col-md-11">
-                    <div class="card-body">
+                  <div class="col-sm-10 col-md-10 col-lg-11 col-9">
+                    <div class="card-body pb-1 pt-3">
                       <h6 class="card-title">
                         <%= course.title %>
                       </h6>
-                      <% if (course.tags) { const tags=course.tags.split(","); %>
+                      <% if (course.tags) { const tags=course.tags.split(","); let factsCounter=1; const
+                        displayedTags=tags.slice(0, 2); // Limiting to two tags %>
                         <ul class="courses_tags_list">
-                          <% tags.forEach((tag)=> { %>
-                            <li class="facts-default mt-1">
+                          <% displayedTags.forEach((tag)=> { %>
+                            <li class="facts-<%= factsCounter %>">
                               <%= tag.trim() %>
                             </li>
-                            <% }) %>
+                            <% factsCounter++; %>
+                              <% }) %>
                         </ul>
                         <% } %>
                     </div>
@@ -73,19 +75,27 @@
               </div>
             </div>
           </a>
-        </div>
-        <% }); %>
-        <% } else { %>
-          <p class="text-muted" style="text-align: center; font-weight:normal;">No courses found</p>
-        <% } %>
+          <% }); %>
+
+            <% if (page> 1 || page < totalPages) { %>
+                <div class="text-center">
+                  <div class="btn-group" role="group">
+                    <% if (page> 1) { %>
+                      <button class="btn btn-primary" onclick="goToPage(<%= page - 1 %>)">Previous Page</button>
+                      <% } %>
+                        <% if (page < totalPages) { %>
+                          <button class="btn btn-primary" onclick="goToPage(<%= page + 1 %>)">Next Page</button>
+                          <% } %>
+                  </div>
+                </div>
+                <% } %>
+                <% } else { %>
+                  <p class="text-muted" style="text-align: center; font-weight:normal;">No courses found</p>
+                <% } %>
+
+      </div>
     </section>
   </main>
+
+  <script src="/js/search.js"></script>
   <%- include("templates/footer") %>
-    <script>
-      function populateSearch(tag) {
-        const searchInput = document.getElementById('search');
-        searchInput.value = tag;
-        const searchForm = document.getElementById('search-form');
-        searchForm.submit();
-      }
-    </script>
