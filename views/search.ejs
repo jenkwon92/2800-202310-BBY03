@@ -34,7 +34,7 @@
           </div>
         </div>
     </section>
-    
+
     <!-- Display search results -->
     <section id="search-section" class="light-2">
       <div class="container">
@@ -89,10 +89,10 @@
                   <div class="text-center">
                     <div class="btn-group" role="group">
                       <% if (page> 1) { %>
-                        <button class="btn btn-primary" onclick="goToPage(<%= page - 1 %>)">Previous Page</button>
+                        <button class="btn btn-default" onclick="goToPage(<%= page - 1 %>)">Previous Page</button>
                         <% } %>
                           <% if (page < totalPages) { %>
-                            <button class="btn btn-primary" onclick="goToPage(<%= page + 1 %>)">Next Page</button>
+                            <button class="btn btn-default" onclick="goToPage(<%= page + 1 %>)">Next Page</button>
                             <% } %>
                     </div>
                   </div>
