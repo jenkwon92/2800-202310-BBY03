@@ -1,54 +1,54 @@
 <%- include("templates/header") %>
-  <main role="main">
+  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/courseDetail.css">
+  <main class="light-2" role="main">
     <section>
       <div class="container">
         <div class="row">
           <div class="col-12">
-            <h1 class="mt-4">
+            <h1>
               <%= course.title %>
             </h1>
-            <img src="/images/course1.jpg" class="img-fluid" alt="Course Image">
-            <h2 class="mt-4">Course Overview</h2>
-            <p>
-              <%= course.description %>
-            </p>
-            <h3>Tags</h3>
-            <% if (course.tags) { const tags=course.tags.split(","); %>
-            <ul class="courses_tags_list">
-                <% tags.forEach((tag)=> { %>
-                  <li class="facts-default">
-                    <%= tag.trim() %>
-                  </li>
-                  <% }) %>
-              </ul>
-              <% } %>
-              <div class="mt-2">
-                <button data="<%= course._id %>" class="btn btn-primary" onclick="saveCourse()">Save</button>
-                <a class="btn btn_start_learning " href="<%=course.link %>" target="_blank">
-                  Start Learning</a>
-                </div>
+            <% const courseTags=course.tags ? course.tags.split(",") : []; %>
+              <% if (courseTags.length> 0) { %>
+                <% const tag=courseTags[0].trim().toLowerCase(); %>
+                  <% if (tag==='ai' ) { %>
+                    <img src="/images/AI.jpg" class="img-fluid" alt="Course Image">
+                    <% } else if (tag==='data science' ) { %>
+                      <img src="/images/datascience.jpg" class="img-fluid" alt="Course Image">
+                      <% } else if (tag==='python' ) { %>
+                        <img src="/images/python.jpg" class="img-fluid" alt="Course Image">
+                        <% } else { %>
+                          <img src="/images/course.jpg" class="img-fluid" alt="Course Image">
+                          <% } %>
+                            <% } else { %>
+                              <img src="/images/course.jpg" class="img-fluid" alt="Course Image">
+                              <% } %>
+                                <h2 class="mt-4">Course Overview</h2>
+                                <p>
+                                  <%= course.description %>
+                                </p>
+                                <h3>Tags</h3>
+                                <% if (course.tags) { const tags=course.tags.split(","); let factsCounter=1; %>
+                                  <ul class="courses_tags_list mb-3">
+                                    <% tags.forEach((tag)=> { %>
+                                      <li class="facts-<%= factsCounter %>">
+                                        <%= tag.trim() %>
+                                      </li>
+                                      <% factsCounter++; %>
+                                        <% }) %>
+                                  </ul>
+                                  <% } %>
+                                  <div class="mt-2">
+                                    <button data="<%= course._id %>" class="btn btn_start_learning" onclick="saveCourse()">Save</button>
+                                    <a class="btn btn_start_learning " href="<%=course.link %>" target="_blank">
+                                      Start Learning</a>
+                                    </div>
           </div>
         </div>
       </div>
     </section>
   </main>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/js/courseDetail.js"></script>
   <%- include("templates/footer") %>
-
-    <script>
-      function saveCourse() {
-        const courseId = '<%= course._id %>';                     // Get the courseId from the server-side template
-        const xhr = new XMLHttpRequest();                         // Create a new XMLHttpRequest object
-        xhr.open('POST', '/saveCourse');                          // Set up the POST request to the '/saveCourse' endpoint
-        xhr.setRequestHeader('Content-Type', 'application/json'); // Set the request header for JSON content
-        xhr.onload = function () {                                // Define the onload event handler for the request
-          if (xhr.status === 200) {                               // Check if the response status is 200 (success)
-            console.log('The course saved successfully');         // Log a success message
-            //window.location.href = '/myCourses';                // Redirect to the 'myCourses' page
-          } else {
-            console.error('Error saving a course');               // Log an error message
-          }
-        };
-        xhr.send(JSON.stringify({ courseId: courseId }));         // Send the courseId as JSON data in the request body
-      }
-    </script>
