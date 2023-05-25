@@ -10,7 +10,7 @@
       border-radius: 5px;
       font-weight: bolder;
     }
-  
+
     .savedbtn {
       display: inline-block;
       margin: 0 5px 5px 0;
@@ -21,32 +21,43 @@
       margin-left: 5px;
       color: #04327d;
     }
-  
+
     .selected-skill .close {
       margin-left: 10px;
       cursor: pointer;
     }
-  
+
     .multiselect-container.dropdown-menu {
       display: none !important;
       max-height: 200px;
       overflow-y: auto;
     }
-  
+
     #selectedSkills {
       display: flex;
       flex-wrap: wrap;
     }
-  
+
     .skill-container {
       display: inline-block;
     }
   </style>
 
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <h4 style="margin-top: 30px;">Edit Skills</h4>
+  <main role="main">
+    <section>
+      <div class="container">
+        <div class="col-lg-12 col-md-12 mb-3">
+          <div>
+            <div class="sec-left mb-3">
+              <span class="material-icons-outlined" style="vertical-align: middle;" onclick="goBack()">arrow_back</span>
+              <h3 style="display: inline-block; margin-left: 5px; vertical-align: middle;">Edit Skills</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="light-2">
+      <div class="container">
         <div class="row">
           <div class="col" style="margin-top: 20px;">
             <div class="dropdown" style="margin-bottom:40px">
@@ -98,8 +109,8 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
@@ -140,7 +151,7 @@
             savedButton.textContent = skill;
 
             savedButtonContainer.appendChild(savedButton); // savedbtn을 컨테이너에 추가
-            skillContainer.appendChild(savedButtonContainer); 
+            skillContainer.appendChild(savedButtonContainer);
 
             const closeButton = document.createElement('span');
             closeButton.className = 'close';
@@ -148,7 +159,7 @@
             closeButton.innerHTML = '&times;';
             closeButton.addEventListener('click', removeSkill);
 
-            skillContainer.appendChild(closeButton); 
+            skillContainer.appendChild(closeButton);
 
             selectedSkillsContainer.appendChild(skillContainer);
 
@@ -172,7 +183,7 @@
       select.passedElement.element.addEventListener('change', function () {
         const selectedOptions = Array.from(this.selectedOptions);
 
-        
+
         skillsSet.clear();
 
         selectedOptions.forEach(option => {

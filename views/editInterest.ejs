@@ -10,7 +10,7 @@
       border-radius: 5px;
       font-weight: bolder;
     }
-  
+
     .savedbtn {
       display: inline-block;
       margin: 0px 5px 5px 0;
@@ -21,32 +21,43 @@
       margin-left: 5px;
       color: #04327d;
     }
-  
+
     .selected-interest .close {
       margin-left: 10px;
       cursor: pointer;
     }
-  
+
     .multiselect-container.dropdown-menu {
       display: none !important;
       max-height: 200px;
       overflow-y: auto;
     }
-  
+
     /* #selectedInterests {
       display: flex;
       flex-wrap: wrap;
     } */
-  
+
     /* .interest-container {
       display: inline-block;
     } */
   </style>
 
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <h4 style="margin-top: 30px;">Edit Interests</h4>
+  <main role="main">
+    <section>
+      <div class="container">
+        <div class="col-lg-12 col-md-12 mb-3">
+          <div>
+            <div class="sec-left mb-3">
+              <span class="material-icons-outlined" style="vertical-align: middle;" onclick="goBack()">arrow_back</span>
+              <h3 style="display: inline-block; margin-left: 5px; vertical-align: middle;">Edit Interests</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="light-2">
+      <div class="container">
         <div class="row">
           <div class="col" style="margin-top: 20px;">
             <div class="dropdown" style="margin-bottom:40px">
@@ -80,32 +91,31 @@
             <div id="interestSet1" class="border p-3 mt-3">
               <div id="selectedInterests">
                 <ul class="courses_tags_list interest-container" style="display: inline-block;">
-                <% if (interests && interests.length> 0) { %>
-                  <% interests.forEach(function(interest) { %>
-                    <div style="display: inline-block;" class="singleInterest">
-                      <li class="facts-1 savedbtn">
-                      <!-- <button type="button" class="btn btn-rounded savedbtn" style="margin-bottom: 8px;"> -->
-                        <%= interest %>
-                      <!-- </button> -->
-                    </li>
-                      <span class="close" data-interest="<%= interest %>">&times;</span>
-                    </div>
+                  <% if (interests && interests.length> 0) { %>
+                    <% interests.forEach(function(interest) { %>
+                      <div style="display: inline-block;" class="singleInterest">
+                        <li class="facts-1 savedbtn">
+                          <!-- <button type="button" class="btn btn-rounded savedbtn" style="margin-bottom: 8px;"> -->
+                          <%= interest %>
+                            <!-- </button> -->
+                        </li>
+                        <span class="close" data-interest="<%= interest %>">&times;</span>
+                      </div>
                       <% }); %>
-                      <% } else { %>
-                        <p>Update your interests</p>
-                        <% } %>
-                      </ul>
+                        <% } else { %>
+                          <p>Update your interests</p>
+                          <% } %>
+                </ul>
               </div>
             </div>
-            <p id="save-button" style="font-size: 20px; color: #B4CDED; float: right; margin-top: 20px;" class="material-icons-outlined profile-button"
-              type="submit">save
+            <p id="save-button" style="font-size: 20px; color: #B4CDED; float: right; margin-top: 20px;"
+              class="material-icons-outlined profile-button" type="submit">save
             </p>
-            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-
+    </section>
+  </main>
   <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
   <script>
@@ -129,7 +139,7 @@
 
         if (interestsSet.size > 0) {
           interestsSet.forEach(interest => {
-            
+
             // interestContainer.className = 'interest-container';
 
             const savedInterestsContainer = document.createElement('div'); // savedbtn을 감싸는 컨테이너 요소
@@ -173,24 +183,24 @@
       }
 
       select.passedElement.element.addEventListener('change', function () {
-  const selectedOptions = Array.from(this.selectedOptions);
+        const selectedOptions = Array.from(this.selectedOptions);
 
-  selectedOptions.forEach(option => {
-    if (!interestsSet.has(option.value)) {
-      interestsSet.add(option.value);
-    }
-  });
+        selectedOptions.forEach(option => {
+          if (!interestsSet.has(option.value)) {
+            interestsSet.add(option.value);
+          }
+        });
 
-  // Remove deselected options from interestsSet
-  const deselectedOptions = Array.from(interestsSet).filter(interest => {
-    return !selectedOptions.some(option => option.value === interest);
-  });
-  deselectedOptions.forEach(option => {
-    interestsSet.delete(option);
-  });
+        // Remove deselected options from interestsSet
+        const deselectedOptions = Array.from(interestsSet).filter(interest => {
+          return !selectedOptions.some(option => option.value === interest);
+        });
+        deselectedOptions.forEach(option => {
+          interestsSet.delete(option);
+        });
 
-  updateSelectedInterests();
-});
+        updateSelectedInterests();
+      });
 
       const saveButton = document.querySelector('#save-button');
       saveButton.addEventListener('click', saveInterests);
