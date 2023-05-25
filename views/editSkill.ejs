@@ -13,7 +13,7 @@
 
     .savedbtn {
       display: inline-block;
-      margin: 0 5px 5px 0;
+      margin: 0px 5px 5px 0;
       padding: 5px 10px;
       background-color: #b4cded;
       border-radius: 5px;
@@ -33,14 +33,14 @@
       overflow-y: auto;
     }
 
-    #selectedSkills {
+    /* #selectedSkills {
       display: flex;
       flex-wrap: wrap;
     }
 
     .skill-container {
       display: inline-block;
-    }
+    } */
   </style>
 
   <main role="main">
@@ -88,24 +88,27 @@
                 </select>
               </div>
             </div>
-            <div id="skillSet1" class="border p-3 mt-3">
+            <div id="skillSet1" class="border p-3 mt-3" style="background:#fff">
               <div id="selectedSkills">
+                <ul class="courses_tags_list skill-container" style="display: inline-block;">
                 <% if (skills && skills.length> 0) { %>
                   <% skills.forEach(function(skill) { %>
-                    <div class="skill-container">
-                      <button type="button" class="btn btn-rounded savedbtn" style="margin-bottom: 8px;">
+                    <div style="display: inline-block;" class="singleSkill">
+                      <li class="facts-1 savedbtn">
                         <%= skill %>
-                      </button>
+                      </li>
                       <span class="close" data-skill="<%= skill %>">&times;</span>
                     </div>
                     <% }); %>
                       <% } else { %>
                         <p>Update your Skills</p>
                         <% } %>
+              </ul>
               </div>
             </div>
-            <button id="save-button" class="btn btn-sm btn-dark profile-button" type="submit"
-              style="font-size: 15px; float: right; margin-top: 20px;">Save</button>
+            <p id="save-button" style="font-size: 20px; color: #B4CDED; float: right; margin-top: 20px;"
+              class="material-icons-outlined profile-button" type="submit">save
+            </p>
           </div>
         </div>
       </div>
@@ -128,7 +131,8 @@
       });
 
       const selectedSkillsContainer = document.querySelector('#selectedSkills');
-      const selectedSkills = document.querySelector('#selectedSkills');
+      // const selectedSkills = document.querySelector('#selectedSkills');
+      const skillContainer = document.querySelector('.skill-container'); // 새로운 컨테이너 요소 생성
       let skillsSet = new Set(); // Create a Set to store the selected skills
 
       // Function to add or remove the selected skills container
@@ -137,23 +141,18 @@
 
         if (skillsSet.size > 0) {
           skillsSet.forEach(skill => {
-            
-            const skillContainer = document.createElement('div');
-            skillContainer.className = 'skill-container';
 
             const savedButtonContainer = document.createElement('div'); // savedbtn을 감싸는 컨테이너 요소
             savedButtonContainer.style.display = 'inline-block'; // 가로 정렬을 위해 inline-block 스타일 적용
+            savedButtonContainer.className = 'singleSkill'; // 가로 정렬을 위해 inline-block 스타일 적용
 
             const skillText = document.createTextNode(skill);
-            const savedButton = document.createElement('button');
-            savedButton.type = 'button';
-            savedButton.className = 'btn btn-rounded savedbtn';
-            savedButton.style.marginBottom = '8px';
-            savedButton.style.marginTop = '8px';
-            savedButton.textContent = skill;
+            const savedSkill = document.createElement('li');
+            savedSkill.className = 'facts-1 savedbtn';
+            savedSkill.textContent = skill;
 
-            savedButtonContainer.appendChild(savedButton); // savedbtn을 컨테이너에 추가
-            skillContainer.appendChild(savedButtonContainer);
+            savedButtonContainer.appendChild(savedSkill); // savedbtn을 컨테이너에 추가
+            // skillContainer.appendChild(savedButtonContainer);
 
             const closeButton = document.createElement('span');
             closeButton.className = 'close';
@@ -161,10 +160,10 @@
             closeButton.innerHTML = '&times;';
             closeButton.addEventListener('click', removeSkill);
 
-            skillContainer.appendChild(closeButton);
+            savedButtonContainer.appendChild(closeButton);
 
-            selectedSkillsContainer.appendChild(skillContainer);
-
+            skillContainer.appendChild(savedButtonContainer);
+            selectedSkills.appendChild(skillContainer);
           });
         } else {
           const updateSkillsText = document.createElement('p');
