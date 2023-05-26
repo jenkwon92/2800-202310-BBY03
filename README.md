@@ -88,14 +88,14 @@ It has the following subfolders and files:
 |    |    └── profile.css               # CSS file for profile page
 |    ├── dataset                # Dataset folder
 |    ├── easterEgg              # Easter egg folder
-|    |    ├── cloud1.png                # Source:
-|    |    ├── cloud2.png                # Source: 
-|    |    ├── cloud3.png                # Source: 
-|    |    ├── cloud4.png                # Source: 
-|    |    ├── cloud5.png                # Source: 
-|    |    ├── cloud6.png                # Source: 
-|    |    ├── plane.png                 # Source: 
-|    |    └── plane.wav                 # Source: 
+|    |    ├── cloud1.png                # Source: https://illustoon.com/
+|    |    ├── cloud2.png                # Source: https://illustoon.com/
+|    |    ├── cloud3.png                # Source: https://illustoon.com/
+|    |    ├── cloud4.png                # Source: https://illustoon.com/
+|    |    ├── cloud5.png                # Source: https://illustoon.com/
+|    |    ├── cloud6.png                # Source: https://illustoon.com/
+|    |    ├── plane.png                 # Source: https://illustoon.com/
+|    |    └── plane.wav                 # Source: https://pixabay.com/sound-effects/search/plane/
 |    ├── images               # Images folder
 |    |    ├── profile           #Profile folder
 |    |    |   └──default.jpg            # Source: https://www.vectorstock.com/royalty-free-vectors/default-vectors 
@@ -111,7 +111,6 @@ It has the following subfolders and files:
 |    |    └── udemy.png                 # Source: https://twitter.com/udemy             
 |    ├── js                     # JavaScript folder
 |    |    ├── courseDetail.js           # JS file for course details page
-|    |    ├── easterEgg_origin.js       # JS file for easter egg
 |    |    ├── easterEgg.js              # JS file for easter egg
 |    |    ├── main.js                   # JS file for main page
 |    |    └── search.js                 # JS file for search page
@@ -119,8 +118,7 @@ It has the following subfolders and files:
 └── views                   # Views folder
      ├── templates              # Templates folder
      |    ├── footer.ejs                # EJS file for footer
-     |    ├── header.ejs                # EJS file for header 1
-     |    └── header2.ejs               # EJS file for header 2
+     |    ├── header.ejs                # EJS file for header
      ├── 404.ejs                        # EJS file for 404 page
      ├── chatbot.ejs                    # EJS file for chatbot page
      ├── courseDetail.ejs               # EJS file for course details page

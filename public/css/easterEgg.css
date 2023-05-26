@@ -1,3 +1,6 @@
+/*===================================================
+            Easter Egg Elements
+==================================================*/
 .cloud {
   position: absolute;
   left: -120px;
@@ -21,6 +24,5 @@
   width: 100%;
   top: 20%;
   height: 70%;
-  /* background-color: #cde4f9; */
   overflow: hidden;
 }
