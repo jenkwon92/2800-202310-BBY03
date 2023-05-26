@@ -1,55 +1,153 @@
 <%- include("templates/header") %>
-  <section>
-    <div class="row d-flex justify-content-center">
-      <div class="col-md-8 col-lg-6 col-xl-4">
-
-        <div class="card" id="chat1" style="border:none;">
-          <div class="card-body" style="height: 65vh; overflow-y: scroll;">
-
-            <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="/images/cat1.jpg" alt="avatar 1" style="width: 45px; height: 100%;">
-              <div class="p-3 ms-3" style="border-radius: 15px; background-color: #dee2e6">
-                <p class="small mb-0">Here are curated courses that refered to your skills and
-                  interests.</p>
-              </div>
+  <main role="main">
+    <section>
+      <div class="container">
+        <div class="col-lg-12 col-md-12 mb-3">
+          <div>
+            <div class="sec-left">
+              <span class="material-icons-outlined" style="vertical-align: middle;" onclick="goBack()">arrow_back</span>
+              <h3 style="display: inline-block; margin-left: 5px; vertical-align: middle;">Chatbot</h3>
             </div>
-
-            <script>
-              console.log("Image 1 source:", "/images/cat1.jpg");
-            </script>
-
-            <div class="d-flex flex-row justify-content-end mb-4">
-              <div class="p-3 me-3 border" style="border-radius: 15px; background-color: #fbfbfb;">
-                <p class="small mb-0">Thank you, I really like your product.</p>
-              </div>
-              <img src="/images/cat1.jpg" alt="avatar 1" style="width: 45px; height: 100%;">
-            </div>
-
-            <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="/images/cat1.jpg" alt="avatar 1" style="width: 45px; height: 100%;">
-              <div class="p-3 ms-3" style="border-radius: 15px; background-color: #dee2e6">
-                <p class="small mb-0">...</p>
-              </div>
-            </div>
-            <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="/images/cat1.jpg" alt="avatar 1" style="width: 45px; height: 100%;">
-              <div class="p-3 ms-3" style="border-radius: 15px; background-color: #dee2e6">
-                <p class="small mb-0">...</p>
-              </div>
-            </div>
-            <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="/images/cat1.jpg" alt="avatar 1" style="width: 45px; height: 100%;">
-              <div class="p-3 ms-3" style="border-radius: 15px; background-color: #dee2e6">
-                <p class="small mb-0">...</p>
-              </div>
-            </div>
-          </div>
-          <div class="form-outline">
-            <textarea class="form-control" id="textAreaExample" rows="1"></textarea>
-            <label class="form-label" for="textAreaExample">Type your message</label>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+    <section class="light-2">
+      <div class="container" style="margin-bottom:4rem">
+        <div class="row d-flex justify-content-center">
+          <div class="col-xl-12 col-lg-12 col-12">
+            <div class="card" id="chat1" style="border:none;">
+              <div class="card-body" style="height: 65vh; overflow-y: scroll;" id="chat-messages">
+                <div class="d-flex flex-row justify-content-start mb-4">
+                  <span class="material-icons-outlined" style="font-size: 2rem; color:#B4CDED;">smart_toy</span>
+                  <div class="p-3 ms-3" style="border-radius: 15px; background-color: #dee2e6">
+                    <p class="small mb-0">Hello, I am here to help you.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-outline p-2 fixed-bottom" style="margin-bottom:4rem">
+        <textarea class="form-control" id="textAreaExample" rows="1" placeholder="Type your message"></textarea>
+      </div>
+    </section>
+  </main>
   <%- include("templates/footer") %>
+
+    <script>
+      // Send chatbot API request from client side
+      function sendChatMessage() {
+        const input = document.getElementById("textAreaExample").value;     // Get the input message from the textarea
+        const messageContainer = document.getElementById("chat-messages");  // Get the message container element
+        const userMessage = createMessageElement(input, true);              // Create a user message element
+        messageContainer.appendChild(userMessage);                          // Append the user message element to the message container
+        document.getElementById("textAreaExample").value = "";              // Clear the textarea
+
+        // Send chatbot API request
+        fetch("/chatbotMessages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ input }),                                  // Send the input message to the server
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();                                       // Parse the response as JSON
+            } else {
+              throw new Error("Request failed");
+            }
+          })
+          .then((data) => {
+            const botMessage = createMessageElement(data.output, false);    // Create a bot message element with the response from the server
+            messageContainer.appendChild(botMessage);                       // Append the bot message element to the message container
+
+            scrollToBottom(messageContainer);                               // Scroll to the bottom of the chat container
+            clearTextarea();                                                // Clear the textarea
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      // Create message element
+      function createMessageElement(message, isUser) {
+        message = message.replace(/^\s*[\r\n]+|<br\s*\/?>\s*|[\r\n]+\s*$/g, '');  // Remove empty lines and <br> tags from the message
+
+        if (message.trim() === '') {
+          return null;                                                            // Skip creating the message element if it's empty
+        }
+
+
+        const messageElement = document.createElement("div");                     // Create a new div element for the message
+        const messageClass = isUser ? "user-message" : "bot-message";             // Determine the CSS class based on the message type
+        messageElement.classList.add(messageClass);                               // Add the CSS class to the message element
+
+        if (isUser) {
+          messageElement.classList.add("d-flex", "flex-row", "justify-content-end", "mb-4");  // Add CSS classes for user message
+
+          const userMessageContent = document.createElement("div");               // Create a div element for the user message content             
+          userMessageContent.classList.add("p-3", "me-3", "border");              // Add CSS classes for user message content
+          userMessageContent.style.borderRadius = "15px";                         // Set border radius
+          userMessageContent.style.backgroundColor = "#fbfbfb";                   // Set background color
+
+          const userMessageText = document.createElement("p");                    // Create a paragraph element for the user message text
+          userMessageText.classList.add("small", "mb-0");                         // Add CSS classes for user message text
+          userMessageText.innerText = message;                                    // Set the text content of the user message
+          userMessageContent.appendChild(userMessageText);                        // Append the user message text to the user message content div
+
+          // const userAvatar = document.createElement("img");
+          // userAvatar.src = "/images/profile/default.jpg";
+          // userAvatar.alt = "avatar 1";
+          // userAvatar.style.width = "45px";
+          // userAvatar.style.height = "100%";
+
+          messageElement.appendChild(userMessageContent);                         // Append the user message content to the message element
+          // messageElement.appendChild(userAvatar);
+
+
+        } else {
+          messageElement.classList.add("d-flex", "flex-row", "justify-content-start", "mb-4");  // Add CSS classes for bot message
+
+          const botIcon = document.createElement("span");                         // Create a span element for the bot icon
+          botIcon.classList.add("material-icons-outlined");                       // Add CSS class for bot icon
+          botIcon.style.fontSize = "2rem";                                        // Set font size
+          botIcon.style.color = "#B4CDED";                                        // Set icon color
+          botIcon.innerText = "smart_toy";                                        // Set the icon content
+
+          const botMessageContent = document.createElement("div");                // Create a div element for the bot message content
+          botMessageContent.classList.add("p-3", "ms-3");                         // Add CSS classes for bot message content
+          botMessageContent.style.borderRadius = "15px";                          // Set border radius
+          botMessageContent.style.backgroundColor = "#dee2e6";                    // Set background color
+          const botMessageText = document.createElement("p");                     // Create a paragraph element for the bot message text
+          botMessageText.classList.add("small", "mb-0");                          // Add CSS classes for bot message text
+          botMessageText.innerText = message;                                     // Set the text content of the bot message
+          botMessageContent.appendChild(botMessageText);                          // Append the bot message text to the bot message content div
+
+          messageElement.appendChild(botIcon);                                    // Append the bot icon to the message element
+          messageElement.appendChild(botMessageContent);                          // Append the bot message content to the message element
+        }
+        return messageElement;                                                    // Return the created message element
+      }
+
+      // Scroll to the bottom of the chat container
+      function scrollToBottom(container) {
+        container.scrollTop = container.scrollHeight;                             // Set the scrollTop property to the scrollHeight to scroll to the bottom
+      }
+
+      // Clear the textarea
+      function clearTextarea() {
+        document.getElementById("textAreaExample").value = "";                    // Clear the textarea value
+        document.getElementById("textAreaExample").focus();                       // Set focus back to the textarea
+      }
+
+      // Send chatbot message when Enter key is entered
+      document.getElementById("textAreaExample").addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+          event.preventDefault();                                                 // Prevent newline character from being added to the textarea
+          sendChatMessage();                                                      // Call the function to send the chat message
+        }
+      });
+    </script>

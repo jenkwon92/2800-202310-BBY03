@@ -8,169 +8,112 @@
         <h1 class="jumbotron-heading user_name">
           <%=username%>
         </h1>
-        <div class="path-img user_img"><a href="/profile" tabindex="-1"><img src="/images/cat1.jpg" class="img-fluid"
+        <div class="path-img user_img"><a href="/profile" tabindex="-1"><img src="<%= userImage %>" class="img-fluid"
               alt=""></a></div>
       </div>
     </div>
   </div>
   <main role="main">
     <section class="light-2">
-      <div class="container">
+      <div class="container" style="height:40vh;">
         <div class="col-lg-12 col-md-12 mb-3">
           <div class="sec-heading2">
             <div class="sec-left">
-              <h3>My Courses</h3>
+              <h3 class="fw-normal">My Courses</h3>
             </div>
             <div class="sec-right">
               <a href="/myCourses" class="btn-br-more">See All</a>
             </div>
           </div>
         </div>
-
         <div class="row">
-          <div class="col-lg-12 col-md-12 col-sm-12 p-3">
-            <div class="my_courses">
-              <div class="my_courses_block_grid style_3 m-1">
-                <div class="my_courses_block_thumb n-shadow">
-                  <a href="/courseDetail"><img src="/images/cat1.jpg" class="my_courses_course_image img-fluid"
-                      alt=""></a>
-                </div>
-                <div class="my_courses_block_body">
-                  <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a></h4>
-                  <div class="my_courses_block_author">
-                    <h5><a href="/courseDetail">Shaurya Preet</a></h5>
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <% if (myCourses && myCourses.length> 0) { %>
+              <div class="my_courses" style="margin-bottom:0;">
+                <% myCourses.forEach((course)=> { %>
+
+                  <div class="my_courses_block_grid style_3 m-1">
+                    <div class="my_courses_block_body">
+                      <h4 class="bl-title"><a href="/courseDetail/<%= course._id %>">
+                          <%= course.title %>
+                        </a></h4>
+                      <div class="my_courses_block_description">
+                        <h5><a href="/courseDetail/<%= course._id %>">
+                            <%= course.description %>
+                          </a></h5>
+                      </div>
+                    </div>
+                    <div class="courses_tags">
+                      <ul class="courses_tags_list">
+                        <li class="facts-1">
+                          <%= course.tags %>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="my_courses_block_footer">
+                      <div class="btn_start_learning" onclick="openNewWindow('<%= course.link %>')"><i
+                          class="ti-control-skip-forward mr-2"></i>Start
+                        learning
+                      </div>
+                    </div>
                   </div>
-                  <div class="my_courses_block_website">
-                    <h5><a href="/courseDetail">Udemy</a></h5>
-                  </div>
-                </div>
-                <div class="courses_tags">
-                  <ul class="courses_tags_list">
-                    <li class="facts-1">Python</li>
-                    <li class="facts-2">Basic</li>
-                    <li class="facts-5">Backend</li>
-                  </ul>
-                </div>
-                <div class="my_courses_block_footer">
-                  <div class="btn_start_learning"><i class="ti-control-skip-forward mr-2"></i>Start
-                    learning
-                  </div>
-                </div>
+                  <% }); %>
               </div>
-              <div class="my_courses_block_grid style_3 m-1">
-                <div class="my_courses_block_thumb n-shadow">
-                  <a href="/courseDetail"><img src="/images/cat1.jpg" class="my_courses_course_image img-fluid"
-                      alt=""></a>
-                </div>
-                <div class="my_courses_block_body">
-                  <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a></h4>
-                  <div class="my_courses_block_author">
-                    <h5><a href="/courseDetail">Shaurya Preet</a></h5>
-                  </div>
-                  <div class="my_courses_block_website">
-                    <h5><a href="/courseDetail">Udemy</a></h5>
-                  </div>
-                </div>
-                <div class="courses_tags">
-                  <ul class="courses_tags_list">
-                    <li class="facts-1">Python</li>
-                    <li class="facts-2">Basic</li>
-                    <li class="facts-5">Backend</li>
-                  </ul>
-                </div>
-                <div class="my_courses_block_footer">
-                  <div class="btn_start_learning"><i class="ti-control-skip-forward mr-2"></i>Start
-                    learning
-                  </div>
-                </div>
-              </div>
-              <div class="my_courses_block_grid style_3 m-1">
-                <div class="my_courses_block_thumb n-shadow">
-                  <a href="/courseDetail"><img src="/images/cat1.jpg" class="my_courses_course_image img-fluid"
-                      alt=""></a>
-                </div>
-                <div class="my_courses_block_body">
-                  <h4 class="bl-title"><a href="/courseDetail">Python for Data Science</a></h4>
-                  <div class="my_courses_block_author">
-                    <h5><a href="/courseDetail">Shaurya Preet</a></h5>
-                  </div>
-                  <div class="my_courses_block_website">
-                    <h5><a href="/courseDetail">Udemy</a></h5>
-                  </div>
-                </div>
-                <div class="courses_tags">
-                  <ul class="courses_tags_list">
-                    <li class="facts-1">Python</li>
-                    <li class="facts-2">Basic</li>
-                    <li class="facts-5">Backend</li>
-                  </ul>
-                </div>
-                <div class="my_courses_block_footer">
-                  <div class="btn_start_learning"><i class="ti-control-skip-forward mr-2"></i>Start
-                    learning
-                  </div>
-                </div>
-              </div>
-            </div>
+              <% } else { %>
+                <p class="text-muted" style="text-align: center; font-weight:normal;">No courses found</p>
+                <% } %>
           </div>
         </div>
       </div>
     </section>
 
     <section class="light-2">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 mb-3">
-                    <div class="sec-heading2">
-                        <div class="sec-left">
-                            <h3>Recommendations</h3>
-                        </div>
-                        <div class="sec-right">
-                            <a href="/recommendation" class="btn-br-more">See All</a>
-                        </div>
-                    </div>
-                </div>
-                <% if (!recommendedCourses) { %>
-                    <div class="col-12">
-                        <p>No recommended courses found.</p>
-                    </div>
-                <% } else { %>
-                    <% recommendedCourses.slice(0, 2).forEach((course) => { %>
-                        <div class="col-xl-6 col-lg-6 col-12">
-                            <div class="box mb-15 recommendations_course_grid">
-                                <div class="recommendations_course_body">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <div class="d-flex flex-column fw-500">
-                                                <h4 class="bl-title"><a href="/courseDetail"><%= course.title %></a></h4>
-                                            </div>
-                                        </div>
-                                        <a href="<%= course.link %>">
-                                            <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span
-                                                class="path2"></span></span>
-                                        </a>
-                                    </div>
-                                    <p style="font-size: smaller;"><%= course.description %></p>
-                                </div>
-                            </div>
-                        </div>
-                    <% }) %>
-                <% } %>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 mb-3">
+            <div class="sec-heading2">
+              <div class="sec-left">
+                <h3 class="fw-normal">Recommendations</h3>
+              </div>
+              <div class="sec-right">
+                <a href="/recommendation" class="btn-br-more">See All</a>
+              </div>
             </div>
+          </div>
+          <% if (!recommendedCourses) { %>
+            <div class="col-12">
+              <p>No recommended courses found.</p>
+            </div>
+            <% } else { %>
+              <% recommendedCourses.slice(0, 2).forEach((course)=> { %>
+                <div class="col-xl-6 col-lg-6 col-12">
+                  <div class="box mb-15 recommendations_course_grid">
+                    <div class="recommendations_course_body">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                          <div class="d-flex flex-column fw-500">
+                            <h4 class="bl-title"><a href="/courseDetail/<%= course._id %>">
+                                <%= course.title %>
+                              </a></h4>
+                          </div>
+                        </div>
+                        <a href="<%= course.link %>">
+                          <i class="fa-solid fa-arrow-right"></i><span class="path1"></span><span
+                            class="path2"></span></span>
+                        </a>
+                      </div>
+                      <p style="font-size: smaller;">
+                        <%= course.description %>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <% }) %>
+                  <% } %>
         </div>
+      </div>
     </section>
   </main>
-  <!-- <div id="sky">
-    <div id="clouds">
-    </div>
-    <img id="plane" src="/easterEgg/plane.png">
-    <img class="cloud" src="/easterEgg/cloud1.png">
-    <img class="cloud" src="/easterEgg/cloud2.png">
-    <img class="cloud" src="/easterEgg/cloud3.png">
-    <img class="cloud" src="/easterEgg/cloud4.png">
-    <img class="cloud" src="/easterEgg/cloud5.png">
-    <img class="cloud" src="/easterEgg/cloud6.png">
-  </div> -->
 
   <!-- Scripts for Jquery -->
   <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -186,4 +129,9 @@
   <!-- Scripts for slick carousel -->
   <script src="/js/main.js"></script>
 
+  <script>
+    function openNewWindow(link) {
+      window.open(link, '_blank');
+    }
+  </script>
   <%- include("templates/footer") %>

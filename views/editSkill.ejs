@@ -1,37 +1,29 @@
+<link rel="stylesheet" href="/css/profile.css">
 <%- include("templates/header") %>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
-
-  <style>
-    .selected-skill {
-      display: inline-block;
-      margin: 0 5px 5px 0;
-      padding: 5px 10px;
-      background-color: #e9ecef;
-      border-radius: 5px;
-    }
-
-    .selected-skill .close {
-      margin-left: 10px;
-      cursor: pointer;
-    }
-
-    .multiselect-container.dropdown-menu {
-      display: none !important;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-  </style>
-
-  <div class="container">
-    <div class="row">
-      <div class="col" style="margin-top: 30px;">
-        <h4>Skills</h4>
+  <main role="main">
+    <section>
+      <div class="container">
+        <div class="col-lg-12 col-md-12 mb-3">
+          <div>
+            <div class="sec-left mb-3">
+              <span class="material-icons-outlined" style="vertical-align: middle;" onclick="goBack()">arrow_back</span>
+              <h3 style="display: inline-block; margin-left: 5px; vertical-align: middle;">Edit Skills</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="light-2">
+      <div class="container">
         <div class="row">
-          <div class="col">
+          <div class="col" style="margin-top: 20px;">
             <div class="dropdown" style="margin-bottom:40px">
-              <button style="width:80%;" class="btn btn-secondary dropdown-toggle" type="button" id="multiSelectButton"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Select your skills
+              <button
+                style="width:100%; height: 50px; font-size: larger; background-color: #6D9DC5; color: white; font-weight: 600;"
+                class="btn" type="button" id="multiSelectButton" data-bs-toggle="dropdown">
+                Skills <i class="material-icons"
+                  style="vertical-align: middle; margin-left: 180px;">keyboard_arrow_down</i>
               </button>
               <div class="dropdown-menu" aria-labelledby="multiSelectButton" style="width:100%;">
                 <select id="multiSelect" multiple style="width:100%;">
@@ -41,35 +33,45 @@
                   <option value="React">React</option>
                   <option value="jquery">jQuery</option>
                   <option value="C++">C++</option>
+                  <option value="R">R</option>
                   <option value="Python">Python</option>
                   <option value="HTML">HTML</option>
                   <option value="CSS">CSS</option>
                   <option value="MySQL">MySQL</option>
+                  <option value="SQL">SQL</option>
                   <option value="MongoDB">MongoDB</option>
+                  <option value="AI">AI</option>
+                  <option value="Big Data">Big Data</option>
+                  <option value="Django">Django</option>
                 </select>
               </div>
             </div>
-            <div id="skillSet1" class="border p-3 mt-3">
+            <div id="skillSet1" class="border p-3 mt-3" style="background:#fff">
               <div id="selectedSkills">
+                <ul class="courses_tags_list skill-container" style="display: inline-block;">
                 <% if (skills && skills.length> 0) { %>
                   <% skills.forEach(function(skill) { %>
-                    <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
-                      <%= skill %>
-                    </button>
-
+                    <div style="display: inline-block;" class="singleSkill">
+                      <li class="facts-1 savedbtn">
+                        <%= skill %>
+                      </li>
+                      <span class="close" data-skill="<%= skill %>">&times;</span>
+                    </div>
                     <% }); %>
                       <% } else { %>
-                        <p>No skills available</p>
+                        <p>Update your Skills</p>
                         <% } %>
+              </ul>
               </div>
             </div>
-            <button id="save-button" class="btn btn-sm btn-dark profile-button" type="submit"
-              style="font-size: 15px; float: right; margin-top: 20px;">Save</button>
+            <p id="save-button" style="font-size: 20px; color: #B4CDED; float: right; margin-top: 20px;"
+              class="material-icons-outlined profile-button" type="submit">save
+            </p>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
@@ -80,80 +82,144 @@
         placeholderValue: 'Select your skills',
         removeItemButton: true,
         maxItemCount: -1,
-        allowHTML: true
+        allowHTML: true,
+        classNames: {
+          removeButton: 'choices__button choices__button--remove'
+        }
       });
 
-      const selectedSkills = document.querySelector('#selectedSkills');
-      const skillSet1 = document.querySelector('#skillSet1');
+      const selectedSkillsContainer = document.querySelector('#selectedSkills');
+      // const selectedSkills = document.querySelector('#selectedSkills');
+      const skillContainer = document.querySelector('.skill-container'); // 새로운 컨테이너 요소 생성
+      let skillsSet = new Set(); // Create a Set to store the selected skills
+
+      // Function to add or remove the selected skills container
+      function updateSelectedSkills() {
+        const selectedSkillsContainer = document.querySelector('#selectedSkills');
+
+        if (skillsSet.size > 0) {
+          skillsSet.forEach(skill => {
+
+            const savedButtonContainer = document.createElement('div'); // savedbtn을 감싸는 컨테이너 요소
+            savedButtonContainer.style.display = 'inline-block'; // 가로 정렬을 위해 inline-block 스타일 적용
+            savedButtonContainer.className = 'singleSkill'; // 가로 정렬을 위해 inline-block 스타일 적용
+
+            const skillText = document.createTextNode(skill);
+            const savedSkill = document.createElement('li');
+            savedSkill.className = 'facts-1 savedbtn';
+            savedSkill.textContent = skill;
+
+            savedButtonContainer.appendChild(savedSkill); // savedbtn을 컨테이너에 추가
+            // skillContainer.appendChild(savedButtonContainer);
+
+            const closeButton = document.createElement('span');
+            closeButton.className = 'close';
+            closeButton.dataset.skill = skill;
+            closeButton.innerHTML = '&times;';
+            closeButton.addEventListener('click', removeSkill);
+
+            savedButtonContainer.appendChild(closeButton);
+
+            skillContainer.appendChild(savedButtonContainer);
+            selectedSkills.appendChild(skillContainer);
+          });
+        } else {
+          const updateSkillsText = document.createElement('p');
+          updateSkillsText.textContent = 'Update your skills';
+          selectedSkillsContainer.appendChild(updateSkillsText);
+        }
+
+        // Add event listeners to existing buttons
+        const existingButtons = selectedSkillsContainer.querySelectorAll('.savedbtn');
+        existingButtons.forEach(button => {
+          const closeButton = button.querySelector('.close');
+          if (closeButton) {
+            closeButton.addEventListener('click', removeSkill);
+          }
+        });
+      }
 
       select.passedElement.element.addEventListener('change', function () {
-        selectedSkills.innerHTML = '';
         const selectedOptions = Array.from(this.selectedOptions);
+
+
+        skillsSet.clear();
+
         selectedOptions.forEach(option => {
-          const skillContainer = document.createElement('div');
-          skillContainer.className = 'selected-skill';
-          const skillText = document.createElement('span');
-          skillText.textContent = option.text;
-
-          const closeButton = document.createElement('span');
-          closeButton.className = 'close';
-          closeButton.innerHTML = '&times;';
-          closeButton.addEventListener('click', function () {
-            skillContainer.remove();
-            select.removeActiveItemsByValue(option.value);
-            saveSkills(); // Call saveSkills() after removing the skill
-          });
-
-          skillContainer.appendChild(skillText);
-          skillContainer.appendChild(closeButton);
-
-          selectedSkills.appendChild(skillContainer);
+          skillsSet.add(option.value);
         });
 
-        // Show or hide the skillSet1 div based on the selected skills
-        if (selectedOptions.length > 0) {
-          skillSet1.style.display = 'block';
-        } else {
-          skillSet1.style.display = 'none';
-        }
-      });
-
-      // Remove skill when close button is clicked
-      selectedSkills.addEventListener('click', function (event) {
-        if (event.target.classList.contains('close')) {
-          const skill = event.target.dataset.skill;
-          const skillContainer = event.target.parentNode;
-          skillContainer.remove();
-          select.removeActiveItemsByValue(skill);
-          saveSkills(); // Call saveSkills() after removing the skill
-        }
+        updateSelectedSkills();
       });
 
       const saveButton = document.querySelector('#save-button');
       saveButton.addEventListener('click', saveSkills);
 
       function saveSkills() {
-        const selectedOptions = Array.from(select.getValue(false));
-        const skills = selectedOptions.map(option => option.value).join(',');
+        const skills = Array.from(skillsSet);
 
-        if (skills.trim() === '') {
-          console.error('Skills data is missing');
+        if (skills.length === 0) {
+          window.location.href = '/profile';
           return;
         }
 
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/saveSkills');
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = function () {
-          if (xhr.status === 200) {
-            console.log('Skills saved successfully');
-            window.location.href = '/profile'; // redirect to the profile page
-          } else {
-            console.error('Error saving skills');
-          }
-        };
-        xhr.send(JSON.stringify({ skills: skills })); // Send skills data as JSON object
+        fetch('/saveSkills', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ skills }),
+        })
+          .then(response => {
+            if (response.ok) {
+              console.log('skills saved successfully');
+              window.location.href = '/profile';
+            } else {
+              throw new Error('Error saving skills');
+            }
+          })
+          .catch(error => {
+            console.error('Error saving skills:', error);
+          });
       }
+
+      function removeSkill(event) {
+        const skill = event.currentTarget.dataset.skill;
+        console.log('Removing skill:', skill);
+
+        const singleSkill = event.currentTarget.closest('.singleSkill');
+        if (singleSkill !== null) {
+          singleSkill.remove();
+
+          fetch('/removeSkill', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ skill }),
+          })
+            .then(response => {
+              if (response.ok) {
+                console.log('skill deleted successfully');
+              } else {
+                throw new Error('Failed to delete skill');
+              }
+            })
+            .catch(error => {
+              console.error('Error deleting skill:', error);
+            });
+        }
+      }
+
+      function updateDatabase() {
+        console.log('Updating database');
+      }
+
+      // Event listener for click 
+      const closeButtons = document.querySelectorAll('.close');
+      closeButtons.forEach(button => {
+        button.addEventListener('click', removeSkill);
+      });
     });
   </script>
 

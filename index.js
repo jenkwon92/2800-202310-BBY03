@@ -14,6 +14,7 @@ const jwt = require("jsonwebtoken");            // Import jsonwebtoken
 const nodemailer = require("nodemailer");       // Import nodemailer
 const saltRounds = 12;                          // Set the number of salt rounds for bcrypt
 const bodyParser = require("body-parser");      // Middleware for parsing request bodies
+const { Configuration, OpenAIApi } = require("openai"); // Import ObjectId from openai
 
 // Our website URL
 const WebsiteURL = "http://wjxdvnhtuk.eu09.qoddiapp.com";
@@ -29,6 +30,10 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET;
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
 // End Secret Information Section
 
 // Session Section
@@ -40,9 +45,9 @@ const mongoStore = MongoStore.create({
 });
 
 // Database Section
-const { database } = require("./databaseConnection"); // Import the database connection
-const userCollection = database.db(mongodb_database).collection("users"); // Specify the collection to store users
-const coursesCollection = database.db(mongodb_database).collection("courses"); // Specify the collection to store courses
+const { database } = require("./databaseConnection");                           // Import the database connection
+const userCollection = database.db(mongodb_database).collection("users");       // Specify the collection to store users
+const coursesCollection = database.db(mongodb_database).collection("courses");  // Specify the collection to store courses
 
 // Set the ejs view engine
 app.set("view engine", "ejs");
@@ -152,7 +157,6 @@ function getRandomCourses(courses, count) {
   return shuffled.slice(0, count);
 }
 
-// Renders the main page
 app.get("/main", sessionValidation, async (req, res) => {
   try {
     // Retrieve user information from the database
@@ -160,11 +164,21 @@ app.get("/main", sessionValidation, async (req, res) => {
       username: req.session.username,
     });
 
+    const userCourses = user.myCourses || [];
+    let myCoursesData = [];
+
+    for (const courseId of userCourses) {
+      const course = await coursesCollection.findOne({ _id: new ObjectId(courseId) });
+      if (course) {
+        myCoursesData.push(course);
+      }
+    }
+
     // Retrieve user's interests from db
     const userInterests = user.interests || [];
 
     // Create a case-insensitive regular expression pattern for matching interests
-    const interestsPattern = new RegExp(userInterests.map(interest => `\\b${interest}\\b`).join("|"), "i");
+    const interestsPattern = new RegExp(`\\b(${userInterests.join("|")})\\b`, "i");
 
     // Retrieve courses matching the user's interests (case-insensitive)
     const recommendedCourses = await coursesCollection
@@ -174,10 +188,15 @@ app.get("/main", sessionValidation, async (req, res) => {
     // Select a random subset of 2 courses from the recommended courses
     const randomCourses = getRandomCourses(recommendedCourses, 2);
 
+    // Retrieve the user's image path from the user object
+    const userImage = user.image || "/images/profile/default.jpg";
+
     res.render("main", {
       authenticated: req.session.authenticated,
       username: req.session.username,
       recommendedCourses: randomCourses,
+      myCourses: myCoursesData,
+      userImage: userImage,
     });
   } catch (error) {
     console.error("Error retrieving course recommendation:", error);
@@ -186,9 +205,33 @@ app.get("/main", sessionValidation, async (req, res) => {
 });
 
 // Renders the my courses page
-app.get("/myCourses", (req, res) => {
-  res.render("myCourses");
+app.get("/myCourses", sessionValidation, async (req, res) => {
+  try {
+    // Retrieve user information from the database
+    const user = await userCollection.findOne({
+      username: req.session.username,
+    });
+
+    const userCourses = user.myCourses || [];
+
+    // Retrieve user's interests from the database
+    let myCoursesData = [];
+
+    for (const courseId of userCourses) {
+      const course = await coursesCollection.findOne({ _id: new ObjectId(courseId) });
+      if (course) {
+        myCoursesData.push(course);
+      }
+    }
+    console.log('myCoursesData', myCoursesData);
+
+    res.render("myCourses", { myCourses: myCoursesData, username: req.session.username });
+  } catch (error) {
+    console.error("Error retrieving course recommendation:", error);
+    res.status(500).send("Error retrieving course recommendation");
+  }
 });
+
 
 // Renders the course detail page
 app.get("/courseDetail", (req, res) => {
@@ -197,8 +240,10 @@ app.get("/courseDetail", (req, res) => {
 
 /* Recommendation Section */
 
-const recommendedCourseLimit = 100; // Limit the number of initially recommended courses
+// Limit the number of initially recommended courses
+const recommendedCourseLimit = 5; 
 
+// Renders the recommendation page
 app.get("/recommendation", sessionValidation, async (req, res) => {
   try {
     // Retrieve user information from the database
@@ -223,14 +268,13 @@ app.get("/recommendation", sessionValidation, async (req, res) => {
       ]).toArray();
     }
 
-    console.log(recommendedCourses);
+    // If matching courses are empty, retrieve random courses from the course collection
     if (recommendedCourses.length === 0) {
       throw new Error("No recommended courses found");
     }
 
     res.render("recommendation", { recommendedCourses, username: req.session.username });
   } catch (error) {
-    console.error("Error retrieving course recommendation:", error);
     res.status(500).send("Error retrieving course recommendation");
   }
 });
@@ -272,85 +316,85 @@ app.get("/generateMore", sessionValidation, async (req, res) => {
 
     res.json({ additionalRecommendedCourses });
   } catch (error) {
-    console.error("Error retrieving additional recommended courses:", error);
     res.status(500).send("Error retrieving additional recommended courses");
   }
 });
 
 /* Recommendation Section end */
 
+
 /* Profile Section */
 
+// Renders the profile page
 app.get("/profile", async (req, res) => {
-  var isAuthenticated = req.session.authenticated || false;
+  var isAuthenticated = req.session.authenticated || false;  // Check if the user is authenticated
 
-  if (!isAuthenticated) {
+  // If not authenticated, redirect to the login page
+  if (!isAuthenticated) {  
     res.redirect("/login");
   } else {
     try {
-      const user = await userCollection.findOne({
+      const user = await userCollection.findOne({            // Retrieve user data from the database
         username: req.session.username,
       });
 
-      if (!user) {
+      if (!user) {  // If user not found, throw an error
         throw new Error("User not found");
       }
 
       // Set the default image URL if the image is not available or has an unknown path
       const image = user.image || "/images/profile/default.jpg";
 
-      res.render("profile", {
-        authenticated: req.session.authenticated,
-        username: req.session.username,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        job: user.job,
-        image: image,
-        skills: user.skills || [], // Add the 'skills' variable here with a default value of an empty array
-        interests: user.interests || [], // Add the 'interests' variable here with a default value of an empty array
+      res.render("profile", {                                // Render the 'profile' template with the user data
+        authenticated: req.session.authenticated,            // Pass the authentication status
+        username: req.session.username,                      // Pass the username
+        email: user.email,                                   // Pass the user's email
+        firstName: user.firstName,                           // Pass the user's first name
+        lastName: user.lastName,                             // Pass the user's last name
+        job: user.job,                                       // Pass the user's job
+        image: image,                                        // Pass the user's profile image URL
+        skills: user.skills || [],                           // Add the 'skills' variable here with a default value of an empty array
+        interests: user.interests || [],                     // Add the 'interests' variable here with a default value of an empty array
       });
     } catch (error) {
-      console.error(error);
-      res.status(500).send("Error retrieving user profile");
+      res.status(500).send("Error retrieving user profile"); // Send an error response if there is an error
     }
   }
 });
 
+// Renders the editProfile page
 app.get("/editProfile", async (req, res) => {
-  var isAuthenticated = req.session.authenticated || false;
+  var isAuthenticated = req.session.authenticated || false;  // Check if the user is authenticated
 
-  // When the user is not logged in - login page
-  // When the user is logged in - profile page
-  if (!isAuthenticated) {
+  // If not authenticated, redirect to the login page
+  if (!isAuthenticated) {  
     res.redirect("/login");
   } else {
     try {
-      const user = await userCollection.findOne({
+      const user = await userCollection.findOne({            // Retrieve user data from the database
         username: req.session.username,
       });
 
-      if (!user) {
+      if (!user) {  // If user not found, throw an error
         throw new Error("User not found");
       }
 
       // Set the default image URL if the image is not available or has an unknown path
       const image = user.image || "/images/profile/default.jpg";
 
-      res.render("editProfile", {
-        authenticated: req.session.authenticated,
-        username: req.session.username,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        job: user.job,
-        image: image,
-        skills: user.skills || [], // Use the user's skills field directly
-        interests: user.interests || [], // Use the user's interests field directly
+      res.render("editProfile", {  
+        authenticated: req.session.authenticated,            // Pass the authentication status
+        username: req.session.username,                      // Pass the username
+        email: user.email,                                   // Pass the user's email
+        firstName: user.firstName,                           // Pass the user's first name
+        lastName: user.lastName,                             // Pass the user's last name
+        job: user.job,                                       // Pass the user's job
+        image: image,                                        // Pass the user's profile image URL
+        skills: user.skills || [],                           // Use the user's skills field directly
+        interests: user.interests || [],                     // Use the user's interests field directly
       });
     } catch (error) {
-      console.error(error);
-      res.status(500).send("Error retrieving user profile");
+      res.status(500).send("Error retrieving user profile"); // Send an error response if there is an error
     }
   }
 });
@@ -379,22 +423,16 @@ app.get("/editSkill", async (req, res) => {
 });
 
 // edit interest Section
-app.get("/editInterest", async (req, res) => {
+app.get("/editInterest", sessionValidation, async (req, res) => {
   try {
-    // Retrieve user information from the user database
-    const user = await userCollection.findOne({
-      username: req.session.username,
-    });
-
+    const username = req.session.username;
+    const user = await userCollection.findOne({ username: username });
     if (user) {
-      // Get the 'interests' field from the user db
       const interests = user.interests || [];
 
-      res.render("editInterest", {
-        interests: interests,
-      });
+      res.render("editInterest", { interests: interests });
     } else {
-      res.status(404).send("User not found");
+      res.redirect("/"); // Redirect to the appropriate route if the user is not found
     }
   } catch (error) {
     console.error(error);
@@ -403,18 +441,17 @@ app.get("/editInterest", async (req, res) => {
 });
 
 
-// Update the user profile
 const path = require("path");
 
 // Set up multer for handling file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // Update the destination path to use an absolute path
     cb(null, path.join(__dirname, "public/images/profile"));
   },
   filename: function (req, file, cb) {
-    const extension = file.originalname.split(".").pop();
-    cb(null, `${req.session.username}.${extension}`);
+    const fileExtension = file.originalname.split(".").pop();
+    const filename = `${req.session.username}.${fileExtension}`;
+    cb(null, filename);
   },
 });
 
@@ -422,13 +459,22 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.post("/submitProfile", upload.single("image"), async (req, res) => {
-  const { name, job, email, skills, firstName, lastName } = req.body;
+  const { name, job, email, firstName, lastName } = req.body;
   let image = null;
 
   if (req.file) {
     // Generate a new image path with the user's username and file extension
     const fileExtension = req.file.filename.split(".").pop();
-    image = `/images/profile/${req.session.username}.${fileExtension}`;
+    const newFilename = `${req.session.username}.${fileExtension}`;
+    const newFilePath = `/images/profile/${newFilename}`;
+
+    // Move the uploaded file to the desired location
+    const currentFilePath = req.file.path;
+    const destinationPath = path.join(__dirname, "public", newFilePath);
+
+    fs.renameSync(currentFilePath, destinationPath);
+
+    image = newFilePath;
     req.session.image = image; // Update session image
   } else if (req.session.image) {
     image = req.session.image;
@@ -438,36 +484,26 @@ app.post("/submitProfile", upload.single("image"), async (req, res) => {
   }
 
   try {
-    // Update the user's profile in the database
-    const updateFields = { job, email, skills, firstName, lastName };
-
-    // Exclude 'name' from updateFields if it is not provided
-    if (name) {
-      updateFields.name = name;
-    }
-
-    if (image) {
-      updateFields.image = `${image}?t=${Date.now()}`; // Add cache-busting parameter
-    }
-
+    // Update the user's profile image in the database
     const updateResult = await userCollection.updateOne(
       { username: req.session.username },
-      { $set: updateFields }
+      { $set: { image } }
     );
 
-    if (updateResult.modifiedCount === 1) {
-      // Update the session with the new profile information
-      req.session.name = name;
-      req.session.job = job;
-      req.session.email = email;
-      req.session.firstName = firstName;
-      req.session.lastName = lastName;
-
-      // Redirect to the profile page on successful update
-      res.redirect("/profile");
-    } else {
-      throw new Error("Failed to update user profile");
+    if (updateResult.modifiedCount !== 1) {
+      throw new Error("Failed to update user profile image");
     }
+
+    // Update the session with the new profile information
+    req.session.name = name;
+    req.session.job = job;
+    req.session.email = email;
+    req.session.firstName = firstName;
+    req.session.lastName = lastName;
+    req.session.image = image;
+
+    // Redirect to the profile page on successful update
+    res.redirect("/profile");
   } catch (error) {
     console.error(error);
     // Redirect to the profile page on error
@@ -475,23 +511,39 @@ app.post("/submitProfile", upload.single("image"), async (req, res) => {
   }
 });
 
-//update the user's skill
 app.post("/saveSkills", sessionValidation, async (req, res) => {
   try {
     const { skills } = req.body;
     const username = req.session.username;
 
     if (!skills) {
-      throw new Error("Skills data is missing");
+      throw new Error("skills data is missing");
     }
 
-    const skillList = skills.split(",").map((skill) => skill.trim());
+    const skillList = Array.isArray(skills) ? skills.map((skill) => skill.trim()) : [];
+
+    const existingUser = await userCollection.findOne({ username: username });
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    const existingSkills = existingUser.skills || [];
+    const updatedSkills = [...new Set([...existingSkills, ...skillList])];
+
+    if (JSON.stringify(existingSkills) === JSON.stringify(updatedSkills)) {
+      // Interests are the same, no need to update
+      res.json({ success: true }); // Interests saved successfully
+      return;
+    }
+
     const updateResult = await userCollection.updateOne(
       { username: username },
-      { $set: { skills: skillList } }
+      { $set: { skills: updatedSkills } }
     );
-    if (updateResult.modifiedCount === 1) {
-      res.sendStatus(200); // Skills saved successfully
+
+    if (updateResult && updateResult.modifiedCount === 1) {
+      req.session.skills = updatedSkills; // Update session skills
+      res.json({ success: true }); // Skills saved successfully
     } else {
       throw new Error("Failed to save skills");
     }
@@ -501,7 +553,41 @@ app.post("/saveSkills", sessionValidation, async (req, res) => {
   }
 });
 
-//update the user's interests
+//remove the user's skill
+app.post("/removeSkill", sessionValidation, async (req, res) => {
+  try {
+    const { skill } = req.body;
+    const username = req.session.username;
+
+    if (!skill) {
+      throw new Error("skill data is missing");
+    }
+
+    const existingUser = await userCollection.findOne({ username: username });
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    const existingSkills = existingUser.skills || [];
+    const updatedSkills = existingSkills.filter(i => i !== skill);
+
+    const updateResult = await userCollection.updateOne(
+      { username: username },
+      { $set: { skills: updatedSkills } }
+    );
+
+    if (updateResult.modifiedCount >= 1) {
+      console.log('Skill deleted successfully');
+      res.sendStatus(200); 
+    } else {
+      throw new Error("Failed to delete Skill");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error deleting interest"); 
+  }
+});
+
 app.post("/saveInterests", sessionValidation, async (req, res) => {
   try {
     const { interests } = req.body;
@@ -511,21 +597,71 @@ app.post("/saveInterests", sessionValidation, async (req, res) => {
       throw new Error("Interests data is missing");
     }
 
-    const interestList = interests
-      .split(",")
-      .map((interest) => interest.trim());
+    const interestList = Array.isArray(interests) ? interests.map((interest) => interest.trim()) : [];
+
+    const existingUser = await userCollection.findOne({ username: username });
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    const existingInterests = existingUser.interests || [];
+    const updatedInterests = [...new Set([...existingInterests, ...interestList])];
+
+    if (JSON.stringify(existingInterests) === JSON.stringify(updatedInterests)) {
+      // Interests are the same, no need to update
+      res.json({ success: true }); // Interests saved successfully
+      return;
+    }
+
     const updateResult = await userCollection.updateOne(
       { username: username },
-      { $set: { interests: interestList } }
+      { $set: { interests: updatedInterests } }
     );
-    if (updateResult.modifiedCount === 1) {
-      res.sendStatus(200); // Interests saved successfully
+
+    if (updateResult && updateResult.modifiedCount === 1) {
+      req.session.interests = updatedInterests; // Update session interests
+      res.json({ success: true }); // Interests saved successfully
     } else {
       throw new Error("Failed to save interests");
     }
   } catch (error) {
     console.error(error);
     res.status(500).send("Error saving interests"); // Error saving interests
+  }
+});
+
+//remove the user's interest
+app.post("/removeInterest", sessionValidation, async (req, res) => {
+  try {
+    const { interest } = req.body;
+    const username = req.session.username;
+
+    if (!interest) {
+      throw new Error("Interest data is missing");
+    }
+
+    const existingUser = await userCollection.findOne({ username: username });
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    const existingInterests = existingUser.interests || [];
+    const updatedInterests = existingInterests.filter(i => i !== interest);
+
+    const updateResult = await userCollection.updateOne(
+      { username: username },
+      { $set: { interests: updatedInterests } }
+    );
+
+    if (updateResult.modifiedCount >= 1) {
+      console.log('Interest deleted successfully');
+      res.sendStatus(200); // Interest deleted successfully
+    } else {
+      throw new Error("Failed to delete interest");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error deleting interest"); // Error deleting interest
   }
 });
 /* Profile Section end */
@@ -535,7 +671,13 @@ app.post("/saveInterests", sessionValidation, async (req, res) => {
 app.get("/signup", (req, res) => {
   var msg = req.query.msg || "";
 
+  var isAuthenticated = req.session.authenticated || false;
+
+  if (isAuthenticated) {
+    return res.redirect("/main");
+  } else {
   res.render("signUp", { msg: msg });
+  }
 });
 
 // Creates a new user
@@ -559,22 +701,27 @@ app.post("/submitUser", async (req, res) => {
   }
 
   const schema = Joi.object({
-    email: Joi.string()
-      .email()
-      .required()
-      .messages({ "string.empty": "Email is required" }),
-    username: Joi.string()
-      .alphanum()
-      .max(20)
-      .required()
-      .messages({ "string.empty": "Username is required" }),
-    firstName: Joi.string()
-      .required()
-      .messages({ "string.empty": "First name is required" }),
-    password: Joi.string()
-      .max(20)
-      .required()
-      .messages({ "string.empty": "Password is required" }),
+    email: Joi.string().email().required().messages({
+      "string.empty": "Email is required",
+      "string.email": "Please provide a valid email address",
+      "any.required": "Email is required",
+    }),
+    username: Joi.string().alphanum().max(20).required().messages({
+      "string.empty": "Username is required",
+      "string.alphanum": "Username must only contain alphanumeric characters",
+      "string.max": "Username must not exceed 20 characters",
+      "any.required": "Username is required",
+    }),
+    firstName: Joi.string().required().messages({
+      "string.empty": "First name is required",
+      "any.required": "First name is required",
+    }),
+    lastName: Joi.string().allow("").optional(),
+    password: Joi.string().max(30).required().messages({
+      "string.empty": "Password is required",
+      "string.max": "Password must not exceed 30 characters",
+      "any.required": "Password is required",
+    }),
   });
 
   const validationResult = schema.validate({
@@ -622,7 +769,13 @@ app.get("/login", (req, res) => {
   // Show error message if there is one
   var msg = req.query.msg || "";
 
-  res.render("login", { msg: msg });
+  var isAuthenticated = req.session.authenticated || false;
+
+  if (isAuthenticated) {
+    return res.redirect("/main");
+  } else {
+    res.render("login", { msg: msg });
+  }
 });
 
 // logout
@@ -637,42 +790,47 @@ app.get("/logout", (req, res) => {
 });
 
 app.post("/submitLogin", async (req, res) => {
-  var email = req.body.email;
-  var password = req.body.password;
+  const { email, password } = req.body;
 
-  const schema = Joi.string().required();
-  const validationResult = schema.validate(email);
+  const schema = Joi.object({
+    email: Joi.string()
+      .email({ tlds: { allow: false } })
+      .required()
+      .messages({
+        "string.empty": "Email is required",
+        "string.email": "Please provide a valid email address",
+        "any.required": "Email is required",
+      }),
+    password: Joi.string().required().messages({
+      "string.empty": "Password is required",
+      "any.required": "Password is required",
+    }),
+  });
 
-  // If email is invalid, return error message
-  if (validationResult.error != null) {
-    console.log(validationResult.error);
-    res.render("login", { msg: "Invalid Email!" });
-    return;
+  const validationResult = schema.validate({ email, password });
+
+  if (validationResult.error) {
+    const errorMessage = validationResult.error.details[0].message;
+    return res.render("login", { msg: errorMessage });
   }
 
   const user = await userCollection.findOne({ email: email });
 
-  // If email does not exist, return error message
   if (!user) {
     console.log("Email not found");
-    res.render("login", { msg: "User with this email does not exist." });
-    return;
+    return res.render("login", { msg: "User with this email does not exist." });
   }
 
-  // Checks if the password matches using bcrypt compare
   const passwordMatch = await bcrypt.compare(password, user.password);
 
-  // If password does not match, return error message
   if (passwordMatch) {
-    // Set session variables
     req.session.authenticated = true;
     req.session.username = user.username;
     req.session.email = email;
     req.session.cookie.maxAge = expireTime;
   } else {
     console.log("Incorrect password");
-    res.render("login", { msg: "Password is incorrect." });
-    return;
+    return res.render("login", { msg: "Password is incorrect." });
   }
 
   res.redirect("/main");
@@ -768,39 +926,42 @@ app.get("/resetPassword/:id/:token", async (req, res, next) => {
   }
 });
 
-// Resets the user's password
 app.post("/resetPassword/:id/:token", async (req, res, next) => {
-  // Get user id and token from url
   const { id, token } = req.params;
-
-  // Get new password from form
   const { newPassword } = req.body;
 
-  // Find user in database
+  const schema = Joi.object({
+    newPassword: Joi.string().required().messages({
+      "string.empty": "New password is required",
+      "any.required": "New password is required",
+    }),
+  });
+
+  const validationResult = schema.validate({ newPassword });
+
+  if (validationResult.error) {
+    const errorMessage = validationResult.error.details[0].message;
+    return res.render("error", { errorMessage: "Validation error!" });
+  }
+
   const user = await userCollection.findOne({ _id: new ObjectId(id) });
 
-  // If user does not exist, return error message
   if (!user) {
     return res.render("error", { errorMessage: "ID not found!" });
   }
 
-  // Create secret for JWT
   const secret = JWT_SECRET + user.password;
-  try {
-    // Verify the token
-    const payload = jwt.verify(token, secret);
 
-    // Hash the new password
+  try {
+    const payload = jwt.verify(token, secret);
     user.password = await bcrypt.hash(newPassword, saltRounds);
 
-    // Update password in database
     await userCollection.updateOne(
       { _id: new ObjectId(id) },
       { $set: { password: user.password } }
     );
 
-    // Password successfully updated
-    res.render("passwordUpdated");
+    return res.render("passwordUpdated");
   } catch (error) {
     console.log(error);
     return res.render("error", { errorMessage: "Invalid token!" });
@@ -809,14 +970,38 @@ app.post("/resetPassword/:id/:token", async (req, res, next) => {
 
 /* Password Recovery Section end */
 
+/* Chatbot Section start */
 // Renders the chatbot page
 app.get("/chatbot", (req, res) => {
-  res.render("chatbot");
+  res.render("chatbot");                              // Render the "chatbot" view when the "/chatbot" route is accessed
 });
+
+app.post("/chatbotMessages", async (req, res) => {
+  const input = req.body.input;                       // Retrieve the input message from the request body
+
+  const completion = await openai.createCompletion({
+    model: "text-davinci-003",                        // Specify the model to use for text completion
+    prompt: input,                                    // Set the input message as the prompt for the text completion
+    max_tokens: 100,                                   // Limit the response to 20 tokens
+  });
+
+  const output = completion.data.choices[0].text;     // Extract the generated completion text
+  res.json({ output: output });                       // Send the output response as JSON
+});
+
+app.get("/fineTuning", (req, res) => {
+  res.render("fineTuning");                              // Render the "chatbot" view when the "/chatbot" route is accessed
+});
+
+app.post("/fineTuningProcess", (req, res) => {
+  res.render("fineTuning");                              // Render the "chatbot" view when the "/chatbot" route is accessed
+});
+
+/* Chatbot Section end */
 
 /* Search Section */
 // Renders the search page
-app.get("/search", (req, res) => {
+app.get("/search", sessionValidation, (req, res) => {
   const searchQuery = req.query.search; // Get the search query from the URL query parameters
   const page = parseInt(req.query.page) || 1; // Get the page number from the URL query parameters, default to 1 if not provided
   const itemsPerPage = 10; // Set the number of items to display per page
@@ -859,7 +1044,7 @@ app.get("/search", (req, res) => {
     })
     .catch((error) => {
       console.error("Error finding documents:", error);
-      res.render("error"); // Render an error page if there's an error
+      res.render("404"); // Render an error page if there's an error
     });
 });
 /* Search Section end */
@@ -867,26 +1052,92 @@ app.get("/search", (req, res) => {
 /* Course Detail Section */
 
 // Renders the course detail page
-app.get("/courseDetail/:courseId", (req, res) => {
+app.get("/courseDetail/:courseId", sessionValidation, async (req, res) => {
   const courseId = req.params.courseId; // Get the courseId from the URL parameters
+  const user = await userCollection.findOne({
+    username: req.session.username,
+  });
+
+  const userCourses = user.myCourses || [];
+  let isSaved = false; // Declare and assign initial value
+
+  // Check if the course is saved in user's courses
+  if (userCourses.includes(courseId)) {
+    isSaved = true;
+  }
 
   // Find the course with the given courseId
-  coursesCollection.findOne({ _id: new ObjectId(courseId) })
+  coursesCollection
+    .findOne({ _id: new ObjectId(courseId) })
     .then((course) => {
       if (!course) {
-        // If the course is not found, render an error page or a not-found page
         res.render("error", { errorMessage: "Course not found" });
         return;
       }
 
-      // Render the course detail page with the retrieved course
-      res.render("courseDetail", { course });
+      res.render("courseDetail", { course: course, isSaved: isSaved });
     })
     .catch((error) => {
       console.error("Error finding course:", error);
-      res.render("error", { errorMessage: error });
+      res.render("404");
     });
 });
+
+// Add a course to my courses
+app.post("/saveCourse", sessionValidation, async (req, res) => {
+  try {
+    const username = req.session.username;
+    const courseId = req.body.courseId;
+
+    const user = await userCollection.findOne({ username });
+
+    if (user.myCourses.includes(courseId)) {
+      // Course already saved, remove it from myCourses
+      await userCollection.updateOne(
+        { username },
+        { $pull: { myCourses: courseId } }
+      );
+      res.sendStatus(200);
+    } else {
+      // Course not saved, add it to myCourses
+      const result = await userCollection.updateOne(
+        { username },
+        { $push: { myCourses: courseId } }
+      );
+      if (result.modifiedCount === 0) {
+        return res.status(400).send("Course already saved");
+      }
+      res.sendStatus(200);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error saving/removing a course from my courses");
+  }
+});
+
+app.post("/removeCourse", sessionValidation, async (req, res) => {
+  try {
+    const username = req.session.username;
+    const courseId = req.body.courseId;
+
+    const user = await userCollection.findOne({ username });
+
+    if (user.myCourses.includes(courseId)) {
+      // Course is saved, remove it from myCourses
+      await userCollection.updateOne(
+        { username },
+        { $pull: { myCourses: courseId } }
+      );
+      res.sendStatus(200);
+    } else {
+      return res.status(400).send("Course is not saved");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error removing the course from my courses");
+  }
+});
+
 
 /* Course Detail Section end */
 

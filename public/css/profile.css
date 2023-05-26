@@ -1,0 +1,97 @@
+/*===================================================
+            Profile Elements
+==================================================*/
+.profile_grid {
+  -webkit-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  position: relative;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  border-radius: 5px;
+  padding: 0px;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.profile_grid .bl-title {
+  font-size: 17px;
+  margin-bottom: 10px;
+}
+
+/*===================================================
+            Edit Skills/Interests Elements
+==================================================*/
+.savedbtn {
+  display: inline-block;
+  margin: 0 5px 5px 0;
+  padding: 5px 10px;
+  background-color: #b4cded;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-left: 5px;
+  color: #04327d;
+}
+
+.multiselect-container.dropdown-menu {
+  display: none !important;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/*===================================================
+            Edit Skills Elements
+==================================================*/
+.selected-skill {
+  display: inline-block;
+  margin: 0 5px 5px 0;
+  padding: 5px 10px;
+  background-color: #b4cded;
+  border-radius: 5px;
+  font-weight: bolder;
+}
+
+.selected-skill .close {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+#selectedSkills {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.skill-container {
+  display: inline-block;
+}
+
+/*===================================================
+            Edit Interests Elements
+==================================================*/
+.selected-interest {
+  display: inline-block;
+  margin: 0 5px 5px 0;
+  padding: 5px 10px;
+  background-color: #b4cded;
+  border-radius: 5px;
+  font-weight: bolder;
+}
+
+.selected-interest .close {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+#selectedInterests {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.interest-container {
+  display: inline-block;
+}

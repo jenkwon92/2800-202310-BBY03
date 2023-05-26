@@ -1,37 +1,29 @@
+<link rel="stylesheet" href="/css/profile.css">
 <%- include("templates/header") %>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
-
-  <style>
-    .selected-interest {
-      display: inline-block;
-      margin: 0 5px 5px 0;
-      padding: 5px 10px;
-      background-color: #e9ecef;
-      border-radius: 5px;
-    }
-
-    .selected-interest .close {
-      margin-left: 10px;
-      cursor: pointer;
-    }
-
-    .multiselect-container.dropdown-menu {
-      display: none !important;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-  </style>
-
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <h4>Interests</h4>
+  <main role="main">
+    <section>
+      <div class="container">
+        <div class="col-lg-12 col-md-12 mb-3">
+          <div>
+            <div class="sec-left mb-3">
+              <span class="material-icons-outlined" style="vertical-align: middle;" onclick="goBack()">arrow_back</span>
+              <h3 style="display: inline-block; margin-left: 5px; vertical-align: middle;">Edit Interests</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="light-2">
+      <div class="container">
         <div class="row">
-          <div class="col" style="margin-top: 30px;">
+          <div class="col" style="margin-top: 20px;">
             <div class="dropdown" style="margin-bottom:40px">
-              <button style="width:80%;" class="btn btn-secondary dropdown-toggle" type="button" id="multiSelectButton"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Select your interests
+              <button
+                style="width:100%; height: 50px; font-size: larger; background-color: #6D9DC5; color: white; font-weight: 600;"
+                class="btn" type="button" id="multiSelectButton" data-bs-toggle="dropdown">
+                Interests <i class="material-icons"
+                  style="vertical-align: middle; margin-left: 180px;">keyboard_arrow_down</i>
               </button>
               <div class="dropdown-menu" aria-labelledby="multiSelectButton" style="width:100%;">
                 <select id="multiSelect" multiple style="width:100%;">
@@ -41,114 +33,201 @@
                   <option value="React">React</option>
                   <option value="jquery">jQuery</option>
                   <option value="C++">C++</option>
-                <option value="R">R</option>
+                  <option value="R">R</option>
                   <option value="Python">Python</option>
                   <option value="HTML">HTML</option>
                   <option value="CSS">CSS</option>
                   <option value="MySQL">MySQL</option>
-                <option value="SQL">SQL</option>
+                  <option value="SQL">SQL</option>
                   <option value="MongoDB">MongoDB</option>
-                <option value="AI">AI</option>
-                <option value="Big Data">Big Data</option>
-                <option value="Django">Django</option>
+                  <option value="AI">AI</option>
+                  <option value="Big Data">Big Data</option>
+                  <option value="Django">Django</option>
                 </select>
               </div>
             </div>
-            <div id="interestSet1" class="border p-3 mt-3">
+            <div id="interestSet1" class="border p-3 mt-3" style="background:#fff">
               <div id="selectedInterests">
-                <% if (interests && interests.length> 0) { %>
-                  <% interests.forEach(function(interest) { %>
-                    <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
-                      <%= interest %>
-                    </button>
-                    <% }); %>
-                      <% } else { %>
-                        <p>No interests available</p>
-                        <% } %>
+                <ul class="courses_tags_list interest-container" style="display: inline-block;">
+                  <% if (interests && interests.length> 0) { %>
+                    <% interests.forEach(function(interest) { %>
+                      <div style="display: inline-block;" class="singleInterest">
+                        <li class="facts-1 savedbtn">
+                          <!-- <button type="button" class="btn btn-rounded savedbtn" style="margin-bottom: 8px;"> -->
+                          <%= interest %>
+                            <!-- </button> -->
+                        </li>
+                        <span class="close" data-interest="<%= interest %>">&times;</span>
+                      </div>
+                      <% }); %>
+                        <% } else { %>
+                          <p>Update your interests</p>
+                          <% } %>
+                </ul>
               </div>
             </div>
-            <button id="save-button" class="btn btn-sm btn-dark profile-button" type="submit"
-              style="font-size: 15px; float: right; margin-top: 20px;">Save</button>
+            <p id="save-button" style="font-size: 20px; color: #B4CDED; float: right; margin-top: 20px;"
+              class="material-icons-outlined profile-button" type="submit">save
+            </p>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
+    </section>
+  </main>
   <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // Initialize the Choices library for the multi-select dropdown
       const select = new Choices('#multiSelect', {
         placeholder: true,
         placeholderValue: 'Select your interests',
         removeItemButton: true,
         maxItemCount: -1,
-        allowHTML: true
+        classNames: {
+          removeButton: 'choices__button choices__button--remove'
+        }
       });
 
-      const selectedInterests = document.querySelector('#selectedInterests');
+      const selectedInterestsContainer = document.querySelector('#selectedInterests');
+      const interestContainer = document.querySelector('.interest-container'); // 새로운 컨테이너 요소 생성
+      let interestsSet = new Set(); // Create a Set to store the selected interests
 
-      // Event listener for the change event on the multi-select dropdown
-      select.passedElement.element.addEventListener('change', function () {
-        selectedInterests.innerHTML = '';
-        const selectedOptions = Array.from(this.selectedOptions);
-        selectedOptions.forEach(option => {
+      // Function to add or remove the selected interests container
+      function updateSelectedInterests() {
 
-          // Create a container for each selected interest
-          const interestContainer = document.createElement('div');
-          interestContainer.className = 'selected-interest';
-          const interestText = document.createElement('span');
-          interestText.textContent = option.text;
+        if (interestsSet.size > 0) {
+          interestsSet.forEach(interest => {
 
-          // Create a close button for removing the interest
-          const closeButton = document.createElement('span');
-          closeButton.className = 'close';
-          closeButton.innerHTML = '&times;';
-          closeButton.addEventListener('click', function () {
+            // interestContainer.className = 'interest-container';
 
-            // Remove the selected interest and call saveInterests()
-            select.removeActiveItemsByValue(option.value);
-            saveInterests();
+            const savedInterestsContainer = document.createElement('div'); // savedbtn을 감싸는 컨테이너 요소
+            savedInterestsContainer.style.display = 'inline-block'; // 가로 정렬을 위해 inline-block 스타일 적용
+            savedInterestsContainer.className = 'singleInterest';
+
+            const interestText = document.createTextNode(interest);
+            const savedInterests = document.createElement('li');
+            savedInterests.className = 'facts-1 savedbtn';
+            savedInterests.textContent = interest;
+
+            savedInterestsContainer.appendChild(savedInterests); // savedbtn을 컨테이너에 추가
+            // interestContainer.appendChild(savedButtonContainer); // 컨테이너를 interestContainer에 추가
+
+            const closeButton = document.createElement('span');
+            closeButton.className = 'close';
+            closeButton.dataset.interest = interest;
+            closeButton.innerHTML = '&times;';
+            closeButton.addEventListener('click', removeInterest);
+
+            savedInterestsContainer.appendChild(closeButton); // closeButton을 interestContainer에 추가
+
+            interestContainer.appendChild(savedInterestsContainer);
+
           });
+        } else {
+          const updateInterestsText = document.createElement('p');
+          updateInterestsText.textContent = 'Update your interests';
+          selectedInterestsContainer.appendChild(updateInterestsText);
+        }
 
-          interestContainer.appendChild(interestText);
-          interestContainer.appendChild(closeButton);
-
-          selectedInterests.appendChild(interestContainer);
+        // Add event listeners to existing buttons
+        const existingButtons = selectedInterestsContainer.querySelectorAll('.savedbtn');
+        existingButtons.forEach(button => {
+          const closeButton = button.querySelector('.close');
+          if (closeButton) {
+            closeButton.addEventListener('click', removeInterest);
+          }
         });
+      }
+
+      select.passedElement.element.addEventListener('change', function () {
+        const selectedOptions = Array.from(this.selectedOptions);
+
+        selectedOptions.forEach(option => {
+          if (!interestsSet.has(option.value)) {
+            interestsSet.add(option.value);
+          }
+        });
+
+        // Remove deselected options from interestsSet
+        const deselectedOptions = Array.from(interestsSet).filter(interest => {
+          return !selectedOptions.some(option => option.value === interest);
+        });
+        deselectedOptions.forEach(option => {
+          interestsSet.delete(option);
+        });
+
+        updateSelectedInterests();
       });
 
       const saveButton = document.querySelector('#save-button');
       saveButton.addEventListener('click', saveInterests);
 
       function saveInterests() {
-        // Get the selected interests and convert them to a comma-separated string
-        const selectedOptions = Array.from(select.getValue(false));
-        const interests = selectedOptions.map(option => option.value).join(',');
+        const interests = Array.from(interestsSet);
 
-        if (interests.trim() === '') {
-          console.error('Interests data is missing');
+        if (interests.length === 0) {
+          window.location.href = '/profile';
           return;
         }
 
-        // Send a POST request to save the interests
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/saveInterests');
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = function () {
-          if (xhr.status === 200) {
-            console.log('Interests saved successfully');
-            window.location.href = '/profile'; // Redirect to the profile page
-          } else {
-            console.error('Error saving interests');
-          }
-        };
-        xhr.send(JSON.stringify({ interests: interests })); // Send interests data as JSON object
+        fetch('/saveInterests', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ interests }),
+        })
+          .then(response => {
+            if (response.ok) {
+              console.log('Interests saved successfully');
+              window.location.href = '/profile';
+            } else {
+              throw new Error('Error saving interests');
+            }
+          })
+          .catch(error => {
+            console.error('Error saving interests:', error);
+          });
       }
+
+      function removeInterest(event) {
+        const interest = event.currentTarget.dataset.interest;
+        console.log('Removing interest:', interest);
+
+        const singleInterest = event.currentTarget.closest('.singleInterest');
+        if (singleInterest !== null) {
+          singleInterest.remove();
+
+          fetch('/removeInterest', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ interest }),
+          })
+            .then(response => {
+              if (response.ok) {
+                console.log('Interest deleted successfully');
+              } else {
+                throw new Error('Failed to delete interest');
+              }
+            })
+            .catch(error => {
+              console.error('Error deleting interest:', error);
+            });
+        }
+      }
+
+      function updateDatabase() {
+        console.log('Updating database');
+      }
+
+      // Event listener for click 
+      const closeButtons = document.querySelectorAll('.close');
+      closeButtons.forEach(button => {
+        button.addEventListener('click', removeInterest);
+      });
     });
   </script>
-
 
   <%- include("templates/footer") %>

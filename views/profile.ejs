@@ -1,114 +1,146 @@
+<link rel="stylesheet" href="/css/profile.css">
 <%- include("templates/header") %>
-
-  <!-- All profiles -->
-  <div class="card" style="margin-top: 50px;">
-    <!-- Basic profile -->
-    <div class="rounded-top text-white d-flex flex-row" style="background-color: #4A596D; height:200px;">
-      <div class="ms-4 mt-auto mb-auto d-flex flex-column" style="width: 150px;">
-        <img src="<%= image || '/images/profile/default.png' %>" alt="Profile Image" class="img-fluid img-thumbnail"
-          style="width: 130px; z-index: 1;">
-      </div>
-      <div class="ms-3" style="font-size: small; color: #d0d4d6; margin-top: auto; margin-bottom: auto;">
-        <h5 style="margin-bottom: 10px; font-weight: 700;">
-          <%= username %>
-        </h5>
-        <h6 style="margin-bottom: 5px; font-weight: 400;">Name: <%= firstName %> <%= lastName %>
-        </h6>
-        <h6 style="margin-bottom: 5px; font-weight: 400;">Job: <%= job %>
-        </h6>
-        <h6 style="margin-bottom: 0; font-weight: 400;">Email: <%= email %>
-        </h6>
-        <span id="edit-icon" style="font-size: 20px; float: right; position: absolute; top:170px; right: 10px"
-          class="material-icons">edit</span>
-      </div>
-    </div>
-    <!-- Basic profile end -->
-
-    <!-- Skills&interests -->
-    <div class="card-body p-4 text-black" style="margin-top: 20px;">
-      <!-- Skills section -->
-      <div class="mb-5">
-        <p class="lead fw-normal mb-1" style="font-weight: 400;">Skills</p>
-        <div class="p-4" style="background-color: #d0d4d6; border-radius: 10px;">
-          <% if (skills && skills.length> 0) { %>
-            <% skills.forEach(function(skill) { %>
-              <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
-                <%= skill %>
-              </button>
-
-              <% }); %>
-                <% } else { %>
-                  <p style="text-align: center; font-weight:normal; color: blueviolet;">Update your skills!</p>
-                  <% } %>
+  <main role="main">
+    <!-- All profiles -->
+    <section>
+      <div class="container">
+        <div class="col-lg-12 col-md-12 mb-3">
+          <div>
+            <div class="sec-left">
+              <span class="material-icons-outlined" style="vertical-align: middle;" onclick="goBack()">arrow_back</span>
+              <h3 style="display: inline-block; margin-left: 5px; vertical-align: middle;">Profile</h3>
+            </div>
+          </div>
         </div>
       </div>
-      <!-- Skills section end -->
-
-      <!-- Interests section -->
-      <div>
-        <p class="lead fw-normal mb-1" style="font-weight: 400;">Interests</p>
-        <div class="p-4" style="background-color: #d0d4d6; border-radius: 10px;">
-          <% if (interests && interests.length> 0) { %>
-            <% interests.forEach(function(interest) { %>
-              <button type="button" class="btn btn-secondary btn-rounded" style="margin-bottom: 8px;">
-                <%= interest %>
-              </button>
-              <% }); %>
-                <% } else { %>
-                  <p style="text-align: center; font-weight:normal; color: blueviolet;">Update your interests!</p>
-                  <% } %>
+      <div class="container">
+        <!-- Basic profile -->
+        <div class="d-flex flex-row">
+          <div class="mt-auto mb-auto d-flex flex-column" style="width: 35%;">
+            <img src="<%= image || '/images/profile/default.png' %>" alt="Profile Image" class="img-fluid img-thumbnail"
+              style="width: 130px; z-index: 1;">
+          </div>
+          <div class="mt-auto mb-auto d-flex flex-column"
+            style="font-size: small; margin-top: auto; margin-bottom: auto; width: 60%; padding: 10px;">
+            <h5 style="margin-bottom: 10px; font-weight: 700;">
+              <%= username %>
+            </h5>
+            <h6 style="margin-bottom: 5px; font-weight: 400;">Name: <%= firstName %>
+                <%= lastName %>
+            </h6>
+            <h6 style="margin-bottom: 5px; font-weight: 400;">Job: <%= job %>
+            </h6>
+            <h6 style="margin-bottom: 0; font-weight: 400; text-transform: none;">Email: <%= email %>
+            </h6>
+          </div>
+          <div class="mt-auto d-flex flex-column">
+            <p id="edit-icon" style="font-size: 20px; color: #B4CDED;" class="material-icons-outlined">edit</p>
+          </div>
+          <!-- Basic profile end -->
         </div>
+    </section>
+    <section class="light-2">
+      <!-- Skills&interests -->
+      <div class="container">
+        <!-- Skills section -->
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-12">
+            <div class="box mb-15 profile_grid">
+              <div class="profile_body">
+                <h3 class="lead fw-normal mb-1" style="font-weight: 400;">Skills</h3>
+                <div class="p-4" style="background-color: #ffffff; border-radius: 10px;">
+                  <ul class="courses_tags_list">
+                    <% if (skills && skills.length> 0) { %>
+                      <% skills.forEach(function(skill) { %>
+                        <li class="facts-2 mt-1">
+                          <%= skill %>
+                        </li>
+
+                        <% }); %>
+                          <% } else { %>
+                            <p class="text-muted" style="text-align: center; font-weight:normal; margin: 0;">Update your
+                              skills!</p>
+                            <% } %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- Skills section end -->
+
+            <!-- Interests section -->
+            <div class="col-xl-12 col-lg-12 col-12">
+              <div class="box mb-15 profile_grid">
+                <h3 class="lead fw-normal mb-1" style="font-weight: 400;">Interests</h3>
+                <div class="p-4" style="background-color: #ffffff; border-radius: 10px;">
+                  <% if (interests && interests.length> 0) { %>
+                    <ul class="courses_tags_list">
+                      <% interests.forEach(function(interest) { %>
+                        <li class="facts-3 mt-1">
+                          <%= interest %>
+                        </li>
+                        <% }); %>
+                    </ul>
+                    <% } else { %>
+                      <p class="text-muted" style="text-align: center; font-weight:normal;margin: 0;">Update your
+                        interests!</p>
+                      <% } %>
+                </div>
+              </div>
+            </div>
+
+            <!-- Edit skills&interests -->
+            <div class="d-flex justify-content-center align-items-center mb-4">
+              <div class="col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
+                style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; background-color: #ffffff;">
+                <span id="go-skill"
+                  style="font-size: 40px; float: right; line-height:20px; margin: 20px; color: #B4CDED"
+                  class="material-icons-outlined">
+                  computer
+                </span>
+                <p style="font-size:1rem" class="text-center mt-2">Skills</p>
+              </div>
+              <div class="col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
+                style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; background-color: #ffffff;">
+                <span id="go-interest"
+                  style="font-size: 40px; float: right; line-height:20px; margin: 20px; color: #B4CDED;"
+                  class="material-icons-outlined">
+                  menu_book
+                </span>
+                <p style="font-size:1rem" class="text-center mt-2">Interests</p>
+              </div>
+            </div>
+            <!-- Edit skills&interests end -->
+
+            <!-- Log out -->
+            <div class="btn_log_out" onclick="window.location.href='/logout'"><i
+                class="ti-control-skip-forward mr-2"></i>Log
+              out
+            </div>
+            <!-- Log out end -->
+          </div>
+
+        </div>
+        <!-- Interests section end -->
       </div>
-      <!-- Interests section end -->
-    </div>
-    <!-- Skills&interests end -->
-
-   <!-- Edit skills&interests -->
-<div class="d-flex justify-content-center align-items-center mb-4">
-  <div class="col-md-4 offset-md-2 col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
-    style="border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
-    <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
-      class="material-icons">
-      computer
-    </span>
-    <p style="font-size:1rem" class="text-center mt-2">Skills</p>
-  </div>
-  <div class="col-md-4 col-6 mb-2 d-flex align-items-center flex-column justify-content-center"
-    style="border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
-    <span id="edit-icon" style="font-size: 40px; float: right; line-height:20px; margin: 20px;"
-      class="material-icons">
-      menu_book
-    </span>
-    <p style="font-size:1rem" class="text-center mt-2">Interests</p>
-  </div>
-</div>
-<!-- Edit skills&interests end -->
-
-    <!-- Log out -->
-    <button onclick="window.location.href='/logout'" class="btn btn-sm btn-dark profile-button" type="button"
-      style="border-radius: 10px; align-items: center; margin-top: 50px; width: 100%; margin-bottom: 100px;">Log
-      out</button>
-    <!-- Log out end -->
-  </div>
-
-  </div>
-  </div>
-  </div>
-  </div>
-  </section>
-
+      <!-- Skills&interests end -->
+    </section>
+  </main>
   <!-- Function section -->
   <script>
+
+    //Link to the editProfile page when click the edit icon
     const editIcon = document.querySelector("#edit-icon");
     editIcon.addEventListener("click", () => {
       window.location.href = "/editProfile";
     });
 
+    //Link to the editSkill page when click the laptop icon
     const goSkill = document.querySelector("#go-skill");
     goSkill.addEventListener("click", () => {
       window.location.href = "/editSkill";
     });
 
+    //Link to the editInterest page when click the book icon
     const goInterest = document.querySelector("#go-interest");
     goInterest.addEventListener("click", () => {
       window.location.href = "/editInterest";

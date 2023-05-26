@@ -1,104 +1,6 @@
 /*===================================================
-            Fonts
-        ==================================================*/
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap");
-
-/*===================================================
-                    GLobal Settings
-                ==================================================*/
-* {
-  outline: none;
-}
-
-.modal-open {
-  overflow: hidden !important;
-}
-
-body {
-  background: #ffffff;
-  color: #4d5868;
-  font-size: 14px;
-  font-family: "Outfit", sans-serif;
-  margin: 0;
-  overflow-x: hidden !important;
-  font-weight: 400;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-h4 a {
-  color: #303740;
-  font-weight: 500;
-  font-size: 20;
-  text-decoration: none;
-  background-color: transparent;
-  -webkit-text-decoration-skip: objects;
-}
-
-a:hover,
-a:focus {
-  text-decoration: none;
-}
-
-a.link {
-  color: #da0b4e;
-}
-
-a.link:hover,
-a.link:focus,
-a:hover,
-a:focus {
-  color: #da0b4e;
-}
-
-section {
-  padding: 30px 0 15px;
-  position: relative;
-}
-
-.text-muted {
-  color: #8d97ad !important;
-}
-
-.lead {
-  font-size: 20px !important;
-}
-
-p {
-  line-height: 1.8;
-}
-
-p,
-ul,
-ol,
-dl,
-dt,
-dd,
-blockquote,
-address {
-  margin: 0 0 10px;
-}
-
-/*------------ GLobal Settings: Heading-------------*/
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #202124;
-  font-weight: 600;
-  text-transform: capitalize;
-  font-family: "Outfit", sans-serif;
-}
-
-h1 {
-  line-height: 40px;
-  font-size: 36px;
-}
+            My Courses Elements
+==================================================*/
 
 /*-------------- GLobal Settings: Background Colors ----------------*/
 html body .bg-light {
@@ -113,23 +15,9 @@ html body .bg-light-2 {
   margin-bottom: 1rem;
 }
 
-.light-2 {
-  background: #fbf5f4;
-}
-
-/*-------------- GLobal Settings: Section Headings ----------------*/
-.sec-left {
-  flex: 1;
-}
-
-.sec-left h3 {
-  font-size: 20px;
-  margin-bottom: 0px;
-}
-
 /*===================================================
-                    Recommendations
-                ==================================================*/
+            My Courses 
+==================================================*/
 .my_courses_grid {
   -webkit-transition: all 0.25s ease;
   -o-transition: all 0.25s ease;
