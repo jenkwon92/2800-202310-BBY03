@@ -185,17 +185,17 @@ How to use our product
 
 ## 8. AI Usage
 
-# How we used AI to create our app
-    * During the development of our app, we used AI to overcome coding challenges. When we encountered obstacles or got stuck on a particular feature, we utilized ChatGPT, to assist us in generating code snippets. This innovative approach not only saved us time but also provided valuable insights and suggestions to enhance our app's functionality.
+How we used AI to create our app
+* During the development of our app, we used AI to overcome coding challenges. When we encountered obstacles or got stuck on a particular feature, we utilized ChatGPT, to assist us in generating code snippets. This innovative approach not only saved us time but also provided valuable insights and suggestions to enhance our app's functionality.
 
-# How we used AI to create or clean data sets
-    * While AI played a significant role in generating code for our app, we did not utilize AI specifically for creating or cleaning data sets. Instead, we used traditional cleaning techniques to ensure the accuracy and quality of our data. By manually curating and verifying the data sets, we maintained a high standard of reliability in our app's information.
+How we used AI to create or clean data sets
+* While AI played a significant role in generating code for our app, we did not utilize AI specifically for creating or cleaning data sets. Instead, we used traditional cleaning techniques to ensure the accuracy and quality of our data. By manually curating and verifying the data sets, we maintained a high standard of reliability in our app's information.
 
-# How our app uses AI
-    * One of the standout features of our app is the integration of an AI-powered chatbot. By incorporating AI technologies, we have developed a dynamic and interactive chatbot function that provides personalized recommendations, answers user queries, and facilitates engaging conversations. The chatbot utilizes natural language processing and machine learning algorithms to understand user inputs and deliver relevant and accurate responses, making the learning experience more interactive and efficient.
+How our app uses AI
+* One of the standout features of our app is the integration of an AI-powered chatbot. By incorporating AI technologies, we have developed a dynamic and interactive chatbot function that provides personalized recommendations, answers user queries, and facilitates engaging conversations. The chatbot utilizes natural language processing and machine learning algorithms to understand user inputs and deliver relevant and accurate responses, making the learning experience more interactive and efficient.
 
-# Limitations we encountered
-    * Although AI has proven to be a valuable asset in our app development process, we did come across certain limitations. We realized that AI, while capable of assisting with code generation, cannot provide solutions for every programming challenge. There were instances where we had to resort to manual research and seeking external resources to address specific coding requirements. This experience highlighted the importance of a balanced approach, combining AI assistance with traditional problem-solving techniques to overcome hurdles effectively.
+Limitations we encountered
+* Although AI has proven to be a valuable asset in our app development process, we did come across certain limitations. We realized that AI, while capable of assisting with code generation, cannot provide solutions for every programming challenge. There were instances where we had to resort to manual research and seeking external resources to address specific coding requirements. This experience highlighted the importance of a balanced approach, combining AI assistance with traditional problem-solving techniques to overcome hurdles effectively.
 
 ## 9. Contact Information
 * Contact us at coursepilotapp@gmail.com
