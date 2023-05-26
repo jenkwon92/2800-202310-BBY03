@@ -995,7 +995,7 @@ app.post("/chatbotMessages", async (req, res) => {
   const completion = await openai.createCompletion({
     model: "text-davinci-003",                        // Specify the model to use for text completion
     prompt: input,                                    // Set the input message as the prompt for the text completion
-    max_tokens: 20,                                   // Limit the response to 20 tokens
+    max_tokens: 100,                                   // Limit the response to 20 tokens
   });
 
   const output = completion.data.choices[0].text;     // Extract the generated completion text
