@@ -459,7 +459,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.post("/submitProfile", upload.single("image"), async (req, res) => {
-  const { name, job, email, skills, firstName, lastName } = req.body;
+  const { name, job, email, firstName, lastName } = req.body;
   let image = null;
 
   if (req.file) {
@@ -484,39 +484,26 @@ app.post("/submitProfile", upload.single("image"), async (req, res) => {
   }
 
   try {
-    // Update the user's profile in the database
-    const updateFields = {
-      job,
-      email,
-      skills,
-      firstName,
-      lastName,
-      image: `${image}?t=${Date.now()}`, // Add cache-busting parameter
-    };
-
-    // Exclude 'name' from updateFields if it is not provided
-    if (name) {
-      updateFields.name = name;
-    }
-
+    // Update the user's profile image in the database
     const updateResult = await userCollection.updateOne(
       { username: req.session.username },
-      { $set: updateFields }
+      { $set: { image } }
     );
 
-    if (updateResult.modifiedCount === 1) {
-      // Update the session with the new profile information
-      req.session.name = name;
-      req.session.job = job;
-      req.session.email = email;
-      req.session.firstName = firstName;
-      req.session.lastName = lastName;
-
-      // Redirect to the profile page on successful update
-      res.redirect("/profile");
-    } else {
-      throw new Error("Failed to update user profile");
+    if (updateResult.modifiedCount !== 1) {
+      throw new Error("Failed to update user profile image");
     }
+
+    // Update the session with the new profile information
+    req.session.name = name;
+    req.session.job = job;
+    req.session.email = email;
+    req.session.firstName = firstName;
+    req.session.lastName = lastName;
+    req.session.image = image;
+
+    // Redirect to the profile page on successful update
+    res.redirect("/profile");
   } catch (error) {
     console.error(error);
     // Redirect to the profile page on error
