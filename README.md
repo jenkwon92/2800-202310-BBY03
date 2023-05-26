@@ -96,7 +96,9 @@ It has the following subfolders and files:
 |    |    ├── cloud6.png                # Source: 
 |    |    ├── plane.png                 # Source: 
 |    |    └── plane.wav                 # Source: 
-|    ├── images                 # Images folder
+|    ├── images               # Images folder
+|    |    ├── profile           #Profile folder
+|    |    |   └──default.jpg            # Source: https://www.vectorstock.com/royalty-free-vectors/default-vectors 
 |    |    ├── AI.jpg                    # Source: https://www.gatesnotes.com/The-Age-of-AI-Has-Begun
 |    |    ├── course.jpg                # Source: https://stock.adobe.com/ie/search?k=cloud%20computing%20background
 |    |    ├── datacamp.png              # Source: https://www.crunchbase.com/organization/data-camp
@@ -106,7 +108,7 @@ It has the following subfolders and files:
 |    |    ├── fullLogo.png              # Source: Personal CoursePilot Logo
 |    |    ├── logo.png                  # Source: Personal CoursePilot Logo
 |    |    ├── python.jpg                # Source: https://ciracollege.com/2020/11/06/why-python-programming-is-the-future/
-|    |    └── udemy.png                 # Source: https://twitter.com/udemy
+|    |    └── udemy.png                 # Source: https://twitter.com/udemy             
 |    ├── js                     # JavaScript folder
 |    |    ├── courseDetail.js           # JS file for course details page
 |    |    ├── easterEgg_origin.js       # JS file for easter egg
