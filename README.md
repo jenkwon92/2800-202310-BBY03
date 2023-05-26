@@ -199,3 +199,7 @@ Limitations we encountered
 
 ## 9. Contact Information
 * Contact us at coursepilotapp@gmail.com
+
+* Yongeun Kwon | [jenkwon92](https://github.com/jenkwon92) | ywkon35@my.bcit.ca   |
+* Munyoung Cho | [muun-y](https://github.com/muun-y)       | mcho47@my.bcit.ca    |
+* Marvin Sio   | [Martxian](https://github.com/Martxian)   | msio@my.bcit.ca      |
